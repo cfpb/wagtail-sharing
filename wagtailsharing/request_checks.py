@@ -26,6 +26,4 @@ class StaffUserRequestCheck(object):
 class HostnameRequestCheck(object):
     def verify_request(self, request):
         sharing_hostname = getattr(settings, 'WAGTAILSHARING_HOSTNAME', None)
-        print(sharing_hostname)
-        print(request.get_host())
         return sharing_hostname and sharing_hostname == request.get_host()
