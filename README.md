@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cfpb/wagtail-sharing.svg?branch=master)](https://travis-ci.org/cfpb/wagtail-sharing) [![Coverage Status](https://coveralls.io/repos/github/cfpb/wagtail-sharing/badge.svg?branch=master)](https://coveralls.io/github/cfpb/wagtail-sharing?branch=master)
+
 # wagtail-sharing
 
 Easier sharing of [Wagtail](https://wagtail.io) drafts.
