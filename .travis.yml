@@ -3,7 +3,7 @@ cache: pip
 
 matrix:
   include:
-    - env: flake8
+    - env: TOXENV=flake8
     - env: TOXENV=py27-dj18-wag17
       python: 2.7
     - env: TOXENV=py27-dj18-wag18
