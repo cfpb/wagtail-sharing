@@ -15,12 +15,14 @@ def verify_sharing_request(request):
 
 class LoggedInUserRequestCheck(object):
     def verify_request(self, request):
-        return request.user.is_authenticated()
+        user = getattr(request, 'user', None)
+        return user and user.is_authenticated()
 
 
 class StaffUserRequestCheck(object):
     def verify_request(self, request):
-        return request.user.is_authenticated() and request.user.is_staff
+        user = getattr(request, 'user', None)
+        return user and user.is_authenticated() and user.is_staff
 
 
 class HostnameRequestCheck(object):
