@@ -8,7 +8,9 @@ Easier sharing of [Wagtail](https://wagtail.io) drafts.
 
 It works by replacing the default Wagtail [URL patterns](http://docs.wagtail.io/en/v1.8/getting_started/integrating_into_django.html#url-configuration) with a wrapper that displays a page's most recent draft content for certain incoming requests.
 
-Viewing page drafts this way also adds a simple banner to the top of each page, stating "Preview: This content may not represent the published state of this page."
+Viewing page drafts this way also adds a simple banner to the top of each page:
+
+![Draft banner](docs/images/banner.png)
 
 ## Setup
 
@@ -28,16 +30,6 @@ Viewing page drafts this way also adds a simple banner to the top of each page, 
      ...
  )
 ```
-
-1. Add the middleware for proper processing of requests:
-
- ```py
- # in settings.py
- MIDDLEWARE_CLASSES = (
-     ...
-     'wagtailsharing.middleware.WagtailSharingMiddleware',
- )
- ```
 
 1. Configure desired sharing settings (see below):
 
@@ -97,7 +89,11 @@ class SpecificUserRequestCheck(object):
 
 ## Compatibility
 
-This project is a work in progress, but has been tested for compatibility with Python 2.7, Django 1.8, and Wagtail 1.7.
+This project has been tested for compatibility with:
+
+- Python 2.7, 3.5
+- Django 1.8, 1.9, 1.10
+- Wagtail 1.6, 1.7, 1.8
 
 ## Open source licensing info
 1. [TERMS](TERMS.md)

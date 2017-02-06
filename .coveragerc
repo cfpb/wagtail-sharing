@@ -1,0 +1,6 @@
+[run]
+source=
+    wagtailsharing
+omit=
+    setup.py
+    */tests/urls.py
