@@ -2,8 +2,51 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.test import RequestFactory, TestCase, override_settings
 
 from wagtailsharing.request_checks import (
-    HostnameRequestCheck, LoggedInUserRequestCheck, StaffUserRequestCheck
+    HostnameRequestCheck, LoggedInUserRequestCheck, StaffUserRequestCheck,
+    verify_sharing_request
 )
+
+
+class SuccessfulRequestCheck(object):
+    def verify_request(self, request):
+        return True
+
+
+class UnsuccessfulRequestCheck(object):
+    def verify_request(self, request):
+        return False
+
+
+class TestVerifySharingRequest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    @override_settings(WAGTAILSHARING_REQUEST_CHECKS=[])
+    def test_no_checks(self):
+        request = self.factory.get('/')
+        self.assertFalse(verify_sharing_request(request))
+
+    @override_settings(WAGTAILSHARING_REQUEST_CHECKS=[
+        'wagtailsharing.tests.test_request_checks.SuccessfulRequestCheck',
+    ])
+    def test_check_succeeds(self):
+        request = self.factory.get('/')
+        self.assertTrue(verify_sharing_request(request))
+
+    @override_settings(WAGTAILSHARING_REQUEST_CHECKS=[
+        'wagtailsharing.tests.test_request_checks.UnsuccessfulRequestCheck',
+    ])
+    def test_check_fails(self):
+        request = self.factory.get('/')
+        self.assertFalse(verify_sharing_request(request))
+
+    @override_settings(WAGTAILSHARING_REQUEST_CHECKS=[
+        'wagtailsharing.tests.test_request_checks.SuccessfulRequestCheck',
+        'wagtailsharing.tests.test_request_checks.UnsuccessfulRequestCheck',
+    ])
+    def test_only_one_check_succeeds(self):
+        request = self.factory.get('/')
+        self.assertTrue(verify_sharing_request(request))
 
 
 class TestLoggedInUserRequestCheck(TestCase):
