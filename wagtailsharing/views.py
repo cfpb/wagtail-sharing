@@ -20,9 +20,10 @@ class ServeView(View):
         else:
             return wagtail_serve(request, path)
 
-    def serve_shared(self, request, path):
+    @classmethod
+    def serve_shared(cls, request, path):
         # Determine which page is being requested.
-        page, args, kwargs = self.get_requested_page(request, path)
+        page, args, kwargs = cls.get_requested_page(request, path)
 
         # Get the latest revision for the requested page.
         page = page.get_latest_revision_as_page()
@@ -37,13 +38,13 @@ class ServeView(View):
         response = page.serve(request, *args, **kwargs)
 
         # Do appropriate response postprocessing.
-        response = self.postprocess_response(response)
+        response = cls.postprocess_response(response)
 
         return response
 
     @staticmethod
     def get_requested_page(request, path):
-        if not request.site:
+        if not getattr(request, 'site', None):
             raise Http404
 
         path_components = [
@@ -73,6 +74,8 @@ class ServeView(View):
 
     @staticmethod
     def add_response_banner(response):
+        response.render()
+
         html = BeautifulSoup(response.content, 'html.parser')
 
         banner_template_name = 'wagtailsharing/banner.html'

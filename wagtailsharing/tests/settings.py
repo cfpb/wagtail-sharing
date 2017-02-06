@@ -27,7 +27,12 @@ DATABASES = {
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-
+    'taggit',
+    'wagtail.tests.testapp',
+    'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
+    'wagtail.wagtaildocs',
+    'wagtail.wagtailimages',
+
     'wagtailsharing',
 )
