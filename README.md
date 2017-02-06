@@ -8,7 +8,7 @@ Easier sharing of [Wagtail](https://wagtail.io) drafts.
 
 It works by replacing the default Wagtail [URL patterns](http://docs.wagtail.io/en/v1.8/getting_started/integrating_into_django.html#url-configuration) with a wrapper that displays a page's most recent draft content for certain incoming requests.
 
-Viewing page drafts this way also adds a simple banner to the top of each page:
+A simple banner is also added to the top of each page when draft content is being viewed to make sure users know that current published content may differ:
 
 ![Draft banner](docs/images/banner.png)
 
