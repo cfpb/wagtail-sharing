@@ -76,8 +76,6 @@ The list should contain the full classnames of check classes to invoke against t
 - `wagtailsharing.request_checks.HostnameRequestCheck`
 
  Requests coming from a hostname matching `settings.WAGTAILSHARING_HOSTNAME` exactly (using `request.get_host()`, which notably includes the port, e.g. `sharing.my.domain:8000`) will see the latest draft when visiting a page instead of the latest published content.
- 
- This requires first creating a duplicate `Site` that matches the specified sharing hostname/port and has the same root page as the site for which you want to share.
 
 ### Writing your own request checks
 
