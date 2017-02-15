@@ -44,6 +44,21 @@ class ServeView(View):
 
     @staticmethod
     def get_requested_page(request, path):
+        """Retrieve a page given a request and a requested path.
+
+        This method uses the standard `wagtail.wagtailcore.Page.route` method
+        to retrieve a page using its path from its appropriate site root.
+
+        If a requested page exists and is published, the result of `Page.route`
+        can be returned directly.
+
+        If the page exists but is not yet published, `Page.route` raises an
+        `Http404`, which this method tries to catch and handle. `Page.route`
+        raises `Http404` in two cases: if no page with the given path exists
+        and if a page exists but is unpublished. This method catches both
+        cases, and, if they fall into the latter category, returns the
+        requested page back to the caller despite its draft status.
+        """
         if not getattr(request, 'site', None):
             raise Http404
 

@@ -65,17 +65,17 @@ The `settings.WAGTAILSHARING_REQUEST_CHECKS` setting specifies a list of checks 
 
 The list should contain the full classnames of check classes to invoke against the incoming Django `HttpRequest` object. If **any** of these checks pass, the request is considered authorized to view draft content. Built-in classes include:
 
-#### `wagtailsharing.request_checks.LoggedInUserRequestCheck`
+- `wagtailsharing.request_checks.LoggedInUserRequestCheck`
 
-Any logged-in users will see the latest draft when visiting a page instead of the latest published content.
+ Any logged-in users will see the latest draft when visiting a page instead of the latest published content.
 
-#### `wagtailsharing.request_checks.StaffUserRequestCheck`
+- `wagtailsharing.request_checks.StaffUserRequestCheck`
 
-Staff users (verified by checking `user.is_staff`) will see the latest draft when visiting a page instead of the latest published content.
+ Staff users (verified by checking `user.is_staff`) will see the latest draft when visiting a page instead of the latest published content.
 
-#### `wagtailsharing.request_checks.HostnameRequestCheck`
+- `wagtailsharing.request_checks.HostnameRequestCheck`
 
-Requests coming from a hostname matching `settings.WAGTAILSHARING_HOSTNAME` exactly (using `request.get_host()`, which notably includes the port, e.g. `my.domain:8000`) will see the latest draft when visiting a page instead of the latest published content.
+ Requests coming from a hostname matching `settings.WAGTAILSHARING_HOSTNAME` exactly (using `request.get_host()`, which notably includes the port, e.g. `sharing.my.domain:8000`) will see the latest draft when visiting a page instead of the latest published content.
 
 ### Writing your own request checks
 
