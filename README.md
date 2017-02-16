@@ -93,7 +93,7 @@ This project has been tested for compatibility with:
 
 - Python 2.7, 3.5
 - Django 1.8, 1.9, 1.10
-- Wagtail 1.6, 1.7, 1.8
+- Wagtail 1.6, 1.7, 1.8, 1.9
 
 ## Open source licensing info
 1. [TERMS](TERMS.md)
