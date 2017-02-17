@@ -3,8 +3,6 @@ from __future__ import absolute_import, unicode_literals
 import django
 import os
 
-DEBUG = True
-
 
 ALLOWED_HOSTS = ['*']
 
@@ -18,7 +16,7 @@ DATABASES = {
             'DATABASE_ENGINE',
             'django.db.backends.sqlite3'
         ),
-        'NAME': os.environ.get('DATABASE_NAME', 'wagtailsharingdb'),
+        'NAME': os.environ.get('DATABASE_NAME', 'wagtailsharing.sqlite'),
         'USER': os.environ.get('DATABASE_USER', None),
         'PASSWORD': os.environ.get('DATABASE_PASS', None),
         'HOST': os.environ.get('DATABASE_HOST', None),
@@ -55,6 +53,7 @@ else:
     )
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -62,6 +61,7 @@ INSTALLED_APPS = (
 
     'taggit',
 
+    'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
     'wagtail.tests.testapp',
     'wagtail.wagtailadmin',
@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'wagtail.wagtaildocs',
     'wagtail.wagtailforms',
     'wagtail.wagtailimages',
+    'wagtail.wagtailsites',
     'wagtail.wagtailusers',
 
     'wagtailsharing',

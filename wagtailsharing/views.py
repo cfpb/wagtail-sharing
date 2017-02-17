@@ -10,44 +10,30 @@ from django.views.generic import View
 from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.views import serve as wagtail_serve
 
-from wagtailsharing.request_checks import verify_sharing_request
+from wagtailsharing.models import SharingSite
 
 
 class ServeView(View):
     def get(self, request, path):
-        if verify_sharing_request(request):
-            return self.serve_shared(request, path)
-        else:
+        try:
+            sharing_site = SharingSite.find_for_request(request)
+        except SharingSite.DoesNotExist:
             return wagtail_serve(request, path)
 
-    @classmethod
-    def serve_shared(cls, request, path):
-        # Determine which page is being requested.
-        page, args, kwargs = cls.get_requested_page(request, path)
+        page, args, kwargs = self.get_requested_page(
+            sharing_site.wagtail_site,
+            request,
+            path
+        )
 
-        # Get the latest revision for the requested page.
-        page = page.get_latest_revision_as_page()
-
-        # Call the before_serve_page hook.
-        for fn in hooks.get_hooks('before_serve_page'):
-            result = fn(page, request, args, kwargs)
-            if isinstance(result, HttpResponse):
-                return result
-
-        # Generate the page response.
-        response = page.serve(request, *args, **kwargs)
-
-        # Do appropriate response postprocessing.
-        response = cls.postprocess_response(response)
-
-        return response
+        return self.serve_latest_revision(page, request, args, kwargs)
 
     @staticmethod
-    def get_requested_page(request, path):
-        """Retrieve a page given a request and a requested path.
+    def get_requested_page(site, request, path):
+        """Retrieve a page from a site given a request and path.
 
         This method uses the standard `wagtail.wagtailcore.Page.route` method
-        to retrieve a page using its path from its appropriate site root.
+        to retrieve a page using its path from the given site root.
 
         If a requested page exists and is published, the result of `Page.route`
         can be returned directly.
@@ -59,15 +45,12 @@ class ServeView(View):
         cases, and, if they fall into the latter category, returns the
         requested page back to the caller despite its draft status.
         """
-        if not getattr(request, 'site', None):
-            raise Http404
-
         path_components = [
             component for component in path.split('/') if component
         ]
 
         try:
-            return request.site.root_page.route(request, path_components)
+            return site.root_page.route(request, path_components)
         except Http404:
             exception_source = inspect.trace()[-1]
             stack_frame = exception_source[0]
@@ -79,6 +62,25 @@ class ServeView(View):
                 raise
 
             return page, [], {}
+
+    @classmethod
+    def serve_latest_revision(cls, page, request, args, kwargs):
+        # Call the before_serve_page hook.
+        for fn in hooks.get_hooks('before_serve_page'):
+            result = fn(page, request, args, kwargs)
+            if isinstance(result, HttpResponse):
+                return result
+
+        # Get the latest revision for the requested page.
+        page = page.get_latest_revision_as_page()
+
+        # Generate the page response.
+        response = page.serve(request, *args, **kwargs)
+
+        # Do appropriate response postprocessing.
+        response = cls.postprocess_response(response)
+
+        return response
 
     @classmethod
     def postprocess_response(cls, response):
