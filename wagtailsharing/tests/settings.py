@@ -3,6 +3,10 @@ from __future__ import absolute_import, unicode_literals
 import django
 import os
 
+DEBUG = True
+
+
+ALLOWED_HOSTS = ['*']
 
 SECRET_KEY = 'not needed'
 
@@ -14,7 +18,7 @@ DATABASES = {
             'DATABASE_ENGINE',
             'django.db.backends.sqlite3'
         ),
-        'NAME': os.environ.get('DATABASE_NAME', 'wagtailsharing'),
+        'NAME': os.environ.get('DATABASE_NAME', 'wagtailsharingdb'),
         'USER': os.environ.get('DATABASE_USER', None),
         'PASSWORD': os.environ.get('DATABASE_PASS', None),
         'HOST': os.environ.get('DATABASE_HOST', None),
@@ -53,7 +57,12 @@ else:
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.staticfiles',
+
     'taggit',
+
+    'wagtail.contrib.settings',
     'wagtail.tests.testapp',
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
@@ -64,6 +73,8 @@ INSTALLED_APPS = (
 
     'wagtailsharing',
 )
+
+STATIC_URL = '/static/'
 
 TEMPLATES = [
     {
@@ -82,3 +93,14 @@ TEMPLATES = [
         },
     },
 ]
+
+WAGTAIL_SITE_NAME = 'Test Site'
+
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    'default': {
+        'WIDGET': 'wagtail.wagtailadmin.rich_text.HalloRichTextArea'
+    },
+    'custom': {
+        'WIDGET': 'wagtail.tests.testapp.rich_text.CustomRichTextArea'
+    },
+}
