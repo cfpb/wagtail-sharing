@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
 from django.utils.text import slugify

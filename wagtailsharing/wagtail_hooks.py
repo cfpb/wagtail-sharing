@@ -12,4 +12,5 @@ class SharingSiteModelAdmin(ModelAdmin):
     add_to_settings_menu = True
     list_display = ('site', 'hostname', 'port')
 
+
 modeladmin_register(SharingSiteModelAdmin)
