@@ -21,7 +21,7 @@ class ServeView(View):
             return wagtail_serve(request, path)
 
         page, args, kwargs = self.get_requested_page(
-            sharing_site.wagtail_site,
+            sharing_site.site,
             request,
             path
         )
@@ -100,7 +100,9 @@ class ServeView(View):
         banner_html = banner_template.render()
 
         banner = BeautifulSoup(banner_html, 'html.parser')
-        html.body.insert(0, banner)
-        response.content = html.prettify()
+
+        if html.body:
+            html.body.insert(0, banner)
+            response.content = html.prettify()
 
         return response

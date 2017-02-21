@@ -3,4 +3,5 @@ source=
     wagtailsharing
 omit=
     setup.py
-    */tests/urls.py
+    wagtailsharing/tests/urls.py
+    wagtailsharing/tests/settings.py

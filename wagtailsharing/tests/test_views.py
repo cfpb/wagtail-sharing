@@ -6,173 +6,154 @@ from mock import Mock, patch
 
 from wagtail.tests.testapp.models import SimplePage
 from wagtail.wagtailcore.models import Site
+
+from wagtailsharing.models import SharingSite
 from wagtailsharing.views import ServeView
 
 
-def create_draft_page(root, title):
-    page = SimplePage(
-        title=title,
-        slug=slugify(title),
-        content='content',
-        live=False
-    )
-
-    root.add_child(instance=page)
-    return page
-
-
-class TestServeViewGet(TestCase):
+class TestServeView(TestCase):
     def setUp(self):
-        self.path = '/simple'
-        self.request = RequestFactory().get(self.path)
+        self.factory = RequestFactory()
+        self.default_site = Site.objects.get(is_default_site=True)
 
-    @override_settings(WAGTAILSHARING_REQUEST_CHECKS=[
-        'wagtailsharing.tests.test_request_checks.UnsuccessfulRequestCheck',
-    ])
-    def test_checks_fail(self):
+    def make_request(self, path, **kwargs):
+        request = self.factory.get(path, **kwargs)
+        request.site = self.default_site
+        return request
+
+    def create_sharing_site(self, hostname):
+        SharingSite.objects.create(
+            site=self.default_site,
+            hostname=hostname
+        )
+
+    def create_draft_page(self, title):
+        page = SimplePage(
+            title=title,
+            slug=slugify(title),
+            content='content',
+            live=False
+        )
+
+        self.default_site.root_page.add_child(instance=page)
+        return page
+
+    def assert_title_matches(self, response, title):
+        self.assertContains(response, title)
+
+    def test_no_sharing_site_exists_uses_wagtail_serve(self):
+        request = self.make_request('/')
         with patch('wagtailsharing.views.wagtail_serve') as wagtail_serve:
-            ServeView().get(self.request, self.path)
-            wagtail_serve.assert_called_once_with(self.request, self.path)
+            ServeView().get(request, request.path)
+            wagtail_serve.assert_called_once_with(request, request.path)
 
-    @override_settings(WAGTAILSHARING_REQUEST_CHECKS=[
-        'wagtailsharing.tests.test_request_checks.SuccessfulRequestCheck',
-    ])
-    def test_checks_pass(self):
-        with patch(
-            'wagtailsharing.views.ServeView.serve_shared'
-        ) as serve_shared:
-            ServeView().get(self.request, self.path)
-            serve_shared.assert_called_once_with(self.request, self.path)
+    def test_default_site_missing_page_raises_404(self):
+        self.create_sharing_site(hostname='hostname')
 
+        request = self.make_request('/missing/')
+        with self.assertRaises(Http404):
+            ServeView().get(request, request.path)
 
-class TestServeViewServeShared(TestCase):
-    def setUp(self):
-        default_site = Site.objects.get(is_default_site=True)
-        self.root = default_site.root_page
+    def test_sharing_site_missing_page_raises_404(self):
+        self.create_sharing_site(hostname='hostname')
 
-        self.slug = 'abc'
-        self.path = '/' + self.slug
-        self.request = RequestFactory().get(self.path)
-        self.request.site = default_site
+        request = self.make_request('/missing/', HTTP_HOST='hostname')
+        with self.assertRaises(Http404):
+            ServeView().get(request, request.path)
 
-    def assert_title_matches(self, html, title):
-        soup = BeautifulSoup(html, 'html.parser')
-        self.assertEqual(soup.title.text.strip(), title)
+    def test_default_site_unpublished_page_raises_404(self):
+        self.create_sharing_site(hostname='hostname')
+        self.create_draft_page(title='unpublished')
 
-    def test_single_draft_revision(self):
-        create_draft_page(self.root, title='ABC')
-        response = ServeView.serve_shared(self.request, self.path)
-        self.assert_title_matches(response.content, 'ABC')
+        request = self.make_request('/unpublished/')
+        with self.assertRaises(Http404):
+            ServeView().get(request, request.path)
 
-    def test_single_published_revision(self):
-        page = create_draft_page(self.root, title='ABC')
+    def test_sharing_site_unpublished_page_returns_200(self):
+        self.create_sharing_site(hostname='hostname')
+        self.create_draft_page(title='draft')
+
+        request = self.make_request('/draft/', HTTP_HOST='hostname')
+        response = ServeView().get(request, request.path)
+        self.assertEqual(response.status_code, 200)
+
+    def test_default_site_published_page_returns_200(self):
+        self.create_sharing_site(hostname='hostname')
+        page = self.create_draft_page(title='published')
         page.save_revision().publish()
-        response = ServeView.serve_shared(self.request, self.path)
-        self.assert_title_matches(response.content, 'ABC')
 
-    def test_newer_draft_revision(self):
-        page = create_draft_page(self.root, title='ABC')
+        request = self.make_request('/published/')
+        response = ServeView().get(request, request.path)
+        self.assertEqual(response.status_code, 200)
+
+    def test_sharing_site_published_page_returns_200(self):
+        self.create_sharing_site(hostname='hostname')
+        page = self.create_draft_page(title='published')
         page.save_revision().publish()
-        page.title = 'DEF'
+
+        request = self.make_request('/published/', HTTP_HOST='hostname')
+        response = ServeView().get(request, request.path)
+        self.assertEqual(response.status_code, 200)
+
+    def test_default_site_draft_version_returns_published_version(self):
+        self.create_sharing_site(hostname='hostname')
+        page = self.create_draft_page(title='original')
+        page.save_revision().publish()
+        page.title = 'changed'
         page.save_revision()
-        response = ServeView.serve_shared(self.request, self.path)
-        self.assert_title_matches(response.content, 'DEF')
 
-    def test_even_newer_draft_revision(self):
-        page = create_draft_page(self.root, title='ABC')
-        page.save_revision().publish()
-        page.title = 'DEF'
-        page.save_revision()
-        page.title = 'GHI'
-        page.save_revision()
-        response = ServeView.serve_shared(self.request, self.path)
-        self.assert_title_matches(response.content, 'GHI')
+        request = self.make_request('/original/')
+        response = ServeView().get(request, request.path)
+        self.assert_title_matches(response, 'original')
 
-    def test_latest_published_revision(self):
-        page = create_draft_page(self.root, title='ABC')
+    def test_sharing_site_draft_version_returns_draft_version(self):
+        self.create_sharing_site(hostname='hostname')
+        page = self.create_draft_page(title='original')
         page.save_revision().publish()
-        page.title = 'DEF'
-        page.save_revision().publish()
-        response = ServeView.serve_shared(self.request, self.path)
-        self.assert_title_matches(response.content, 'DEF')
+        page.title = 'changed'
+        page.save_revision()
+
+        request = self.make_request('/original/', HTTP_HOST='hostname')
+        response = ServeView().get(request, request.path)
+        self.assert_title_matches(response, 'changed')
 
     def test_before_serve_page_hook_called(self):
+        self.create_sharing_site(hostname='hostname')
+        self.create_draft_page(title='page')
+
         with patch(
             'wagtail.wagtailcore.hooks.get_hooks'
         ) as get_hooks:
-            create_draft_page(self.root, title='ABC')
-            ServeView.serve_shared(self.request, self.path)
+            request = self.make_request('/page/', HTTP_HOST='hostname')
+            ServeView().get(request, request.path)
             get_hooks.assert_called_once_with('before_serve_page')
 
     def test_before_serve_page_hook_returns_redirect(self):
+        self.create_sharing_site(hostname='hostname')
+        self.create_draft_page(title='page')
+
         with patch(
             'wagtail.wagtailcore.hooks.get_hooks',
             return_value=[Mock(return_value=HttpResponse(status=999))]
         ):
-            create_draft_page(self.root, title='ABC')
-            response = ServeView.serve_shared(self.request, self.path)
+            request = self.make_request('/page/', HTTP_HOST='hostname')
+            response = ServeView().get(request, request.path)
             self.assertEqual(response.status_code, 999)
 
+    @override_settings(WAGTAILSHARING_BANNER=False)
+    def test_no_banner_setting(self):
+        response = Mock(content='<body>abcde</body>')
+        response = ServeView.postprocess_response(response)
+        self.assertEqual(response.content, '<body>abcde</body>')
 
-class TestServeViewGetRequestedPage(TestCase):
-    def setUp(self):
-        default_site = Site.objects.get(is_default_site=True)
-        self.root = default_site.root_page
+    @override_settings(WAGTAILSHARING_BANNER=True)
+    def test_banner_setting_no_body(self):
+        response = Mock(content='abcde')
+        response = ServeView.postprocess_response(response)
+        self.assertEqual(response.content, 'abcde')
 
-        self.slug = 'simple'
-        self.path = '/' + self.slug
-        self.request = RequestFactory().get(self.path)
-        self.request.site = default_site
-
-    def test_no_site_raises_404(self):
-        del self.request.site
-        with self.assertRaises(Http404):
-            ServeView.get_requested_page(self.request, self.path)
-
-    def test_null_site_raises_404(self):
-        self.request.site = None
-        with self.assertRaises(Http404):
-            ServeView.get_requested_page(self.request, self.path)
-
-    def test_nonexistent_route_raises_404(self):
-        with self.assertRaises(Http404):
-            ServeView.get_requested_page(self.request, self.path)
-
-    def test_draft_page_returned(self):
-        create_draft_page(self.root, title=self.slug)
-        page, _, __ = ServeView.get_requested_page(self.request, self.path)
-        self.assertEquals(page.slug, self.slug)
-
-    def test_published_page_returned(self):
-        page = create_draft_page(self.root, title=self.slug)
-        page.save_revision().publish()
-        page, _, __ = ServeView.get_requested_page(self.request, self.path)
-        self.assertEquals(page.slug, self.slug)
-
-
-@override_settings(
-    WAGTAILSHARING_REQUEST_CHECKS=[
-        'wagtailsharing.request_checks.HostnameRequestCheck',
-    ],
-    WAGTAILSHARING_HOSTNAME='sharing.test'
-)
-class TestServeViewSharingHostname(TestCase):
-    def setUp(self):
-        default_site = Site.objects.get(is_default_site=True)
-        self.root = default_site.root_page
-
-        create_draft_page(self.root, title='slug')
-
-    def test_no_sharing_site_defined_returns_draft_page(self):
-        response = self.client.get('/slug/', HTTP_HOST='sharing.test')
-        self.assertEqual(response.status_code, 200)
-
-    def test_sharing_site_defined_returns_draft_page(self):
-        Site.objects.create(hostname='sharing.test', root_page=self.root)
-        response = self.client.get('/slug/', HTTP_HOST='sharing.test')
-        self.assertEqual(response.status_code, 200)
-
-    def test_sharing_site_defined_default_site_returns_404(self):
-        Site.objects.create(hostname='sharing.test', root_page=self.root)
-        response = self.client.get('/slug/')
-        self.assertEqual(response.status_code, 404)
+    @override_settings(WAGTAILSHARING_BANNER=True)
+    def test_banner_setting_modified_body(self):
+        response = Mock(content='<body>abcde</body>')
+        response = ServeView.postprocess_response(response)
+        self.assertIn('wagtailsharing-banner', response.content)

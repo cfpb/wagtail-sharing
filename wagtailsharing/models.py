@@ -7,7 +7,7 @@ from wagtail.wagtailcore.models import Site
 
 @python_2_unicode_compatible
 class SharingSite(models.Model):
-    wagtail_site = models.ForeignKey(Site, related_name='sharing_sites')
+    site = models.ForeignKey(Site, related_name='sharing_sites')
     hostname = models.CharField(max_length=255, db_index=True)
     port = models.IntegerField(default=80)
 
@@ -17,7 +17,7 @@ class SharingSite(models.Model):
     def __str__(self):
         return(
             self.hostname +
-            ("" if self.port == 80 else (":%d" % self.port))
+            ('' if self.port == 80 else (':%d' % self.port))
         )
 
     @classmethod

@@ -8,12 +8,12 @@ from mock import patch
 class TestUrlPatterns(TestCase):
     def setUp(self):
         def test_view():
-            pass
+            pass  # pragma: no cover
 
         self.patterns = [
-            url(r'^foo/$', test_view, name='foo'),
-            url(r'^((?:[\w\-]+/)*)$', test_view, name='wagtail_serve'),
-            url(r'^bar/$', test_view, name='bar'),
+            url(r'^foo/$', url, name='foo'),
+            url(r'^((?:[\w\-]+/)*)$', url, name='wagtail_serve'),
+            url(r'^bar/$', url, name='bar'),
         ]
 
         self.patcher = patch.object(

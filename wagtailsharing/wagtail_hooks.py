@@ -10,6 +10,6 @@ class SharingSiteModelAdmin(ModelAdmin):
     menu_icon = 'site'
     menu_order = 603
     add_to_settings_menu = True
-    list_display = ('wagtail_site', 'hostname', 'port')
+    list_display = ('site', 'hostname', 'port')
 
 modeladmin_register(SharingSiteModelAdmin)

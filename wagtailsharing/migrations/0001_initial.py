@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('hostname', models.CharField(max_length=255, db_index=True)),
                 ('port', models.IntegerField(default=80)),
-                ('wagtail_site', models.ForeignKey(related_name='sharing_sites', to='wagtailcore.Site')),
+                ('site', models.ForeignKey(related_name='sharing_sites', to='wagtailcore.Site')),
             ],
         ),
         migrations.AlterUniqueTogether(
