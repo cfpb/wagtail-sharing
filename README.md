@@ -4,19 +4,21 @@
 
 Easier sharing of [Wagtail](https://wagtail.io) drafts.
 
-`wagtailsharing` makes it easier to share Wagtail draft content for review by users who can't necessarily login to or use the full Wagtail admin site. This lets you do things like host Wagtail on mysite.domain but host the most recent draft content on share.mysite.domain.
+Wagtail Sharing makes it easier to share Wagtail draft content for review by users who don't have access to the Wagtail admin site. It allows you to define an alternate hostname and/or port on which to expose the latest revision of all of your Wagtail pages.
 
-It works by replacing the default Wagtail [URL patterns](http://docs.wagtail.io/en/v1.8/getting_started/integrating_into_django.html#url-configuration) with a wrapper that displays a page's most recent draft content for certain incoming requests.
+For example, let's say your Wagtail site is running on http://mysite.com. You've created a draft page at slug `/path/to/draft`, but haven't yet published it. Wagtail Sharing lets you expose that draft page at some other domain, for example http://sharing.mysite.com/path/to/draft.
 
-A simple banner is also added to the top of each page when draft content is being viewed to make sure users know that current published content may differ:
+In another use case, you might have a published page at http://mysite.com/already/published/page, and you've made some draft changes. Wagtail Sharing lets you expose those draft changes at http://sharing.mysite.com/already/published/page while still keeping the same published content at your regular domain.
 
-![Draft banner](docs/images/banner.png)
+These examples obviously work best when you have some method of restricting access to http://sharing.mysite.com, for example by only exposing that subdomain on a private network.
+
+Wagtail Sharing lets you create separate sharing sites for each Wagtail Site you have defined. It also supports a configurable visual banner on shared pages to remind reviewers that content may differ from your published site.
 
 ## Setup
 
 1. Install the package using pip:
  
- ```
+ ```sh
  pip install git+https://github.com/cfpb/wagtail-sharing.git
  ```
  
@@ -31,20 +33,12 @@ A simple banner is also added to the top of each page when draft content is bein
  )
 ```
 
-1. Configure desired sharing settings (see below):
+1. Run migrations to create required database tables:
 
- ```py
- # in settings.py
- 
- # This makes drafts visible to logged-in users or from requests to
- # a given hostname.
- WAGTAILSHARING_REQUEST_CHECKS = (
-     'wagtailsharing.request_checks.LoggedInUserRequestCheck',
-     'wagtailsharing.request_checks.HostnameRequestCheck',
- )
- 
- WAGTAILSHARING_HOSTNAME = os.environ.get('WAGTAILSHARING_HOSTNAME')
+ ```sh
+ $ manage.py migrate wagtailsharing
  ```
+
  
 1. Replace use of Wagtail's catch-all URL pattern:
  
@@ -59,33 +53,21 @@ A simple banner is also added to the top of each page when draft content is bein
 +urlpatterns.append(url(r'', include(wagtailsharing_urls)))
  ```
 
-## Request checks
+## Sharing sites
 
-The `settings.WAGTAILSHARING_REQUEST_CHECKS` setting specifies a list of checks to make against incoming requests to validate that they have permission to view draft pages. **Important: configuring this section wrong could expose draft/private content publicly. Be careful when configuring this part!**
+The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions. 
 
-The list should contain the full classnames of check classes to invoke against the incoming Django `HttpRequest` object. If **any** of these checks pass, the request is considered authorized to view draft content. Built-in classes include:
+![Sharing sites](docs/images/sharing-sites.png)
 
-- `wagtailsharing.request_checks.LoggedInUserRequestCheck`
+No sharing sites exist by default. A sharing site must be manually created for each Wagtail Site to make its latest revisions shareable. Each sharing site is defined by a unique hostname and port number. **Important: configuring your sharing sites improperly could expose draft/private content publicly. Be careful when setting them up!**
 
- Any logged-in users will see the latest draft when visiting a page instead of the latest published content.
+## Banners
 
-- `wagtailsharing.request_checks.StaffUserRequestCheck`
+Pages viewed on a wagtail-sharing shared site have a simple banner added to them to remind reviewers that the current published content may differ from the content they are viewing.
 
- Staff users (verified by checking `user.is_staff`) will see the latest draft when visiting a page instead of the latest published content.
+![Banner](docs/images/banner.png)
 
-- `wagtailsharing.request_checks.HostnameRequestCheck`
-
- Requests coming from a hostname matching `settings.WAGTAILSHARING_HOSTNAME` exactly (using `request.get_host()`, which notably includes the port, e.g. `sharing.my.domain:8000`) will see the latest draft when visiting a page instead of the latest published content.
-
-### Writing your own request checks
-
-You can write your own request check class by defining a new object that has a `verify_request` method:
-
-```py
-class SpecificUserRequestCheck(object):
-    def verify_request(self, request):
-        return request.user.username == 'admin'
-```
+This behavior can be disabled by setting `settings.WAGTAILSHARING_BANNER = False`.  The banner template can be overridden by providing an alternate template file at `wagtailsharing/banner.html` similar to how [wagtailadmin template overrides](http://docs.wagtail.io/en/latest/advanced_topics/customisation/admin_templates.html#customising-admin-templates) are supported.
 
 ## Compatibility
 
