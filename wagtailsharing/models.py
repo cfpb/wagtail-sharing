@@ -7,7 +7,8 @@ from wagtail.wagtailcore.models import Site
 
 @python_2_unicode_compatible
 class SharingSite(models.Model):
-    site = models.ForeignKey(Site, related_name='sharing_sites')
+    site = models.OneToOneField(Site, on_delete=models.CASCADE,
+                                related_name='sharing_site')
     hostname = models.CharField(max_length=255, db_index=True)
     port = models.IntegerField(default=80)
 

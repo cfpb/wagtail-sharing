@@ -17,11 +17,12 @@ class TestSharingSite(TestCase):
         self.create(hostname='hostname', port=8000)
 
     def test_site_related_name_default_empty(self):
-        self.assertFalse(self.default_site.sharing_sites.exists())
+        with self.assertRaises(SharingSite.DoesNotExist):
+            self.default_site.sharing_site
 
     def test_site_related_name(self):
         self.create(hostname='hostname', port=8000)
-        self.assertTrue(self.default_site.sharing_sites.exists())
+        self.assertIsNotNone(self.default_site.sharing_site)
 
     def test_str(self):
         site = self.create(hostname='hostname', port=8000)
@@ -36,10 +37,10 @@ class TestSharingSite(TestCase):
         with self.assertRaises(IntegrityError):
             self.create(hostname='hostname', port=1234)
 
-    def test_multiple_sharing_sites(self):
+    def test_multiple_sharing_sites_not_allowed(self):
         self.create(hostname='hostname', port=1234)
-        self.create(hostname='otherhost', port=5678)
-        self.assertEqual(self.default_site.sharing_sites.count(), 2)
+        with self.assertRaises(IntegrityError):
+            self.create(hostname='otherhost', port=5678)
 
     def test_find_for_request(self):
         sharing_site = self.create(hostname='hostname', port=1234)
