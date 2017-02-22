@@ -7,6 +7,12 @@ from django.test import TestCase
 from mock import patch
 
 
+try:
+    from importlib import reload
+except ImportError:
+    pass
+
+
 class TestUrlPatterns(TestCase):
     def setUp(self):
         def test_view():
