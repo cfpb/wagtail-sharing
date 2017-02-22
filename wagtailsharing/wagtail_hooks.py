@@ -26,7 +26,7 @@ def add_sharing_link(page, page_perms, is_parent=False):
 
     if sharing_url:
         yield wagtailadmin_widgets.Button(
-            'Get sharing link',
+            'View sharing link',
             sharing_url,
             attrs={
                 'title': _("Share latest revision of '{title}'").format(
