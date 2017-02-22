@@ -69,6 +69,14 @@ Pages viewed on a wagtail-sharing shared site have a simple banner added to them
 
 This behavior can be disabled by setting `settings.WAGTAILSHARING_BANNER = False`.  The banner template can be overridden by providing an alternate template file at `wagtailsharing/banner.html` similar to how [wagtailadmin template overrides](http://docs.wagtail.io/en/latest/advanced_topics/customisation/admin_templates.html#customising-admin-templates) are supported.
 
+## Sharing links
+
+A page's sharing URL can be retrieved by passing its `Page` instance to `wagtailsharing.helpers.get_sharing_url`. This method returns `None` if no shared sites are configured or if the specified page is not routable to a shared site.
+
+Shared pages will also have a new dropdown menu option that links to this sharing URL from the Wagtail page explorer.
+
+![Dropdown with sharing link](docs/images/dropdown.png)
+
 ## Compatibility
 
 This project has been tested for compatibility with:

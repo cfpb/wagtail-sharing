@@ -1,12 +1,11 @@
 from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
-from django.utils.text import slugify
 from mock import Mock, patch
 
-from wagtail.tests.testapp.models import SimplePage
 from wagtail.wagtailcore.models import Site
 
 from wagtailsharing.models import SharingSite
+from wagtailsharing.tests.helpers import create_draft_page
 from wagtailsharing.views import ServeView
 
 
@@ -25,17 +24,6 @@ class TestServeView(TestCase):
             site=self.default_site,
             hostname=hostname
         )
-
-    def create_draft_page(self, title):
-        page = SimplePage(
-            title=title,
-            slug=slugify(title),
-            content='content',
-            live=False
-        )
-
-        self.default_site.root_page.add_child(instance=page)
-        return page
 
     def assert_title_matches(self, response, title):
         self.assertContains(response, title)
@@ -62,7 +50,7 @@ class TestServeView(TestCase):
 
     def test_default_site_unpublished_page_raises_404(self):
         self.create_sharing_site(hostname='hostname')
-        self.create_draft_page(title='unpublished')
+        create_draft_page(self.default_site, title='unpublished')
 
         request = self.make_request('/unpublished/')
         with self.assertRaises(Http404):
@@ -70,7 +58,7 @@ class TestServeView(TestCase):
 
     def test_sharing_site_unpublished_page_returns_200(self):
         self.create_sharing_site(hostname='hostname')
-        self.create_draft_page(title='draft')
+        create_draft_page(self.default_site, title='draft')
 
         request = self.make_request('/draft/', HTTP_HOST='hostname')
         response = ServeView().get(request, request.path)
@@ -78,7 +66,7 @@ class TestServeView(TestCase):
 
     def test_default_site_published_page_returns_200(self):
         self.create_sharing_site(hostname='hostname')
-        page = self.create_draft_page(title='published')
+        page = create_draft_page(self.default_site, title='published')
         page.save_revision().publish()
 
         request = self.make_request('/published/')
@@ -87,7 +75,7 @@ class TestServeView(TestCase):
 
     def test_sharing_site_published_page_returns_200(self):
         self.create_sharing_site(hostname='hostname')
-        page = self.create_draft_page(title='published')
+        page = create_draft_page(self.default_site, title='published')
         page.save_revision().publish()
 
         request = self.make_request('/published/', HTTP_HOST='hostname')
@@ -96,7 +84,7 @@ class TestServeView(TestCase):
 
     def test_default_site_draft_version_returns_published_version(self):
         self.create_sharing_site(hostname='hostname')
-        page = self.create_draft_page(title='original')
+        page = create_draft_page(self.default_site, title='original')
         page.save_revision().publish()
         page.title = 'changed'
         page.save_revision()
@@ -107,7 +95,7 @@ class TestServeView(TestCase):
 
     def test_sharing_site_draft_version_returns_draft_version(self):
         self.create_sharing_site(hostname='hostname')
-        page = self.create_draft_page(title='original')
+        page = create_draft_page(self.default_site, title='original')
         page.save_revision().publish()
         page.title = 'changed'
         page.save_revision()
@@ -118,7 +106,7 @@ class TestServeView(TestCase):
 
     def test_before_serve_page_hook_called(self):
         self.create_sharing_site(hostname='hostname')
-        self.create_draft_page(title='page')
+        create_draft_page(self.default_site, title='page')
 
         with patch(
             'wagtail.wagtailcore.hooks.get_hooks'
@@ -129,7 +117,7 @@ class TestServeView(TestCase):
 
     def test_before_serve_page_hook_returns_redirect(self):
         self.create_sharing_site(hostname='hostname')
-        self.create_draft_page(title='page')
+        create_draft_page(self.default_site, title='page')
 
         with patch(
             'wagtail.wagtailcore.hooks.get_hooks',

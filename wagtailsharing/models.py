@@ -40,3 +40,12 @@ class SharingSite(models.Model):
             port = request.META.get('SERVER_PORT')
 
         return cls.objects.get(hostname=hostname, port=port)
+
+    @property
+    def root_url(self):
+        if self.port == 80:
+            return 'http://{}'.format(self.hostname)
+        elif self.port == 443:
+            return 'https://{}'.format(self.hostname)
+        else:
+            return 'http://{}:{:d}'.format(self.hostname, self.port)
