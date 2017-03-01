@@ -2,6 +2,12 @@ All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
 
+## 0.3 - 2017-03-01
+
+### Changed
+- Improved sharing link text in Wagtail admin menu.
+
+
 ## 0.2 - 2017-02-22
 
 ### Changed

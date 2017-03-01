@@ -34,7 +34,7 @@ def add_sharing_link(page, page_perms, is_parent=False):
             'View sharing link',
             sharing_url,
             attrs={
-                'title': _("Share latest revision of '{}'").format(title),
+                'title': _("View shared revision of '{}'").format(title),
             },
             priority=90
         )
