@@ -14,13 +14,30 @@ testing_extras = [
 ]
 
 
+short_description = 'Easier sharing of Wagtail drafts'
+
+
+def read_long_description():
+    try:
+        import pypandoc
+        return pypandoc.convert('README.md', 'rst')
+    except (IOError, ImportError):
+        pass
+
+
 setup(
     name='wagtail-sharing',
-    version='0.1',
+    url='https://github.com/cfpb/wagtail-sharing',
+    author='CFPB',
+    author_email='tech@cfpb.gov',
+    license='CCO',
+    version='0.3',
     include_package_data=True,
     packages=find_packages(),
     install_requires=install_requires,
     extras_require={
         'testing': testing_extras,
-    }
+    },
+    description=short_description,
+    long_description=read_long_description()
 )
