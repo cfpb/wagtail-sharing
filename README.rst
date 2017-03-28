@@ -27,7 +27,7 @@ Install the package using pip:
 
 .. code-block:: bash
 
-  $ pip install git+https://github.com/cfpb/wagtail-sharing.git
+  $ pip install wagtail-sharing
  
 Add ``wagtailsharing`` as an installed app in your Django settings:
 
