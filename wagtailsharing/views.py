@@ -1,11 +1,12 @@
 from __future__ import unicode_literals
 
 import inspect
+import re
 
-from bs4 import BeautifulSoup
 from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.template import loader
+from django.utils.encoding import force_text
 from django.views.generic import View
 from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.views import serve as wagtail_serve
@@ -96,16 +97,19 @@ class ServeView(View):
     def add_response_banner(response):
         response.render()
 
-        html = BeautifulSoup(response.content, 'html.parser')
+        html = force_text(response.content)
+        body = re.search(r'(?i)<body.*?>', html)
 
-        banner_template_name = 'wagtailsharing/banner.html'
-        banner_template = loader.get_template(banner_template_name)
-        banner_html = banner_template.render()
+        if body:
+            endpos = body.end()
 
-        banner = BeautifulSoup(banner_html, 'html.parser')
+            banner_template_name = 'wagtailsharing/banner.html'
+            banner_template = loader.get_template(banner_template_name)
 
-        if html.body:
-            html.body.insert(0, banner)
-            response.content = html.prettify()
+            banner_html = banner_template.render()
+            banner_html = force_text(banner_html)
+
+            content_with_banner = html[:endpos] + banner_html + html[endpos:]
+            response.content = content_with_banner
 
         return response
