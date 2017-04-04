@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
 from mock import Mock, patch
@@ -140,6 +142,16 @@ class TestServeView(TestCase):
 
     def test_banner_setting_modified_body(self):
         response = Mock(content='<body>abcde</body>')
+        response = ServeView.postprocess_response(response)
+        self.assertIn('wagtailsharing-banner', response.content)
+
+    def test_banner_setting_modified_body_not_first_tag(self):
+        response = Mock(content='<html><body>abcde</body></html>')
+        response = ServeView.postprocess_response(response)
+        self.assertIn('wagtailsharing-banner', response.content)
+
+    def test_banner_setting_modified_body_uppercase(self):
+        response = Mock(content='<BODY>abcde</BODY>')
         response = ServeView.postprocess_response(response)
         self.assertIn('wagtailsharing-banner', response.content)
 

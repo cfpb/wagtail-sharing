@@ -6,6 +6,7 @@ import re
 from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.template import loader
+from django.utils.encoding import force_text
 from django.views.generic import View
 from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.views import serve as wagtail_serve
@@ -92,15 +93,19 @@ class ServeView(View):
     @staticmethod
     def add_response_banner(response):
         response.render()
-        html = str(response.content)
 
-        banner_template_name = 'wagtailsharing/banner.html'
-        banner_template = loader.get_template(banner_template_name)
-        banner_html = banner_template.render()
+        html = force_text(response.content)
+        body = re.search(r'(?i)<body.*?>', html)
 
-        body = re.match(r'<body.*?>', response.content)
         if body:
             endpos = body.end()
+
+            banner_template_name = 'wagtailsharing/banner.html'
+            banner_template = loader.get_template(banner_template_name)
+
+            banner_html = banner_template.render()
+            banner_html = force_text(banner_html)
+
             content_with_banner = html[:endpos] + banner_html + html[endpos:]
             response.content = content_with_banner
 
