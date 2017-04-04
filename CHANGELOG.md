@@ -6,6 +6,7 @@ We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
 ### Changed
 - Improved README formatting for PyPI.
+- Explicitly only invoke sharing logic on HTTP GET requests.
 
 
 ## 0.3 - 2017-03-01

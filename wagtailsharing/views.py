@@ -14,7 +14,10 @@ from wagtailsharing.models import SharingSite
 
 
 class ServeView(View):
-    def get(self, request, path):
+    def dispatch(self, request, path):
+        if request.method.upper() != 'GET':
+            return wagtail_serve(request, path)
+
         try:
             sharing_site = SharingSite.find_for_request(request)
         except SharingSite.DoesNotExist:
