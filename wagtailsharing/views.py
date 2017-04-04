@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 import inspect
+import re
 
-from bs4 import BeautifulSoup
 from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.template import loader
@@ -92,17 +92,16 @@ class ServeView(View):
     @staticmethod
     def add_response_banner(response):
         response.render()
-
-        html = BeautifulSoup(response.content, 'html.parser')
+        html = str(response.content)
 
         banner_template_name = 'wagtailsharing/banner.html'
         banner_template = loader.get_template(banner_template_name)
         banner_html = banner_template.render()
 
-        banner = BeautifulSoup(banner_html, 'html.parser')
-
-        if html.body:
-            html.body.insert(0, banner)
-            response.content = html.prettify()
+        body = re.match(r'<body.*?>', response.content)
+        if body:
+            endpos = body.end()
+            content_with_banner = html[:endpos] + banner_html + html[endpos:]
+            response.content = content_with_banner
 
         return response

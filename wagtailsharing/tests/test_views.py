@@ -133,14 +133,22 @@ class TestServeView(TestCase):
         response = ServeView.postprocess_response(response)
         self.assertEqual(response.content, '<body>abcde</body>')
 
-    @override_settings(WAGTAILSHARING_BANNER=True)
     def test_banner_setting_no_body(self):
         response = Mock(content='abcde')
         response = ServeView.postprocess_response(response)
         self.assertEqual(response.content, 'abcde')
 
-    @override_settings(WAGTAILSHARING_BANNER=True)
     def test_banner_setting_modified_body(self):
         response = Mock(content='<body>abcde</body>')
         response = ServeView.postprocess_response(response)
         self.assertIn('wagtailsharing-banner', response.content)
+
+    def test_banner_setting_modified_body_with_attributes(self):
+        response = Mock(content='<body foo="foo" bar="bar">abcde</body>')
+        response = ServeView.postprocess_response(response)
+        self.assertIn('wagtailsharing-banner', response.content)
+
+    def test_banner_leaves_links_alone(self):
+        response = Mock(content='<body>Link <a href="#">and</a> spaces</body>')
+        response = ServeView.postprocess_response(response)
+        self.assertIn('<a href="#">and</a>', response.content)
