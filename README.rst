@@ -20,6 +20,8 @@ These examples obviously work best when you have some method of restricting acce
 
 Wagtail Sharing lets you create separate sharing sites for each Wagtail Site you have defined. It also supports a configurable visual banner on shared pages to remind reviewers that content may differ from your published site.
 
+This new logic only applies to ``GET`` requests. Other HTTP methods like ``POST`` defer to standard Wagtail handling.
+
 Setup
 -----
 
