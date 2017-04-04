@@ -1,9 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
-## Unreleased
+## 0.5 - 2017-04-04
 
 ### Changed
+- Explicitly only invoke sharing logic on HTTP GET requests.
 - Better and simpler logic for preview banner insertion.
 
 
@@ -11,7 +12,6 @@ We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
 ### Changed
 - Improved README formatting for PyPI.
-- Explicitly only invoke sharing logic on HTTP GET requests.
 
 
 ## 0.3 - 2017-03-01
