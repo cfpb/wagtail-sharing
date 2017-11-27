@@ -1,6 +1,20 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 0.6 - 2017-11-27
+
+### Changed
+- Adds testing against Django 1.11 and Wagtail 1.13.
+- Adds additional hooks to support custom serve logic.
+
+
+## 0.5.1 - 2017-10-31
+
+### Changed
+- Adds testing against Wagtail 1.10.
+- setup.py now includes Trove classifiers for PyPI.
+
+
 ## 0.5 - 2017-04-04
 
 ### Changed
