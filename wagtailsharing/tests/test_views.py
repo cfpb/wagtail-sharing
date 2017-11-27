@@ -1,9 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.http import Http404, HttpResponse
-from django.test import RequestFactory, TestCase, override_settings
-from mock import Mock, patch
+from django.test import RequestFactory, TestCase
+from mock import patch
 
+from wagtail.tests.utils import WagtailTestUtils
 from wagtail.wagtailcore.models import Site
 
 from wagtailsharing.models import SharingSite
@@ -11,7 +12,19 @@ from wagtailsharing.tests.helpers import create_draft_page
 from wagtailsharing.views import ServeView
 
 
-class TestServeView(TestCase):
+def before_serve_page(page, request, args, kwargs):
+    return HttpResponse('before serve page hook')
+
+
+def before_serve_shared_page(page, request, args, kwargs):
+    page.title = 'hook changed title'
+
+
+def after_serve_shared_page(page, response):
+    response['test-hook-header'] = 'foo'
+
+
+class TestServeView(WagtailTestUtils, TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.default_site = Site.objects.get(is_default_site=True)
@@ -124,57 +137,31 @@ class TestServeView(TestCase):
         self.create_sharing_site(hostname='hostname')
         create_draft_page(self.default_site, title='page')
 
-        with patch(
-            'wagtail.wagtailcore.hooks.get_hooks'
-        ) as get_hooks:
+        with self.register_hook('before_serve_page', before_serve_page):
             request = self.make_request('/page/', HTTP_HOST='hostname')
-            ServeView.as_view()(request, request.path)
-            get_hooks.assert_called_once_with('before_serve_page')
+            response = ServeView.as_view()(request, request.path)
+            self.assertContains(response, 'before serve page hook')
 
-    def test_before_serve_page_hook_returns_redirect(self):
+    def test_before_serve_shared_page_hook_called(self):
         self.create_sharing_site(hostname='hostname')
         create_draft_page(self.default_site, title='page')
 
-        with patch(
-            'wagtail.wagtailcore.hooks.get_hooks',
-            return_value=[Mock(return_value=HttpResponse(status=123))]
+        with self.register_hook(
+            'before_serve_shared_page',
+            before_serve_shared_page
         ):
             request = self.make_request('/page/', HTTP_HOST='hostname')
             response = ServeView.as_view()(request, request.path)
-            self.assertEqual(response.status_code, 123)
+            self.assertContains(response, 'hook changed title')
 
-    @override_settings(WAGTAILSHARING_BANNER=False)
-    def test_no_banner_setting(self):
-        response = Mock(content='<body>abcde</body>')
-        response = ServeView.postprocess_response(response)
-        self.assertEqual(response.content, '<body>abcde</body>')
+    def test_after_serve_shared_page_hook_called(self):
+        self.create_sharing_site(hostname='hostname')
+        create_draft_page(self.default_site, title='page')
 
-    def test_banner_setting_no_body(self):
-        response = Mock(content='abcde')
-        response = ServeView.postprocess_response(response)
-        self.assertEqual(response.content, 'abcde')
-
-    def test_banner_setting_modified_body(self):
-        response = Mock(content='<body>abcde</body>')
-        response = ServeView.postprocess_response(response)
-        self.assertIn('wagtailsharing-banner', response.content)
-
-    def test_banner_setting_modified_body_not_first_tag(self):
-        response = Mock(content='<html><body>abcde</body></html>')
-        response = ServeView.postprocess_response(response)
-        self.assertIn('wagtailsharing-banner', response.content)
-
-    def test_banner_setting_modified_body_uppercase(self):
-        response = Mock(content='<BODY>abcde</BODY>')
-        response = ServeView.postprocess_response(response)
-        self.assertIn('wagtailsharing-banner', response.content)
-
-    def test_banner_setting_modified_body_with_attributes(self):
-        response = Mock(content='<body foo="foo" bar="bar">abcde</body>')
-        response = ServeView.postprocess_response(response)
-        self.assertIn('wagtailsharing-banner', response.content)
-
-    def test_banner_leaves_links_alone(self):
-        response = Mock(content='<body>Link <a href="#">and</a> spaces</body>')
-        response = ServeView.postprocess_response(response)
-        self.assertIn('<a href="#">and</a>', response.content)
+        with self.register_hook(
+            'after_serve_shared_page',
+            after_serve_shared_page
+        ):
+            request = self.make_request('/page/', HTTP_HOST='hostname')
+            response = ServeView.as_view()(request, request.path)
+            self.assertEqual(response['test-hook-header'], 'foo')

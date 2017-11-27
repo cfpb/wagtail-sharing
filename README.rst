@@ -93,6 +93,46 @@ Shared pages will also have a new dropdown menu option that links to this sharin
 .. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/dropdown.png
     :alt: Dropdown with sharing link
 
+Hooks
+-----
+
+ .. |before_serve_page| replace:: ``before_serve_page``
+ .. _before_serve_page: http://docs.wagtail.io/en/latest/reference/hooks.html#before-serve-page
+
+As with normal page serving, the serving of shared pages continues to respect Wagtail's built-in |before_serve_page|_ hook.
+
+This project adds these additional hooks:
+
+``before_serve_shared_page``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Called before the latest revision of the page is about to be served, just before its ``serve()`` method is called. Like ``before_serve_page`` this hook is passed the page object, the request object, and the ``args`` and ``kwargs`` that will be passed to the page's ``serve()`` method. If the callable returns an ``HttpResponse``, that response will be returned immediately to the user.
+
+This hook could be useful for limiting sharing to only certain page types or for modifying a page's contents when it is shared.
+
+.. code-block:: python
+
+  from wagtail.wagtailcore import hooks
+
+  @hooks.register('before_serve_shared_page')
+  def modify_shared_title(page, request, args, kwargs):
+      page.title += ' (Shared)'
+
+``after_serve_shared_page``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Called after the page's ``serve()`` method is called but before the response is returned to the user. This hook is passed the page object and the response object returned by ``serve()``. If the callable returns an ``HttpResponse``, that response will be returned immediately to the user.
+
+This hook could be useful for directly modifying the response content, for example by adding custom headers or altering the generated HTML. This hook is used to implement the notification banner described above.
+
+.. code-block:: python
+
+  from wagtail.wagtailcore import hooks
+
+  @hooks.register('after_serve_shared_page')
+  def add_custom_header(page, response):
+      response['Wagtail-Is-Shared'] = '1'
+
 Compatibility
 -------------
 
