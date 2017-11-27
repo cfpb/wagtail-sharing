@@ -137,11 +137,11 @@ class TestServeView(TestCase):
 
         with patch(
             'wagtail.wagtailcore.hooks.get_hooks',
-            return_value=[Mock(return_value=HttpResponse(status=999))]
+            return_value=[Mock(return_value=HttpResponse(status=123))]
         ):
             request = self.make_request('/page/', HTTP_HOST='hostname')
             response = ServeView.as_view()(request, request.path)
-            self.assertEqual(response.status_code, 999)
+            self.assertEqual(response.status_code, 123)
 
     @override_settings(WAGTAILSHARING_BANNER=False)
     def test_no_banner_setting(self):
