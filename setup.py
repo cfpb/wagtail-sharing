@@ -34,6 +34,7 @@ setup(
     long_description=open('README.rst').read(),
     classifiers=[
         'Framework :: Django',
+        'Framework :: Django :: 1.11',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
