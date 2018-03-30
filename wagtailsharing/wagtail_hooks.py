@@ -6,9 +6,15 @@ from django.conf import settings
 from django.template import loader
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+
+try:
+    from wagtail.admin import widgets as wagtailadmin_widgets
+    from wagtail.core import hooks  # pragma: no cover
+except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
+    from wagtail.wagtailadmin import widgets as wagtailadmin_widgets
+    from wagtail.wagtailcore import hooks
+
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from wagtail.wagtailadmin import widgets as wagtailadmin_widgets
-from wagtail.wagtailcore import hooks
 
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite

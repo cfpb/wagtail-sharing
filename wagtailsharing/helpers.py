@@ -1,4 +1,9 @@
-from wagtail.wagtailcore.models import Site
+from __future__ import absolute_import, unicode_literals
+
+try:
+    from wagtail.core.models import Site
+except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
+    from wagtail.wagtailcore.models import Site
 
 from wagtailsharing.models import SharingSite
 

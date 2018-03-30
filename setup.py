@@ -2,8 +2,8 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    'Django>=1.8,<1.12',
-    'wagtail>=1.6,<1.14',
+    'Django>=1.8,<2.1',
+    'wagtail>=1.6,<2.1',
 ]
 
 
@@ -34,10 +34,14 @@ setup(
     long_description=open('README.rst').read(),
     classifiers=[
         'Framework :: Django',
-        'Framework :: Django :: 1.11',
         'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
         'Framework :: Django :: 1.8',
         'Framework :: Django :: 1.9',
+        'Framework :: Django :: 2.0',
+        'Framework :: Wagtail',
+        'Framework :: Wagtail :: 1',
+        'Framework :: Wagtail :: 2',
         'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
         'License :: Public Domain',
         'Programming Language :: Python',

@@ -1,9 +1,15 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.conf.urls import url
-from wagtail.wagtailcore.urls import (
-    serve_pattern, urlpatterns as wagtailcore_urlpatterns
-)
+
+try:
+    from wagtail.core.urls import (
+        serve_pattern, urlpatterns as wagtailcore_urlpatterns
+    )
+except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
+    from wagtail.wagtailcore.urls import (
+        serve_pattern, urlpatterns as wagtailcore_urlpatterns
+    )
 
 from wagtailsharing.views import ServeView
 
