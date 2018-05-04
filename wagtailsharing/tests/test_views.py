@@ -12,15 +12,19 @@ from wagtailsharing.tests.helpers import create_draft_page
 from wagtailsharing.views import ServeView
 
 
-def before_serve_page(page, request, args, kwargs):
-    return HttpResponse('before serve page hook')
+def before_hook_returns_http_response(page, request, args, kwargs):
+    return HttpResponse('returned by hook')
 
 
-def before_serve_shared_page(page, request, args, kwargs):
+def before_hook_changes_page_title(page, request, args, kwargs):
     page.title = 'hook changed title'
 
 
-def after_serve_shared_page(page, response):
+def after_hook_returns_http_response(page, response):
+    return HttpResponse('returned by hook')
+
+
+def after_hook_sets_response_header(page, response):
     response['test-hook-header'] = 'foo'
 
 
@@ -137,10 +141,13 @@ class TestServeView(WagtailTestUtils, TestCase):
         self.create_sharing_site(hostname='hostname')
         create_draft_page(self.default_site, title='page')
 
-        with self.register_hook('before_serve_page', before_serve_page):
+        with self.register_hook(
+            'before_serve_page',
+            before_hook_returns_http_response
+        ):
             request = self.make_request('/page/', HTTP_HOST='hostname')
             response = ServeView.as_view()(request, request.path)
-            self.assertContains(response, 'before serve page hook')
+            self.assertContains(response, 'returned by hook')
 
     def test_before_serve_shared_page_hook_called(self):
         self.create_sharing_site(hostname='hostname')
@@ -148,11 +155,23 @@ class TestServeView(WagtailTestUtils, TestCase):
 
         with self.register_hook(
             'before_serve_shared_page',
-            before_serve_shared_page
+            before_hook_changes_page_title
         ):
             request = self.make_request('/page/', HTTP_HOST='hostname')
             response = ServeView.as_view()(request, request.path)
             self.assertContains(response, 'hook changed title')
+
+    def test_before_serve_shared_page_hook_returns_http_response(self):
+        self.create_sharing_site(hostname='hostname')
+        create_draft_page(self.default_site, title='page')
+
+        with self.register_hook(
+            'before_serve_shared_page',
+            before_hook_returns_http_response
+        ):
+            request = self.make_request('/page/', HTTP_HOST='hostname')
+            response = ServeView.as_view()(request, request.path)
+            self.assertContains(response, 'returned by hook')
 
     def test_after_serve_shared_page_hook_called(self):
         self.create_sharing_site(hostname='hostname')
@@ -160,8 +179,20 @@ class TestServeView(WagtailTestUtils, TestCase):
 
         with self.register_hook(
             'after_serve_shared_page',
-            after_serve_shared_page
+            after_hook_sets_response_header
         ):
             request = self.make_request('/page/', HTTP_HOST='hostname')
             response = ServeView.as_view()(request, request.path)
             self.assertEqual(response['test-hook-header'], 'foo')
+
+    def test_after_serve_shared_page_hook_returns_http_response(self):
+        self.create_sharing_site(hostname='hostname')
+        create_draft_page(self.default_site, title='page')
+
+        with self.register_hook(
+            'after_serve_shared_page',
+            after_hook_returns_http_response
+        ):
+            request = self.make_request('/page/', HTTP_HOST='hostname')
+            response = ServeView.as_view()(request, request.path)
+            self.assertContains(response, 'returned by hook')
