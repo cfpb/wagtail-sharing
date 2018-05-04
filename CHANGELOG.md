@@ -8,6 +8,7 @@ We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 - Add additional tests for the `before_serve_shared_page` and `after_serve_shared_page` hooks.
 - Added Django check and note in README to clarify dependency on `wagtail.contrib.modeladmin` app.
 - Fixed MANIFEST.in to properly include only appropriate HTML templates.
+- Added unit test against requests without `SERVER_PORT`.
 
 
 ## 0.6 - 2017-11-27

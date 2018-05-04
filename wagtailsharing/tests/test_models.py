@@ -65,6 +65,13 @@ class TestSharingSite(TestCase):
         with self.assertRaises(SharingSite.DoesNotExist):
             SharingSite.find_for_request(request)
 
+    def test_find_for_request_no_server_port(self):
+        request = self.factory.get('/')
+        del request.META['SERVER_PORT']
+
+        with self.assertRaises(SharingSite.DoesNotExist):
+            SharingSite.find_for_request(request)
+
     def test_root_url_port_80_http_no_port(self):
         site = SharingSite(hostname='test.hostname', port=80)
         self.assertEqual(site.root_url, 'http://test.hostname')
