@@ -42,6 +42,8 @@ Add ``wagtailsharing`` as an installed app in your Django settings:
       ...
   )
 
+``wagtail.contrib.modeladmin`` is also required and must be included in your list of installed apps.
+
 Run migrations to create required database tables:
 
 .. code-block:: bash

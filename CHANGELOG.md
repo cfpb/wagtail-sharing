@@ -6,6 +6,7 @@ We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 - Simplified CHANGELOG format.
 - Removed superfluous tests of `Page.get_admin_display_title`.
 - Add additional tests for the `before_serve_shared_page` and `after_serve_shared_page` hooks.
+- Added Django check and note in README to clarify dependency on `wagtail.contrib.modeladmin` app.
 
 
 ## 0.6 - 2017-11-27
