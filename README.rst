@@ -66,7 +66,7 @@ Replace use of Wagtail's catch-all URL pattern:
 Sharing sites
 -------------
 
-The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions. 
+The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions.
 
 .. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/sharing-sites.png
     :width: 200px
@@ -74,6 +74,22 @@ The Wagtail admin now contains a new section under Settings called Sharing Sites
     :alt: Sharing sites
 
 No sharing sites exist by default. A sharing site must be manually created for each Wagtail Site to make its latest revisions shareable. Each sharing site is defined by a unique hostname and port number. **Important: configuring your sharing sites improperly could expose draft/private content publicly. Be careful when setting them up!**
+
+
+Middleware
+----------
+
+By default, links to other wagtail pages will go to the main Site domain. To make links stay on the sharing domain, a middleware must be added to the ``MIDDLEWARE`` configuration, after ``'wagtail.core.middleware.SiteMiddleware'``.
+
+.. code-block:: python
+
+  # in settings.py
+  MIDDLEWARE = (
+    ...
+    'wagtailsharing.middleware.SiteMiddleware',
+    ...
+  )
+
 
 Banners
 -------
