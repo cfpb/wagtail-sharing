@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
-## Unreleased
+## 0.7 - 2018-05-11
 
 - Simplified CHANGELOG format.
 - Removed superfluous tests of `Page.get_admin_display_title`.
