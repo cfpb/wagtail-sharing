@@ -9,6 +9,7 @@ We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 - Added Django check and note in README to clarify dependency on `wagtail.contrib.modeladmin` app.
 - Fixed MANIFEST.in to properly include only appropriate HTML templates.
 - Added unit test against requests without `SERVER_PORT`.
+- Added support for Django 2.0 and Wagtail 2.0.
 
 
 ## 0.6 - 2017-11-27

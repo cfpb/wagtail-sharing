@@ -4,8 +4,13 @@ import inspect
 
 from django.http import Http404, HttpResponse
 from django.views.generic import View
-from wagtail.wagtailcore import hooks
-from wagtail.wagtailcore.views import serve as wagtail_serve
+
+try:
+    from wagtail.core import hooks
+    from wagtail.core.views import serve as wagtail_serve  # pragma: no cover
+except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
+    from wagtail.wagtailcore import hooks
+    from wagtail.wagtailcore.views import serve as wagtail_serve
 
 from wagtailsharing.models import SharingSite
 
@@ -32,8 +37,8 @@ class ServeView(View):
     def get_requested_page(site, request, path):
         """Retrieve a page from a site given a request and path.
 
-        This method uses the standard `wagtail.wagtailcore.Page.route` method
-        to retrieve a page using its path from the given site root.
+        This method uses the standard `wagtail.core.Page.route` method to
+        retrieve a page using its path from the given site root.
 
         If a requested page exists and is published, the result of `Page.route`
         can be returned directly.

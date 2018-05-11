@@ -55,7 +55,7 @@ Replace use of Wagtail's catch-all URL pattern:
 .. code-block:: diff
 
   # in urls.py
-  -from wagtail.wagtailcore import urls as wagtail_urls
+  -from wagtail.core import urls as wagtail_urls
   +from wagtailsharing import urls as wagtailsharing_urls
 
   ...
@@ -114,7 +114,7 @@ This hook could be useful for limiting sharing to only certain page types or for
 
 .. code-block:: python
 
-  from wagtail.wagtailcore import hooks
+  from wagtail.core import hooks
 
   @hooks.register('before_serve_shared_page')
   def modify_shared_title(page, request, args, kwargs):
@@ -129,7 +129,7 @@ This hook could be useful for directly modifying the response content, for examp
 
 .. code-block:: python
 
-  from wagtail.wagtailcore import hooks
+  from wagtail.core import hooks
 
   @hooks.register('after_serve_shared_page')
   def add_custom_header(page, response):
@@ -141,8 +141,8 @@ Compatibility
 This project has been tested for compatibility with:
 
 * Python 2.7, 3.5, 3.6
-* Django 1.8-1.11
-* Wagtail 1.6-1.13
+* Django 1.8-1.11, 2.0
+* Wagtail 1.6-1.13, 2.0
 
 Open source licensing info
 --------------------------

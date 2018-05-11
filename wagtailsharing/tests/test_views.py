@@ -4,8 +4,12 @@ from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase
 from mock import patch
 
+try:
+    from wagtail.core.models import Site
+except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
+    from wagtail.wagtailcore.models import Site
+
 from wagtail.tests.utils import WagtailTestUtils
-from wagtail.wagtailcore.models import Site
 
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import create_draft_page
