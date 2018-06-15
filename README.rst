@@ -75,6 +75,28 @@ The Wagtail admin now contains a new section under Settings called Sharing Sites
 
 No sharing sites exist by default. A sharing site must be manually created for each Wagtail Site to make its latest revisions shareable. Each sharing site is defined by a unique hostname and port number. **Important: configuring your sharing sites improperly could expose draft/private content publicly. Be careful when setting them up!**
 
+Creating a new sharing site
+---------------------------
+
+After following the setup steps above, you should be able to create a new sharing site to use this functionality in a local Django development server. Let's assume that you are running your local development server on the default port 8000, and that pages there are being served at http://localhost:8000. We want to create a new sharing site at http://sharing.localhost:8000 at which latest page revisions will be exposed.
+
+To simulate accessing your site on a different hostname, you'll need to loosen `Django's default security settings <https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts>`_ that only allow access on `localhost`. Edit your settings file (e.g. ``myproject/settings/local.py``) to add the following:
+
+.. code-block:: python
+
+  ALLOWED_HOSTS = ['*']
+
+Verify that you can access your local server at http://sharing.localhost:8000. You should see the same content there as on http://localhost:8000, as you haven't enabled wagtail-sharing for the default site yet.
+
+To do so, in the Wagtail admin, under Settings, Sharing Sites, create a new sharing site with these parameters:
+
+.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/new-sharing-site.png
+    :width: 200px
+    :height: 100px
+    :alt: New sharing site
+
+Your latest page revisions (including drafts) should now be available at http://sharing.localhost:8000.
+
 Banners
 -------
 
