@@ -88,12 +88,12 @@ To simulate accessing your site on a different hostname, you'll need to loosen `
 
 Verify that you can access your local server at http://sharing.localhost:8000. You should see the same content there as on http://localhost:8000, as you haven't enabled wagtail-sharing for the default site yet.
 
-To do so, in the Wagtail admin, under Settings, Sharing Sites, create a new sharing site with these parameters:
+To do so, in the Wagtail admin, under Settings, Sharing Sites, create a new sharing site for the default site, with hostname ``sharing.localhost`` and port ``8000``.
 
 .. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/new-sharing-site.png
     :width: 200px
     :height: 100px
-    :alt: New sharing site
+    :alt: New sharing site with site: "localhost [default]", hostname: "sharing.localhost", port: "8000"
 
 Your latest page revisions (including drafts) should now be available at http://sharing.localhost:8000.
 
