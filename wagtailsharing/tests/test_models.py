@@ -1,7 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.db import IntegrityError
-from django.test import RequestFactory, TestCase
+from django.http import Http404
+from django.test import RequestFactory, TestCase, override_settings
 
 try:
     from wagtail.core.models import Site
@@ -9,6 +10,9 @@ except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
     from wagtail.wagtailcore.models import Site
 
 from wagtailsharing.models import SharingSite
+from wagtailsharing.tests.sharingtestapp.models import (
+    ShareableRoutablePageModel
+)
 
 
 class TestSharingSite(TestCase):
@@ -89,3 +93,89 @@ class TestSharingSite(TestCase):
     def test_root_url_other_port_http(self):
         site = SharingSite(hostname='test.hostname', port=1234)
         self.assertEqual(site.root_url, 'http://test.hostname:1234')
+
+
+class TestShareableRoutablePageMixin(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.default_site = Site.objects.get(is_default_site=True)
+        self.home_page = self.default_site.root_page
+        self.routable_page = self.home_page.add_child(
+            instance=ShareableRoutablePageModel(
+                title="Routable Page",
+                live=False,
+            )
+        )
+
+    def test_route_on_sharing_site(self):
+        SharingSite.objects.create(
+            site=self.default_site, hostname='hostname', port=1234
+        )
+        request = self.factory.get(
+            self.routable_page.url + 'subpage-url/',
+            HTTP_HOST='hostname',
+            SERVER_PORT=1234
+        )
+        route_result = self.routable_page.route(request, ['subpage-url'])
+        self.assertEqual(route_result.page, self.routable_page)
+        self.assertEqual(route_result.args[0], self.routable_page.subpage_url)
+
+    @override_settings(APPEND_SLASH=False)
+    def test_route_on_sharing_site_no_append_slash(self):
+        SharingSite.objects.create(
+            site=self.default_site, hostname='hostname', port=1234
+        )
+        request = self.factory.get(
+            self.routable_page.url + 'subpage-url-without-slash',
+            HTTP_HOST='hostname',
+            SERVER_PORT=1234
+        )
+        route_result = self.routable_page.route(
+            request, ['subpage-url-without-slash']
+        )
+        self.assertEqual(route_result.page, self.routable_page)
+        self.assertEqual(
+            route_result.args[0],
+            self.routable_page.subpage_url_without_slash
+        )
+
+    def test_route_on_sharing_site_no_route(self):
+        SharingSite.objects.create(
+            site=self.default_site, hostname='hostname', port=1234
+        )
+        request = self.factory.get(
+            self.routable_page.url + 'not-a-subpage-url/',
+            HTTP_HOST='hostname',
+            SERVER_PORT=1234
+        )
+        with self.assertRaises(Http404):
+            self.routable_page.route(request, ['not-a-subpage-url'])
+
+    def test_route_not_on_sharing_site(self):
+        SharingSite.objects.create(
+            site=self.default_site, hostname='test.hostname', port=1234
+        )
+        request = self.factory.get(
+            self.routable_page.url + 'subpage-url/',
+            HTTP_HOST='hostname',
+            SERVER_PORT=1234
+        )
+        with self.assertRaises(Http404):
+            self.routable_page.route(request, ['subpage-url'])
+
+    def test_published_routable_page(self):
+        self.routable_page.live = True
+        self.routable_page.save()
+        SharingSite.objects.create(
+            site=self.default_site, hostname='test.hostname', port=1234
+        )
+        request = self.factory.get(
+            self.routable_page.url + 'subpage-url/',
+            HTTP_HOST='hostname',
+            SERVER_PORT=1234
+        )
+        route_result = self.routable_page.route(request, ['subpage-url'])
+        self.assertEqual(route_result.page, self.routable_page)
+        self.assertEqual(route_result.args[0], self.routable_page.subpage_url)

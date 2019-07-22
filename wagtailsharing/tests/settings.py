@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     'taggit',
 ) + WAGTAIL_APPS + (
     'wagtailsharing',
+    'wagtailsharing.tests.sharingtestapp',
 )
 
 STATIC_URL = '/static/'
