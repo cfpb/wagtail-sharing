@@ -32,7 +32,9 @@ if wagtail.VERSION >= (2, 0):
     WAGTAIL_APPS = (
         'wagtail.contrib.forms',
         'wagtail.contrib.modeladmin',
+        'wagtail.contrib.routable_page',
         'wagtail.contrib.settings',
+        'wagtail.tests.routablepage',
         'wagtail.tests.testapp',
         'wagtail.admin',
         'wagtail.core',
@@ -57,7 +59,9 @@ if wagtail.VERSION >= (2, 0):
 else:
     WAGTAIL_APPS = (
         'wagtail.contrib.modeladmin',
+        'wagtail.contrib.wagtailroutablepage',
         'wagtail.contrib.settings',
+        'wagtail.tests.routablepage',
         'wagtail.tests.testapp',
         'wagtail.wagtailadmin',
         'wagtail.wagtailcore',

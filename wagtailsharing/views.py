@@ -6,10 +6,14 @@ from django.http import Http404, HttpResponse
 from django.views.generic import View
 
 try:
-    from wagtail.core import hooks
+    from wagtail.contrib.routable_page.models import RoutablePageMixin
+    from wagtail.core import hooks  # pragma: no cover
+    from wagtail.core.url_routing import RouteResult  # pragma: no cover
     from wagtail.core.views import serve as wagtail_serve  # pragma: no cover
 except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
+    from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin
     from wagtail.wagtailcore import hooks
+    from wagtail.wagtailcore.url_routing import RouteResult
     from wagtail.wagtailcore.views import serve as wagtail_serve
 
 from wagtailsharing.models import SharingSite
@@ -25,16 +29,12 @@ class ServeView(View):
         except SharingSite.DoesNotExist:
             return wagtail_serve(request, path)
 
-        page, args, kwargs = self.get_requested_page(
-            sharing_site.site,
-            request,
-            path
-        )
+        page, args, kwargs = self.route(sharing_site.site, request, path)
 
-        return self.serve_latest_revision(page, request, args, kwargs)
+        return self.serve(page, request, args, kwargs)
 
     @staticmethod
-    def get_requested_page(site, request, path):
+    def route(site, request, path):
         """Retrieve a page from a site given a request and path.
 
         This method uses the standard `wagtail.core.Page.route` method to
@@ -63,13 +63,22 @@ class ServeView(View):
             page = stack_frame.f_locals['self']
             path_components = stack_frame.f_locals['path_components']
 
-            if path_components:
+            if isinstance(page, RoutablePageMixin):
+                # This mimics the way that RoutablePageMixin uses the
+                # RouteResult to store the page route view to call.
+                path = '/'
+                if path_components:
+                    path += '/'.join(path_components) + '/'
+
+                view, args, kwargs = page.resolve_subpage(path)
+                return RouteResult(page, args=(view, args, kwargs))
+            elif path_components:
                 raise
 
-            return page, [], {}
+            return RouteResult(page)
 
-    @classmethod
-    def serve_latest_revision(cls, page, request, args, kwargs):
+    @staticmethod
+    def serve(page, request, args, kwargs):
         # Call the before_serve_page hook.
         for fn in hooks.get_hooks('before_serve_page'):
             result = fn(page, request, args, kwargs)

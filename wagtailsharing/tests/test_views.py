@@ -12,7 +12,9 @@ except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
 from wagtail.tests.utils import WagtailTestUtils
 
 from wagtailsharing.models import SharingSite
-from wagtailsharing.tests.helpers import create_draft_page
+from wagtailsharing.tests.helpers import (
+    create_draft_page, create_draft_routable_page
+)
 from wagtailsharing.views import ServeView
 
 
@@ -200,3 +202,22 @@ class TestServeView(WagtailTestUtils, TestCase):
             request = self.make_request('/page/', HTTP_HOST='hostname')
             response = ServeView.as_view()(request, request.path)
             self.assertContains(response, 'returned by hook')
+
+    def test_routable_page_index_route(self):
+        self.create_sharing_site(hostname='hostname')
+        create_draft_routable_page(self.default_site, title='routable')
+
+        request = self.make_request('/routable/', HTTP_HOST='hostname')
+        response = ServeView.as_view()(request, request.path)
+        self.assertEqual(response.status_code, 200)
+
+    def test_routable_page_sub_route(self):
+        self.create_sharing_site(hostname='hostname')
+        create_draft_routable_page(self.default_site, title='routable')
+
+        request = self.make_request(
+            '/routable/archive/year/2000/',
+            HTTP_HOST='hostname'
+        )
+        response = ServeView.as_view()(request, request.path)
+        self.assertContains(response, 'ARCHIVE BY YEAR: 2000')

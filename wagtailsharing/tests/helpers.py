@@ -1,5 +1,6 @@
 from django.utils.text import slugify
 from wagtail.tests.testapp.models import SimplePage
+from wagtail.tests.routablepage.models import RoutablePageTest
 
 
 def create_draft_page(site, title):
@@ -10,5 +11,11 @@ def create_draft_page(site, title):
         live=False
     )
 
+    site.root_page.add_child(instance=page)
+    return page
+
+
+def create_draft_routable_page(site, title):
+    page = RoutablePageTest(title=title, live=False)
     site.root_page.add_child(instance=page)
     return page
