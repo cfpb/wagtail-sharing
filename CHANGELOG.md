@@ -1,6 +1,11 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 0.8 - 2019-07-29
+
+- Improve getting started documentation.
+- Add support for RoutablePageMixin.
+
 ## 0.7 - 2018-05-11
 
 - Simplified CHANGELOG format.
