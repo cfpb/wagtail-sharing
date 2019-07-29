@@ -7,8 +7,8 @@ from django.views.generic import View
 
 try:
     from wagtail.contrib.routable_page.models import RoutablePageMixin
-    from wagtail.core import hooks
-    from wagtail.core.url_routing import RouteResult
+    from wagtail.core import hooks  # pragma: no cover
+    from wagtail.core.url_routing import RouteResult  # pragma: no cover
     from wagtail.core.views import serve as wagtail_serve  # pragma: no cover
 except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
     from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin
