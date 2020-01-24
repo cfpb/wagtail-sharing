@@ -162,7 +162,7 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.5, 3.6
+* Python 3.6
 * Django 1.8-1.11, 2.2
 * Wagtail 1.6-1.13, 2.3, 2.7
 
