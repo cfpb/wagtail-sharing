@@ -5,18 +5,18 @@ matrix:
   include:
     - env: TOXENV=flake8
       python: 3.6
+    - env: TOXENV=py37-dj111-wag113
+      python: 3.7
+    - env: TOXENV=py37-dj20-wag23
+      python: 3.7
+    - env: TOXENV=py37-dj20-wag27
+      python: 3.7
     - env: TOXENV=py36-dj111-wag113
       python: 3.6
     - env: TOXENV=py36-dj20-wag23
       python: 3.6
     - env: TOXENV=py36-dj20-wag27
       python: 3.6
-    - env: TOXENV=py35-dj111-wag113
-      python: 3.5
-    - env: TOXENV=py35-dj20-wag23
-      python: 3.5
-    - env: TOXENV=py35-dj20-wag27
-      python: 3.5
 
 install:
   pip install tox coveralls
