@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 install_requires = [
     'Django>=1.11,<2.3',
-    'wagtail>=1.6,<2.8',
+    'wagtail>=1.6,<2.9',
 ]
 
 
