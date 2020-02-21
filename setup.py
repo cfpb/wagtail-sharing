@@ -23,7 +23,7 @@ setup(
     author='CFPB',
     author_email='tech@cfpb.gov',
     license='CCO',
-    version='0.8',
+    version='0.9',
     include_package_data=True,
     packages=find_packages(),
     install_requires=install_requires,
