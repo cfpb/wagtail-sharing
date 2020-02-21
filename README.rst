@@ -167,7 +167,7 @@ This project has been tested for compatibility with:
 * Wagtail 1.13, 2.3, 2.8
 
 It should be compatible with all intermediate versions, as well.
-If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_
+If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
 
 Open source licensing info
 --------------------------
