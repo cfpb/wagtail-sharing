@@ -1,6 +1,11 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 1.0 - 2020-02-21
+
+- Add support for Wagtail 2.8
+- Remove testing for Python 2.7
+
 ## 0.8 - 2019-07-29
 
 - Improve getting started documentation.
