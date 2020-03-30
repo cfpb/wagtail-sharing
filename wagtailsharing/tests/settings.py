@@ -4,8 +4,6 @@ import os
 
 import django
 
-import wagtail
-
 
 ALLOWED_HOSTS = ["*"]
 
@@ -26,56 +24,29 @@ DATABASES = {
     },
 }
 
-if wagtail.VERSION >= (2, 0):
-    WAGTAIL_APPS = (
-        "wagtail.contrib.forms",
-        "wagtail.contrib.modeladmin",
-        "wagtail.contrib.routable_page",
-        "wagtail.contrib.settings",
-        "wagtail.tests.routablepage",
-        "wagtail.tests.testapp",
-        "wagtail.admin",
-        "wagtail.core",
-        "wagtail.documents",
-        "wagtail.images",
-        "wagtail.sites",
-        "wagtail.users",
-    )
 
-    WAGTAIL_MIDDLEWARE = ("wagtail.core.middleware.SiteMiddleware",)
+WAGTAIL_APPS = (
+    "wagtail.contrib.forms",
+    "wagtail.contrib.modeladmin",
+    "wagtail.contrib.routable_page",
+    "wagtail.contrib.settings",
+    "wagtail.tests.routablepage",
+    "wagtail.tests.testapp",
+    "wagtail.admin",
+    "wagtail.core",
+    "wagtail.documents",
+    "wagtail.images",
+    "wagtail.sites",
+    "wagtail.users",
+)
 
-    WAGTAILADMIN_RICH_TEXT_EDITORS = {
-        "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-        "custom": {
-            "WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"
-        },
-    }
-else:
-    WAGTAIL_APPS = (
-        "wagtail.contrib.modeladmin",
-        "wagtail.contrib.wagtailroutablepage",
-        "wagtail.contrib.settings",
-        "wagtail.tests.routablepage",
-        "wagtail.tests.testapp",
-        "wagtail.wagtailadmin",
-        "wagtail.wagtailcore",
-        "wagtail.wagtaildocs",
-        "wagtail.wagtailforms",
-        "wagtail.wagtailimages",
-        "wagtail.wagtailsites",
-        "wagtail.wagtailusers",
-    )
+WAGTAIL_MIDDLEWARE = ("wagtail.core.middleware.SiteMiddleware",)
 
-    WAGTAIL_MIDDLEWARE = ("wagtail.wagtailcore.middleware.SiteMiddleware",)
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
+    "custom": {"WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"},
+}
 
-    WAGTAILADMIN_RICH_TEXT_EDITORS = {
-        "default": {
-            "WIDGET": "wagtail.wagtailadmin.rich_text.HalloRichTextArea",
-        },
-        "custom": {
-            "WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"
-        },
-    }
 
 if django.VERSION >= (1, 10):
     MIDDLEWARE = (

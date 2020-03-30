@@ -3,11 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
-
-try:
-    from wagtail.core.models import Site
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    from wagtail.wagtailcore.models import Site
+from wagtail.core.models import Site
 
 
 @python_2_unicode_compatible

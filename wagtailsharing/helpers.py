@@ -1,12 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+from wagtail.core.models import Site
 from wagtailsharing.models import SharingSite
-
-
-try:
-    from wagtail.core.models import Site
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    from wagtail.wagtailcore.models import Site
 
 
 def get_sharing_url(page):

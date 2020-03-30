@@ -2,16 +2,11 @@ from __future__ import absolute_import, unicode_literals
 
 from django.test import TestCase
 
+from wagtail.core.models import Site
 from wagtail.tests.testapp.models import SimplePage
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import create_draft_page
-
-
-try:
-    from wagtail.core.models import Site
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    from wagtail.wagtailcore.models import Site
 
 
 class TestGetSharingUrl(TestCase):

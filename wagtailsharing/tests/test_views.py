@@ -4,6 +4,7 @@ from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase
 
 from mock import patch
+from wagtail.core.models import Site
 from wagtail.tests.utils import WagtailTestUtils
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import (
@@ -11,12 +12,6 @@ from wagtailsharing.tests.helpers import (
     create_draft_routable_page,
 )
 from wagtailsharing.views import ServeView
-
-
-try:
-    from wagtail.core.models import Site
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    from wagtail.wagtailcore.models import Site
 
 
 def before_hook_returns_http_response(page, request, args, kwargs):

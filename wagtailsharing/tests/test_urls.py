@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.conf.urls import url
 from django.test import TestCase
 
+import wagtail.core.urls as wagtail_core_urls
 import wagtailsharing.urls
 from mock import patch
 
@@ -11,11 +12,6 @@ try:
     from importlib import reload
 except ImportError:
     pass
-
-try:
-    import wagtail.core.urls as wagtail_core_urls
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    import wagtail.wagtailcore.urls as wagtail_core_urls
 
 
 class TestUrlPatterns(TestCase):
