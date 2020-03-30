@@ -1,11 +1,16 @@
 from importlib import reload
 
-from django.conf.urls import url
 from django.test import TestCase
 
 import wagtail.core.urls as wagtail_core_urls
 import wagtailsharing.urls
 from mock import patch
+
+
+try:
+    from django.urls import re_path
+except ImportError:
+    from django.conf.urls import url as re_path
 
 
 class TestUrlPatterns(TestCase):
@@ -14,9 +19,9 @@ class TestUrlPatterns(TestCase):
             pass  # pragma: no cover
 
         root_patterns = [
-            url(r"^foo/$", url, name="foo"),
-            url(r"^((?:[\w\-]+/)*)$", url, name="wagtail_serve"),
-            url(r"^bar/$", url, name="bar"),
+            re_path(r"^foo/$", re_path, name="foo"),
+            re_path(r"^((?:[\w\-]+/)*)$", re_path, name="wagtail_serve"),
+            re_path(r"^bar/$", re_path, name="bar"),
         ]
 
         self.patcher = patch.object(

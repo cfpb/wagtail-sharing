@@ -27,7 +27,7 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     install_requires=install_requires,
-    extras_require={"testing": testing_extras,},
+    extras_require={"testing": testing_extras},
     description=short_description,
     long_description=open("README.rst").read(),
     classifiers=[
