@@ -5,6 +5,9 @@ import inspect
 from django.http import Http404, HttpResponse
 from django.views.generic import View
 
+from wagtailsharing.models import SharingSite
+
+
 try:
     from wagtail.contrib.routable_page.models import RoutablePageMixin
     from wagtail.core import hooks  # pragma: no cover
@@ -16,12 +19,10 @@ except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
     from wagtail.wagtailcore.url_routing import RouteResult
     from wagtail.wagtailcore.views import serve as wagtail_serve
 
-from wagtailsharing.models import SharingSite
-
 
 class ServeView(View):
     def dispatch(self, request, path):
-        if request.method.upper() != 'GET':
+        if request.method.upper() != "GET":
             return wagtail_serve(request, path)
 
         try:
@@ -51,7 +52,7 @@ class ServeView(View):
         requested page back to the caller despite its draft status.
         """
         path_components = [
-            component for component in path.split('/') if component
+            component for component in path.split("/") if component
         ]
 
         try:
@@ -60,15 +61,15 @@ class ServeView(View):
             exception_source = inspect.trace()[-1]
             stack_frame = exception_source[0]
 
-            page = stack_frame.f_locals['self']
-            path_components = stack_frame.f_locals['path_components']
+            page = stack_frame.f_locals["self"]
+            path_components = stack_frame.f_locals["path_components"]
 
             if isinstance(page, RoutablePageMixin):
                 # This mimics the way that RoutablePageMixin uses the
                 # RouteResult to store the page route view to call.
-                path = '/'
+                path = "/"
                 if path_components:
-                    path += '/'.join(path_components) + '/'
+                    path += "/".join(path_components) + "/"
 
                 view, args, kwargs = page.resolve_subpage(path)
                 return RouteResult(page, args=(view, args, kwargs))
@@ -80,7 +81,7 @@ class ServeView(View):
     @staticmethod
     def serve(page, request, args, kwargs):
         # Call the before_serve_page hook.
-        for fn in hooks.get_hooks('before_serve_page'):
+        for fn in hooks.get_hooks("before_serve_page"):
             result = fn(page, request, args, kwargs)
             if isinstance(result, HttpResponse):
                 return result
@@ -89,7 +90,7 @@ class ServeView(View):
         page = page.get_latest_revision_as_page()
 
         # Call the before_serve_shared_page hook.
-        for fn in hooks.get_hooks('before_serve_shared_page'):
+        for fn in hooks.get_hooks("before_serve_shared_page"):
             result = fn(page, request, args, kwargs)
             if isinstance(result, HttpResponse):
                 return result
@@ -98,7 +99,7 @@ class ServeView(View):
         response = page.serve(request, *args, **kwargs)
 
         # Call the after_serve_shared_page hook.
-        for fn in hooks.get_hooks('after_serve_shared_page'):
+        for fn in hooks.get_hooks("after_serve_shared_page"):
             result = fn(page, response)
             if isinstance(result, HttpResponse):
                 return result
