@@ -1,4 +1,4 @@
-from __future__ import absolute_import, unicode_literals
+from importlib import reload
 
 from django.conf.urls import url
 from django.test import TestCase
@@ -6,12 +6,6 @@ from django.test import TestCase
 import wagtail.core.urls as wagtail_core_urls
 import wagtailsharing.urls
 from mock import patch
-
-
-try:
-    from importlib import reload
-except ImportError:
-    pass
 
 
 class TestUrlPatterns(TestCase):

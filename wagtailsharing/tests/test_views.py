@@ -1,5 +1,3 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase
 
