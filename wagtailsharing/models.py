@@ -1,29 +1,22 @@
-from __future__ import absolute_import, unicode_literals
-
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
-try:
-    from wagtail.core.models import Site
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    from wagtail.wagtailcore.models import Site
+from wagtail.core.models import Site
 
 
 @python_2_unicode_compatible
 class SharingSite(models.Model):
-    site = models.OneToOneField(Site, on_delete=models.CASCADE,
-                                related_name='sharing_site')
+    site = models.OneToOneField(
+        Site, on_delete=models.CASCADE, related_name="sharing_site"
+    )
     hostname = models.CharField(max_length=255, db_index=True)
     port = models.IntegerField(default=80)
 
     class Meta:
-        unique_together = ('hostname', 'port')
+        unique_together = ("hostname", "port")
 
     def __str__(self):
-        return(
-            self.hostname +
-            ('' if self.port == 80 else (':%d' % self.port))
-        )
+        return self.hostname + ("" if self.port == 80 else (":%d" % self.port))
 
     @classmethod
     def find_for_request(cls, request):
@@ -34,22 +27,22 @@ class SharingSite(models.Model):
         Uses request hostname and port to find matching sharing site.
         """
         try:
-            hostname = request.get_host().split(':')[0]
+            hostname = request.get_host().split(":")[0]
         except KeyError:
             hostname = None
 
         try:
             port = request.get_port()
         except (AttributeError, KeyError):
-            port = request.META.get('SERVER_PORT')
+            port = request.META.get("SERVER_PORT")
 
         return cls.objects.get(hostname=hostname, port=port)
 
     @property
     def root_url(self):
         if self.port == 80:
-            return 'http://{}'.format(self.hostname)
+            return "http://{}".format(self.hostname)
         elif self.port == 443:
-            return 'https://{}'.format(self.hostname)
+            return "https://{}".format(self.hostname)
         else:
-            return 'http://{}:{:d}'.format(self.hostname, self.port)
+            return "http://{}:{:d}".format(self.hostname, self.port)

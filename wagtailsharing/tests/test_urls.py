@@ -1,20 +1,16 @@
-from __future__ import absolute_import, unicode_literals
+from importlib import reload
 
-try:
-    from importlib import reload
-except ImportError:
-    pass
-
-from django.conf.urls import url
 from django.test import TestCase
+
+import wagtail.core.urls as wagtail_core_urls
+import wagtailsharing.urls
 from mock import patch
 
-try:
-    import wagtail.core.urls as wagtail_core_urls
-except ImportError:  # pragma: no cover; fallback for Wagtail <2.0
-    import wagtail.wagtailcore.urls as wagtail_core_urls
 
-import wagtailsharing.urls
+try:
+    from django.urls import re_path
+except ImportError:
+    from django.conf.urls import url as re_path
 
 
 class TestUrlPatterns(TestCase):
@@ -23,15 +19,13 @@ class TestUrlPatterns(TestCase):
             pass  # pragma: no cover
 
         root_patterns = [
-            url(r'^foo/$', url, name='foo'),
-            url(r'^((?:[\w\-]+/)*)$', url, name='wagtail_serve'),
-            url(r'^bar/$', url, name='bar'),
+            re_path(r"^foo/$", re_path, name="foo"),
+            re_path(r"^((?:[\w\-]+/)*)$", re_path, name="wagtail_serve"),
+            re_path(r"^bar/$", re_path, name="bar"),
         ]
 
         self.patcher = patch.object(
-            wagtail_core_urls,
-            'urlpatterns',
-            root_patterns
+            wagtail_core_urls, "urlpatterns", root_patterns
         )
         self.patcher.start()
         self.addCleanup(self.patcher.stop)
@@ -40,11 +34,11 @@ class TestUrlPatterns(TestCase):
         self.urlpatterns = wagtailsharing.urls.urlpatterns
 
     def test_leaves_previous_urls_alone(self):
-        self.assertEqual(self.urlpatterns[0].name, 'foo')
+        self.assertEqual(self.urlpatterns[0].name, "foo")
 
     def test_replaces_wagtail_serve(self):
-        self.assertEqual(self.urlpatterns[1].name, 'wagtail_serve')
-        self.assertEqual(self.urlpatterns[1].callback.__name__, 'ServeView')
+        self.assertEqual(self.urlpatterns[1].name, "wagtail_serve")
+        self.assertEqual(self.urlpatterns[1].callback.__name__, "ServeView")
 
     def test_leaves_later_urls_alone(self):
-        self.assertEqual(self.urlpatterns[2].name, 'bar')
+        self.assertEqual(self.urlpatterns[2].name, "bar")
