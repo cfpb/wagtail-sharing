@@ -1,6 +1,15 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.1 - 2020-04-07
+
+- Improve error messages by refactoring ServeView
+
+## 2.0 - 2020-03-31
+
+- Adding Django 2.2 support, dropping Wagtail 1 support
+- Introduces Black autoformatting.
+
 ## 1.0 - 2020-02-21
 
 - Add support for Wagtail 2.8
