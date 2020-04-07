@@ -18,6 +18,9 @@ class ServeView(View):
         try:
             sharing_site = SharingSite.find_for_request(request)
         except SharingSite.DoesNotExist:
+            sharing_site = None
+
+        if not sharing_site:
             return wagtail_serve(request, path)
 
         page, args, kwargs = self.route(sharing_site.site, request, path)
