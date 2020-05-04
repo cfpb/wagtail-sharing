@@ -2,7 +2,6 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    "Django>=1.11,<2.3",
     "wagtail>=2.3,<2.9",
 ]
 
@@ -23,7 +22,7 @@ setup(
     author="CFPB",
     author_email="tech@cfpb.gov",
     license="CCO",
-    version="2.1",
+    version="2.2",
     include_package_data=True,
     packages=find_packages(),
     install_requires=install_requires,
@@ -32,10 +31,7 @@ setup(
     long_description=open("README.rst").read(),
     classifiers=[
         "Framework :: Django",
-        "Framework :: Django :: 1.11",
-        "Framework :: Django :: 2.0",
-        "Framework :: Django :: 2.1",
-        "Framework :: Django :: 2.2",
+        "Framework :: Django :: 3",
         "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
