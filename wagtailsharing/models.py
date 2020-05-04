@@ -1,10 +1,8 @@
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 
 from wagtail.core.models import Site
 
 
-@python_2_unicode_compatible
 class SharingSite(models.Model):
     site = models.OneToOneField(
         Site, on_delete=models.CASCADE, related_name="sharing_site"
