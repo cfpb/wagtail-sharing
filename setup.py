@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    "wagtail>=2.3,<2.9",
+    "wagtail>=2.3,<2.10",
 ]
 
 
@@ -11,9 +11,6 @@ testing_extras = [
     "flake8>=2.2.0",
     "mock>=1.0.0",
 ]
-
-
-short_description = "Easier sharing of Wagtail drafts"
 
 
 setup(
@@ -27,11 +24,12 @@ setup(
     packages=find_packages(),
     install_requires=install_requires,
     extras_require={"testing": testing_extras},
-    description=short_description,
+    description="Easier sharing of Wagtail drafts",
     long_description=open("README.rst").read(),
     classifiers=[
         "Framework :: Django",
-        "Framework :: Django :: 3",
+        "Framework :: Django :: 1.11",
+        "Framework :: Django :: 2.2",
         "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
