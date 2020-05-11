@@ -2,8 +2,7 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    "Django>=1.11,<2.3",
-    "wagtail>=2.3,<2.9",
+    "wagtail>=2.3,<2.10",
 ]
 
 
@@ -14,27 +13,22 @@ testing_extras = [
 ]
 
 
-short_description = "Easier sharing of Wagtail drafts"
-
-
 setup(
     name="wagtail-sharing",
     url="https://github.com/cfpb/wagtail-sharing",
     author="CFPB",
     author_email="tech@cfpb.gov",
     license="CCO",
-    version="2.1",
+    version="2.2",
     include_package_data=True,
     packages=find_packages(),
     install_requires=install_requires,
     extras_require={"testing": testing_extras},
-    description=short_description,
+    description="Easier sharing of Wagtail drafts",
     long_description=open("README.rst").read(),
     classifiers=[
         "Framework :: Django",
         "Framework :: Django :: 1.11",
-        "Framework :: Django :: 2.0",
-        "Framework :: Django :: 2.1",
         "Framework :: Django :: 2.2",
         "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
