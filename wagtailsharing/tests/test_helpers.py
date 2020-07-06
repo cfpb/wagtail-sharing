@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from wagtail.core.models import Site
 from wagtail.tests.testapp.models import SimplePage
+
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import create_draft_page

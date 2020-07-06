@@ -4,6 +4,7 @@ from django.test import TestCase, override_settings
 
 from mock import Mock, patch
 from wagtail.tests.testapp.models import SimplePage
+
 from wagtailsharing.wagtail_hooks import add_sharing_banner, add_sharing_link
 
 
