@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    "wagtail~=2.0",
+    ""wagtail>=2.3,<2.10"",
 ]
 
 
@@ -19,7 +19,7 @@ setup(
     author="CFPB",
     author_email="tech@cfpb.gov",
     license="CCO",
-    version="2.2.0",
+    version="2.2",
     include_package_data=True,
     packages=find_packages(),
     python_requires=">=3.6",
