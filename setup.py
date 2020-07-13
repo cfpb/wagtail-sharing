@@ -22,6 +22,7 @@ setup(
     version="2.2",
     include_package_data=True,
     packages=find_packages(),
+    python_requires=">=3.6",
     install_requires=install_requires,
     extras_require={"testing": testing_extras},
     description="Easier sharing of Wagtail drafts",

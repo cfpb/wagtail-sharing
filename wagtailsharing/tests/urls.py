@@ -1,4 +1,5 @@
 from wagtail.admin import urls as wagtailadmin_urls
+
 from wagtailsharing import urls as wagtailsharing_urls
 
 

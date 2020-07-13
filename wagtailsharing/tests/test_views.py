@@ -4,6 +4,7 @@ from django.test import RequestFactory, TestCase
 from mock import patch
 from wagtail.core.models import Site
 from wagtail.tests.utils import WagtailTestUtils
+
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import (
     create_draft_page,

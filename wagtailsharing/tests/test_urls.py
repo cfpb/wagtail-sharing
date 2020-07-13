@@ -2,9 +2,10 @@ from importlib import reload
 
 from django.test import TestCase
 
-import wagtail.core.urls as wagtail_core_urls
-import wagtailsharing.urls
 from mock import patch
+from wagtail.core import urls as wagtail_core_urls
+
+import wagtailsharing.urls
 
 
 try:

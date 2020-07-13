@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
 
 from wagtail.core.models import Site
+
 from wagtailsharing.models import SharingSite
 
 
