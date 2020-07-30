@@ -1,3 +1,4 @@
+from django.conf import settings
 from wagtail import VERSION as WAGTAIL_VERSION
 
 
@@ -8,7 +9,7 @@ else:
     from wagtail.core.urls import serve_pattern
     from wagtail.core.urls import urlpatterns as wagtailcore_urlpatterns
 
-from wagtailsharing.views import ServeView
+from wagtailsharing.views import ServeView, TokenServeView
 
 
 try:
@@ -17,8 +18,17 @@ except ImportError:  # pragma: no cover
     from django.conf.urls import url as re_path
 
 
+if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", True):
+    wagtailsharing_serve_path = re_path(
+        r"^share/([\w\.\-\_]+)/$",
+        TokenServeView.as_view(),
+        name="wagtail_serve",
+    )
+else:
+    wagtailsharing_serve_path = re_path(serve_pattern, ServeView.as_view(), name="wagtail_serve")
+
 urlpatterns = [
-    re_path(serve_pattern, ServeView.as_view(), name="wagtail_serve")
+    wagtailsharing_serve_path
     if urlpattern.name == "wagtail_serve"
     else urlpattern
     for urlpattern in wagtailcore_urlpatterns

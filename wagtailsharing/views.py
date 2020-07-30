@@ -1,5 +1,7 @@
 import inspect
+import jwt
 
+from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.views.generic import View
 
@@ -113,3 +115,10 @@ class ServeView(View):
                 return result
 
         return response
+
+
+class TokenServeView(ServeView):
+    def dispatch(self, request, path):
+        from pudb import set_trace
+
+        set_trace()
