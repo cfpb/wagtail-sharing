@@ -1,13 +1,14 @@
 import inspect
 
+from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.views.generic import View
 
+import jwt
 from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.core import hooks
 from wagtail.core.url_routing import RouteResult
 from wagtail.core.views import serve as wagtail_serve
-
 from wagtailsharing.models import SharingSite
 
 
@@ -99,3 +100,10 @@ class ServeView(View):
                 return result
 
         return response
+
+
+class TokenServeView(ServeView):
+    def dispatch(self, request, path):
+        from pudb import set_trace
+
+        set_trace()
