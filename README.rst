@@ -118,6 +118,12 @@ Shared pages will also have a new dropdown menu option that links to this sharin
 .. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/dropdown.png
     :alt: Dropdown with sharing link
 
+To use tokens in place of the page path on the sharing site, add the following setting:
+
+.. code-block:: python
+
+  WAGTAILSHARING_TOKENIZE_URL = True
+
 Hooks
 -----
 
