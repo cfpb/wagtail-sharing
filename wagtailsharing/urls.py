@@ -18,9 +18,10 @@ except ImportError:  # pragma: no cover
     from django.conf.urls import url as re_path
 
 
-if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", True):
+if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", False):
+    share_path = getattr(settings, "WAGTAILSHARING_TOKEN_SHARE_PATH", "share")
     wagtailsharing_serve_path = re_path(
-        r"^share/([\w\.\-\_]+)/$",
+        rf"^{share_path}/([\w\.\-\_]+)/$",
         TokenServeView.as_view(),
         name="wagtail_serve",
     )
