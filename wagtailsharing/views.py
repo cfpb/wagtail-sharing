@@ -1,4 +1,5 @@
 import inspect
+import logging
 
 from django.conf import settings
 from django.http import Http404, HttpResponse
@@ -13,14 +14,19 @@ from wagtailsharing.models import SharingSite
 
 
 class ServeView(View):
-    def dispatch(self, request, path):
-        if request.method.upper() != "GET":
-            return wagtail_serve(request, path)
-
+    def get_sharing_site(self, request, path):
         try:
             sharing_site = SharingSite.find_for_request(request)
         except SharingSite.DoesNotExist:
             sharing_site = None
+
+        return sharing_site
+
+    def dispatch(self, request, path):
+        if request.method.upper() != "GET":
+            return wagtail_serve(request, path)
+
+        sharing_site = self.get_sharing_site(request, path)
 
         if not sharing_site:
             return wagtail_serve(request, path)
@@ -104,6 +110,23 @@ class ServeView(View):
 
 class TokenServeView(ServeView):
     def dispatch(self, request, path):
-        from pudb import set_trace
+        sharing_site = self.get_sharing_site(request, path)
 
-        set_trace()
+        if not sharing_site:
+            return wagtail_serve(request, path)
+
+        try:
+            # Get the wagtail path from the JWT token
+            data = jwt.decode(path, settings.SECRET_KEY, algorithms=["HS256"])
+            decoded_path = data["path"]
+        except Exception as e:
+            logging.warn(
+                f"Could not decode wagtail path from sharing link: {e}"
+            )
+            return wagtail_serve(request, path)
+
+        page, args, kwargs = self.route(
+            sharing_site.site, request, decoded_path
+        )
+
+        return self.serve(page, request, args, kwargs)

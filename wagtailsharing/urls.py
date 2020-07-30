@@ -14,10 +14,11 @@ except ImportError:
     from django.conf.urls import url as re_path
 
 
-if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", True):
-    urlpatterns = [
+if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", False):
+    share_path = getattr(settings, "WAGTAILSHARING_TOKEN_SHARE_PATH", "share")
+    urlpatterns = wagtailcore_urlpatterns + [
         url(
-            r"^share/([\w\.\-\_]+)/$",
+            rf"^{share_path}/([\w\.\-\_]+)/$",
             TokenServeView.as_view(),
             name="wagtail_serve",
         ),

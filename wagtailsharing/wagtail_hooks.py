@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.admin import widgets as wagtailadmin_widgets
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.core import hooks
-
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite
 
