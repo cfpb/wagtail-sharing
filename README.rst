@@ -117,6 +117,18 @@ Shared pages will also have a new dropdown menu option that links to this sharin
     :alt: Dropdown with sharing link
     :width: 640px
 
+To use tokens in place of the page path on the sharing site, add the following setting:
+
+.. code-block:: python
+
+  WAGTAILSHARING_TOKENIZE_URL = True
+
+In some environments such as Heroku, SERVER_PORT set at release time and the real port is fowarded, so the following is needed in settings:
+
+.. code-block:: python
+
+  USE_X_FORWARDED_PORT = True
+
 Hooks
 -----
 
