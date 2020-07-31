@@ -2,6 +2,7 @@ from django.conf import settings
 
 import jwt
 from wagtail.core.models import Site
+
 from wagtailsharing.models import SharingSite
 
 

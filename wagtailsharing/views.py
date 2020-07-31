@@ -10,6 +10,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.core import hooks
 from wagtail.core.url_routing import RouteResult
 from wagtail.core.views import serve as wagtail_serve
+
 from wagtailsharing.models import SharingSite
 
 

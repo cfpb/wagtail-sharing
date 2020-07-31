@@ -30,7 +30,7 @@ Install the package using pip:
 .. code-block:: bash
 
   $ pip install wagtail-sharing
- 
+
 Add ``wagtailsharing`` as an installed app in your Django settings:
 
 .. code-block:: python
@@ -49,7 +49,7 @@ Run migrations to create required database tables:
 .. code-block:: bash
 
   $ manage.py migrate wagtailsharing
- 
+
 Replace use of Wagtail's catch-all URL pattern:
 
 .. code-block:: diff
@@ -66,7 +66,7 @@ Replace use of Wagtail's catch-all URL pattern:
 Sharing sites
 -------------
 
-The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions. 
+The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions.
 
 .. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/sharing-sites.png
     :width: 200px
