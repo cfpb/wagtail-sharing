@@ -1,7 +1,8 @@
-import jwt
-
 from django.conf import settings
+
 from wagtail import VERSION as WAGTAIL_VERSION
+
+import jwt
 
 
 if WAGTAIL_VERSION >= (3, 0):

@@ -1,7 +1,5 @@
 import inspect
-import jwt
 import logging
-
 
 from django.conf import settings
 from django.http import Http404, HttpResponse
@@ -9,6 +7,8 @@ from django.views.generic import View
 
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.routable_page.models import RoutablePageMixin
+
+import jwt
 
 
 if WAGTAIL_VERSION >= (3, 0):
