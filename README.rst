@@ -123,6 +123,12 @@ To use tokens in place of the page path on the sharing site, add the following s
 
   WAGTAILSHARING_TOKENIZE_URL = True
 
+In some environments such as Heroku, SERVER_PORT set at release time and the real port is fowarded, so the following is needed in settings:
+
+.. code-block:: python
+
+  USE_X_FORWARDED_PORT = True
+
 Hooks
 -----
 
