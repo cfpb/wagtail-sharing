@@ -111,6 +111,9 @@ class ServeView(View):
 
 class TokenServeView(ServeView):
     def dispatch(self, request, path):
+        if request.method.upper() != "GET":
+            return wagtail_serve(request, path)
+
         sharing_site = self.get_sharing_site(request, path)
 
         if not sharing_site:
@@ -122,7 +125,7 @@ class TokenServeView(ServeView):
             decoded_path = data["path"]
         except Exception as e:
             logging.warn(
-                f"Could not decode wagtail path from sharing link: {e}"
+                f"Could not decode Wagtail path from sharing link: {e}"
             )
             return wagtail_serve(request, path)
 
