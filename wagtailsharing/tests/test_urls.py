@@ -2,8 +2,9 @@ from importlib import reload
 
 from django.test import TestCase
 
-from mock import patch
 from wagtail.core import urls as wagtail_core_urls
+
+from mock import patch
 
 import wagtailsharing.urls
 
