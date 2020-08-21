@@ -2,8 +2,9 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.test import TestCase, override_settings
 
-from mock import Mock, patch
 from wagtail.tests.testapp.models import SimplePage
+
+from mock import Mock, patch
 
 from wagtailsharing.wagtail_hooks import add_sharing_banner, add_sharing_link
 

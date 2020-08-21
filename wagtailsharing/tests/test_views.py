@@ -1,8 +1,9 @@
+from unittest.mock import patch
+
 from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase
 
 import wagtail
-from mock import patch
 from wagtail.core.models import Site
 from wagtail.tests.utils import WagtailTestUtils
 
