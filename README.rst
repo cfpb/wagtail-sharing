@@ -1,9 +1,9 @@
-.. image:: https://travis-ci.org/cfpb/wagtail-sharing.svg?branch=master
+.. image:: https://travis-ci.org/cfpb/wagtail-sharing.svg?branch=main
   :alt: Build Status
   :target: https://travis-ci.org/cfpb/wagtail-sharing
-.. image:: https://coveralls.io/repos/github/cfpb/wagtail-sharing/badge.svg?branch=master
+.. image:: https://coveralls.io/repos/github/cfpb/wagtail-sharing/badge.svg?branch=main
   :alt: Coverage Status
-  :target: https://coveralls.io/github/cfpb/wagtail-sharing?branch=master
+  :target: https://coveralls.io/github/cfpb/wagtail-sharing?branch=main
 
 wagtail-sharing
 ===============
@@ -68,7 +68,7 @@ Sharing sites
 
 The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions. 
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/sharing-sites.png
+.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/sharing-sites.png
     :width: 200px
     :height: 100px
     :alt: Sharing sites
@@ -90,7 +90,7 @@ Verify that you can access your local server at http://sharing.localhost:8000. Y
 
 To do so, in the Wagtail admin, under Settings, Sharing Sites, create a new sharing site for the default site, with hostname ``sharing.localhost`` and port ``8000``.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/new-sharing-site.png
+.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/new-sharing-site.png
     :width: 200px
     :height: 100px
     :alt: New sharing site with site: "localhost [default]", hostname: "sharing.localhost", port: "8000"
@@ -102,7 +102,7 @@ Banners
 
 Pages viewed on a wagtail-sharing shared site have a simple banner added to them to remind reviewers that the current published content may differ from the content they are viewing.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/banner.png
+.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/banner.png
     :alt: Banner
 
 This behavior can be disabled by setting ``settings.WAGTAILSHARING_BANNER = False``.  The banner template can be overridden by providing an alternate template file at ``wagtailsharing/banner.html`` similar to how `wagtailadmin template overrides <http://docs.wagtail.io/en/latest/advanced_topics/customisation/admin_templates.html#customising-admin-templates>`_ are supported.
@@ -114,7 +114,7 @@ A page's sharing URL can be retrieved by passing its ``Page`` instance to ``wagt
 
 Shared pages will also have a new dropdown menu option that links to this sharing URL from the Wagtail page explorer.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/master/docs/images/dropdown.png
+.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/dropdown.png
     :alt: Dropdown with sharing link
 
 Hooks
@@ -172,6 +172,6 @@ If you find that it is not, please `file an issue <https://github.com/cfpb/wagta
 Open source licensing info
 --------------------------
 
-#. `TERMS <https://github.com/cfpb/cfgov-refresh/blob/master/TERMS.md>`_
-#. `LICENSE <https://github.com/cfpb/cfgov-refresh/blob/master/LICENSE>`_
+#. `TERMS <https://github.com/cfpb/cfgov-refresh/blob/main/TERMS.md>`_
+#. `LICENSE <https://github.com/cfpb/cfgov-refresh/blob/main/LICENSE>`_
 #. `CFPB Source Code Policy <https://github.com/cfpb/source-code-policy>`_
