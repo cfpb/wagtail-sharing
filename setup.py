@@ -1,17 +1,10 @@
 from setuptools import find_packages, setup
 
-
 install_requires = [
     "wagtail>=2.7,<2.11",
 ]
 
-
-testing_extras = [
-    "coverage>=3.7.0",
-    "flake8>=2.2.0",
-    "mock>=1.0.0",
-]
-
+testing_extras = ["coverage>=3.7.0"]
 
 setup(
     name="wagtail-sharing",

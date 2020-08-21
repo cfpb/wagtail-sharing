@@ -1,18 +1,12 @@
 from importlib import reload
+from unittest.mock import patch
 
 from django.test import TestCase
+from django.urls import re_path
 
 from wagtail.core import urls as wagtail_core_urls
 
-from mock import patch
-
 import wagtailsharing.urls
-
-
-try:
-    from django.urls import re_path
-except ImportError:
-    from django.conf.urls import url as re_path
 
 
 class TestUrlPatterns(TestCase):
