@@ -50,7 +50,7 @@ def add_sharing_banner(page, response):
         response.render()
 
     html = force_text(response.content)
-    body = re.search(r"(?i)<body.*?>", html)
+    body = re.search(r"(?is)<body.*?>", html)
 
     if body:
         endpos = body.end()
