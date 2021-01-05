@@ -81,3 +81,11 @@ class TestAddSharingBanner(TestCase):
         content = '<body>Link <a href="#">and</a> spaces</body>'
         response = self.add_banner_to_response(content)
         self.assertContains(response, '<a href="#">and</a>')
+
+    def test_body_has_newlines_still_adds_banner(self):
+        content = """<html><body
+
+        >
+        abcde</body></html>"""
+        response = self.add_banner_to_response(content)
+        self.assertContains(response, "wagtailsharing-banner")
