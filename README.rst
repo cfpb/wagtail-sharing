@@ -48,7 +48,7 @@ Run migrations to create required database tables:
 
 .. code-block:: bash
 
-  $ manage.py migrate wagtailsharing
+  $ python manage.py migrate wagtailsharing
  
 Replace use of Wagtail's catch-all URL pattern:
 
