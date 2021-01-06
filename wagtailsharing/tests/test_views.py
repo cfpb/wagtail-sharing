@@ -15,7 +15,7 @@ from wagtailsharing.tests.helpers import (
 from wagtailsharing.views import ServeView
 
 
-def before_hook_returns_http_response(page, request, args, kwargs):
+def before_hook_returns_http_response(*args):
     return HttpResponse("returned by hook")
 
 
@@ -210,3 +210,14 @@ class TestServeView(WagtailTestUtils, TestCase):
         )
         response = ServeView.as_view()(request, request.path)
         self.assertContains(response, "ARCHIVE BY YEAR: 2000")
+
+    def test_before_route_page_hook_called(self):
+        self.create_sharing_site(hostname="hostname")
+        create_draft_page(self.default_site, title="page")
+
+        with self.register_hook(
+            "before_route_page", before_hook_returns_http_response
+        ):
+            request = self.make_request("/page/", HTTP_HOST="hostname")
+            response = ServeView.as_view()(request, request.path)
+            self.assertContains(response, "returned by hook")

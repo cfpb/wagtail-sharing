@@ -127,6 +127,13 @@ As with normal page serving, the serving of shared pages continues to respect Wa
 
 This project adds these additional hooks:
 
+``before_route_page``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Called when routing, before a page's ``route()`` method is called. This hook is passed the ``ServeView``, the ``request``, and the ``page`` that will have ``route()`` called on it. If the callable returns an ``HttpResponse``, that response will be returned immediately to the user.
+
+This hook could be useful for changing how pages that override Wagtail's built-in routing to subpages handle sharing.
+
 ``before_serve_shared_page``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

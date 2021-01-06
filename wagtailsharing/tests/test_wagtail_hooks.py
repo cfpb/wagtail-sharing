@@ -1,12 +1,17 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 
 from wagtail.tests.testapp.models import SimplePage
 
 from mock import Mock, patch
 
-from wagtailsharing.wagtail_hooks import add_sharing_banner, add_sharing_link
+from wagtailsharing.wagtail_hooks import (
+    add_sharing_banner,
+    add_sharing_link,
+    set_routed_by_wagtail_sharing,
+    set_served_by_wagtail_sharing,
+)
 
 
 class TestAddSharingLink(TestCase):
@@ -89,3 +94,23 @@ class TestAddSharingBanner(TestCase):
         abcde</body></html>"""
         response = self.add_banner_to_response(content)
         self.assertContains(response, "wagtailsharing-banner")
+
+
+class TestSetRoutedByWagtailSharing(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_set_routed_by_wagtail_sharing(self):
+        request = self.factory.get("/an-url")
+        set_routed_by_wagtail_sharing(None, request, "")
+        self.assertTrue(request.routed_by_wagtail_sharing)
+
+
+class TestSetServedByWagtailSharing(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_set_served_by_wagtail_sharing(self):
+        request = self.factory.get("/an-url")
+        set_served_by_wagtail_sharing(None, request, [], {})
+        self.assertTrue(request.served_by_wagtail_sharing)
