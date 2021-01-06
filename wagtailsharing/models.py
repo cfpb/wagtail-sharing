@@ -1,6 +1,7 @@
 from django.db import models
 
-from wagtail.core.models import Site
+from wagtail.contrib.routable_page.models import RoutablePageMixin
+from wagtail.core.models import Page, Site
 
 
 class SharingSite(models.Model):
@@ -44,3 +45,17 @@ class SharingSite(models.Model):
             return "https://{}".format(self.hostname)
         else:
             return "http://{}:{:d}".format(self.hostname, self.port)
+
+
+class ShareableRoutablePageMixin(RoutablePageMixin):
+    def route(self, request, path_components):
+        if getattr(request, "routed_by_wagtail_sharing", False):
+            page = self.get_latest_revision_as_page()
+            return super(ShareableRoutablePageMixin, page).route(
+                request, path_components
+            )
+        return super().route(request, path_components)
+
+
+class ShareableRoutablePage(ShareableRoutablePageMixin, Page):
+    pass

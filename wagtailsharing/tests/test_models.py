@@ -1,9 +1,11 @@
+from unittest import mock
+
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
 
 from wagtail.core.models import Site
 
-from wagtailsharing.models import SharingSite
+from wagtailsharing.models import ShareableRoutablePage, SharingSite
 
 
 class TestSharingSite(TestCase):
@@ -84,3 +86,35 @@ class TestSharingSite(TestCase):
     def test_root_url_other_port_http(self):
         site = SharingSite(hostname="test.hostname", port=1234)
         self.assertEqual(site.root_url, "http://test.hostname:1234")
+
+
+class TestSharableRoutablePage(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.default_site = Site.objects.get(is_default_site=True)
+        self.routable_page = self.default_site.root_page.add_child(
+            instance=ShareableRoutablePage(title="routable")
+        )
+        self.routable_page.save_revision().publish()
+
+    def test_route_no_draft(self):
+        request = self.factory.get("/")
+
+        with mock.patch.object(
+            ShareableRoutablePage, "get_latest_revision_as_page"
+        ) as mock_get_latest_revision_as_page:
+            self.routable_page.route(request, [])
+
+        mock_get_latest_revision_as_page.assert_not_called()
+
+    def test_route_with_draft(self):
+        request = self.factory.get("/")
+        setattr(request, "routed_by_wagtail_sharing", True)
+
+        with mock.patch.object(
+            ShareableRoutablePage, "get_latest_revision_as_page"
+        ) as mock_get_latest_revision_as_page:
+            mock_get_latest_revision_as_page.return_value = self.routable_page
+            self.routable_page.route(request, [])
+
+        mock_get_latest_revision_as_page.assert_called()

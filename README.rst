@@ -164,6 +164,38 @@ This hook could be useful for directly modifying the response content, for examp
   def add_custom_header(page, response):
       response['Wagtail-Is-Shared'] = '1'
 
+Mixins
+------
+
+``ShareableRoutablePageMixin``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ .. |RoutablePageMixin| replace:: ``RoutablePageMixin``
+ .. _RoutablePageMixin: https://docs.wagtail.io/en/stable/reference/contrib/routablepage.html
+
+By default, Wagtail Sharing cannot share draft content on routable pages (pages that use |RoutablePageMixin|_ to define mutliple sub-URLs). To ensure that draft content fields on routable pages are sharable, Wagtail Sharing provides an subclass of |RoutablePageMixin|_, ``ShareableRoutablePageMixin``. 
+
+``SharableRoutablePageMixin`` is used exactly the same way as |RoutablePageMixin|_:
+
+.. code-block:: python
+
+  from wagtail.core.fields import RichTextField
+  from wagtail.core.models import Page
+  from wagtail.contrib.routable_page.models import route
+  from wagtailsharing.models import ShareableRoutablePageMixin
+
+
+  class EventIndexPage(ShareableRoutablePageMixin, Page):
+      intro = RichTextField()
+
+      @route(r'^$')
+      def current_events(self, request):
+          # …
+
+      @route(r'^past/$')
+      def past_events(self, request):
+          # …
+
 Compatibility
 -------------
 
