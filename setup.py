@@ -12,7 +12,7 @@ setup(
     author="CFPB",
     author_email="tech@cfpb.gov",
     license="CCO",
-    version="2.3.0",
+    version="2.4.0",
     include_package_data=True,
     packages=find_packages(),
     python_requires=">=3.6",

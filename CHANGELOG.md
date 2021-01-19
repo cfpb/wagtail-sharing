@@ -1,6 +1,12 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.4 - 2021-01-29
+
+- Add GITHUB_TOKEN to our action env
+- Add DOTALL flag to sharing banner body-RE
+- Handle hook signature change in Wagtail 2.10+
+
 ## 2.1 - 2020-04-07
 
 - Improve error messages by refactoring ServeView
