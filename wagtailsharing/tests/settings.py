@@ -1,5 +1,7 @@
 import os
 
+import wagtail
+
 
 ALLOWED_HOSTS = ["*"]
 
@@ -51,6 +53,9 @@ MIDDLEWARE = (
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
 
+if wagtail.VERSION < (2, 9):
+    MIDDLEWARE += ("wagtail.core.middleware.SiteMiddleware",)
+
 INSTALLED_APPS = (
     (
         "django.contrib.admin",
@@ -62,7 +67,7 @@ INSTALLED_APPS = (
         "taggit",
     )
     + WAGTAIL_APPS
-    + ("wagtailsharing",)
+    + ("wagtailsharing", "wagtailsharing.tests.shareable_routable_testapp")
 )
 
 STATIC_URL = "/static/"

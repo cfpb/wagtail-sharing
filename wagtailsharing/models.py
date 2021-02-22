@@ -1,7 +1,7 @@
 from django.db import models
 
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-from wagtail.core.models import Page, Site
+from wagtail.core.models import Site
 
 
 class SharingSite(models.Model):
@@ -55,7 +55,3 @@ class ShareableRoutablePageMixin(RoutablePageMixin):
                 request, path_components
             )
         return super().route(request, path_components)
-
-
-class ShareableRoutablePage(ShareableRoutablePageMixin, Page):
-    pass
