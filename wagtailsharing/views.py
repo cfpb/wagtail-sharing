@@ -26,7 +26,7 @@ class ServeView(View):
 
         # Call the before_route_page hook.
         for fn in hooks.get_hooks("before_route_page"):
-            result = fn(self, request, path)
+            result = fn(request, path)
             if isinstance(result, HttpResponse):
                 return result
 

@@ -102,7 +102,7 @@ class TestSetRoutedByWagtailSharing(TestCase):
 
     def test_set_routed_by_wagtail_sharing(self):
         request = self.factory.get("/an-url")
-        set_routed_by_wagtail_sharing(None, request, "")
+        set_routed_by_wagtail_sharing(request, "")
         self.assertTrue(request.routed_by_wagtail_sharing)
 
 
