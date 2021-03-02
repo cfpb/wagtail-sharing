@@ -132,7 +132,7 @@ This project adds these additional hooks:
 
 Called when routing, before a page's ``route()`` method is called. This hook is passed the ``ServeView``, the ``request``, and the ``page`` that will have ``route()`` called on it. If the callable returns an ``HttpResponse``, that response will be returned immediately to the user.
 
-This hook allows for any necessary customization of Wagtail's built-in routing behavior, for example to support ShareableRoutablePageMixin (with link to below section of documentation).
+This hook allows for any necessary customization of Wagtail's built-in routing behavior, for example to support `ShareableRoutablePageMixin`_.
 
 ``before_serve_shared_page``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -173,7 +173,7 @@ Mixins
  .. |RoutablePageMixin| replace:: ``RoutablePageMixin``
  .. _RoutablePageMixin: https://docs.wagtail.io/en/stable/reference/contrib/routablepage.html
 
-By default, Wagtail's |RoutablePageMixin|_ is not compatible with W-S, instead you need to use ``ShareableRoutablePageMixin`` in order to view share draft content fields on routable pages.
+By default, Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail-Sharing, instead you need to use ``ShareableRoutablePageMixin`` in order to view share draft content fields on routable pages.
 
 ``ShareableRoutablePageMixin`` is used exactly the same way as |RoutablePageMixin|_:
 
