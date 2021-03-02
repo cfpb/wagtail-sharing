@@ -96,7 +96,7 @@ class TestShareableRoutablePage(TestCase):
         self.default_site = Site.objects.get(is_default_site=True)
         self.sharing_site = SharingSite.objects.create(
             site=self.default_site,
-            hostname="hostname",
+            hostname="sharinghostname",
             port=1234,
         )
 
@@ -128,14 +128,14 @@ class TestShareableRoutablePage(TestCase):
         # Request from the sharing site
         plain_response = self.client.get(
             "/routable-page/",
-            HTTP_HOST="hostname",
+            HTTP_HOST="sharinghostname",
             SERVER_PORT=1234,
         )
         self.assertContains(plain_response, "Published text")
 
         shareable_response = self.client.get(
             "/shareable-routable-page/",
-            HTTP_HOST="hostname",
+            HTTP_HOST="sharinghostname",
             SERVER_PORT=1234,
         )
         self.assertContains(shareable_response, "Shareable draft text")

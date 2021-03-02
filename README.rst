@@ -168,7 +168,7 @@ Mixins
 ------
 
 ``ShareableRoutablePageMixin``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  .. |RoutablePageMixin| replace:: ``RoutablePageMixin``
  .. _RoutablePageMixin: https://docs.wagtail.io/en/stable/reference/contrib/routablepage.html

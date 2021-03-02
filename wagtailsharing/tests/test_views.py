@@ -212,12 +212,12 @@ class TestServeView(WagtailTestUtils, TestCase):
         self.assertContains(response, "ARCHIVE BY YEAR: 2000")
 
     def test_before_route_page_hook_called(self):
-        self.create_sharing_site(hostname="hostname")
+        self.create_sharing_site(hostname="sharinghostname")
         create_draft_page(self.default_site, title="page")
 
         with self.register_hook(
             "before_route_page", before_hook_returns_http_response
         ):
-            request = self.make_request("/page/", HTTP_HOST="hostname")
+            request = self.make_request("/page/", HTTP_HOST="sharinghostname")
             response = ServeView.as_view()(request, request.path)
             self.assertContains(response, "returned by hook")
