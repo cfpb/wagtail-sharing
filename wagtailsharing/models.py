@@ -51,13 +51,12 @@ class ShareableRoutablePageMixin(RoutablePageMixin):
     def route(self, request, path_components):
         if getattr(request, "routed_by_wagtail_sharing", False):
             page = self.get_latest_revision_as_page()
-            # This call to the super with the explicit type and object is so
-            # that the RoutablePageMixin's route() method gets called with the
-            # latest-revision-as-page object as self, rather than the page
-            # object that is current self in this context. This ensures that,
-            # if we're being routed by wagtail sharing, we serve the latest
-            # revision.
-            return super(ShareableRoutablePageMixin, page).route(
-                request, path_components
+            # This call to RoutablePageMixin's route() is so that the  method
+            # gets called with the latest-revision-as-page object as self,
+            # rather than the page object that is current self in this context.
+            # This ensures that, if we're being routed by wagtail sharing, we
+            # serve the latest revision.
+            return RoutablePageMixin.route(
+                page, request, path_components
             )
         return super().route(request, path_components)
