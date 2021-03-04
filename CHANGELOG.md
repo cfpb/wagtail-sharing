@@ -1,6 +1,12 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## Unreleased
+
+- Add `ShareableRoutablePageMixin` to enable sharing of draft default routes on routable pages
+- Add a `before_route_page` hook
+- Add `routed_by_wagtail_sharing` and `served_by_wagtail_sharing` attributes to requests
+
 ## 2.4 - 2021-01-29
 
 - Add GITHUB_TOKEN to our action env

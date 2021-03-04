@@ -24,6 +24,12 @@ class ServeView(View):
         if not sharing_site:
             return wagtail_serve(request, path)
 
+        # Call the before_route_page hook.
+        for fn in hooks.get_hooks("before_route_page"):
+            result = fn(request, path)
+            if isinstance(result, HttpResponse):
+                return result
+
         page, args, kwargs = self.route(sharing_site.site, request, path)
 
         return self.serve(page, request, args, kwargs)

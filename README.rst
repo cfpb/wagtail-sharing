@@ -127,6 +127,13 @@ As with normal page serving, the serving of shared pages continues to respect Wa
 
 This project adds these additional hooks:
 
+``before_route_page``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Called when routing, before a page's ``route()`` method is called. This hook is passed the ``request`` and the ``page`` that will have ``route()`` called on it. If the callable returns an ``HttpResponse``, that response will be returned immediately to the user.
+
+This hook allows for any necessary customization of Wagtail's built-in routing behavior, for example to support `ShareableRoutablePageMixin`_.
+
 ``before_serve_shared_page``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -156,6 +163,38 @@ This hook could be useful for directly modifying the response content, for examp
   @hooks.register('after_serve_shared_page')
   def add_custom_header(page, response):
       response['Wagtail-Is-Shared'] = '1'
+
+Mixins
+------
+
+``ShareableRoutablePageMixin``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ .. |RoutablePageMixin| replace:: ``RoutablePageMixin``
+ .. _RoutablePageMixin: https://docs.wagtail.io/en/stable/reference/contrib/routablepage.html
+
+By default, Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail-Sharing, instead you need to use ``ShareableRoutablePageMixin`` in order to view share draft content fields on routable pages.
+
+``ShareableRoutablePageMixin`` is used exactly the same way as |RoutablePageMixin|_:
+
+.. code-block:: python
+
+  from wagtail.core.fields import RichTextField
+  from wagtail.core.models import Page
+  from wagtail.contrib.routable_page.models import route
+  from wagtailsharing.models import ShareableRoutablePageMixin
+
+
+  class EventIndexPage(ShareableRoutablePageMixin, Page):
+      intro = RichTextField()
+
+      @route(r'^$')
+      def current_events(self, request):
+          # …
+
+      @route(r'^past/$')
+      def past_events(self, request):
+          # …
 
 Compatibility
 -------------
