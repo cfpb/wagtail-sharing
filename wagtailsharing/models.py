@@ -56,7 +56,5 @@ class ShareableRoutablePageMixin(RoutablePageMixin):
             # rather than the page object that is current self in this context.
             # This ensures that, if we're being routed by wagtail sharing, we
             # serve the latest revision.
-            return RoutablePageMixin.route(
-                page, request, path_components
-            )
+            return RoutablePageMixin.route(page, request, path_components)
         return super().route(request, path_components)
