@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.5.1 - 2021-03-05
+
+- Included a delete migration for `ShareableRoutablePage`, a model that does not exist but was accidentially included via migration in 2.5.0
+
 ## 2.5 - 2021-03-04
 
 - Add `ShareableRoutablePageMixin` to enable sharing of draft default routes on routable pages
