@@ -21,4 +21,8 @@ def get_sharing_url(page):
         # Site is not shared.
         return None
 
-    return sharing_site.root_url + page_path
+    # patch root url such that (wrong) port is removed
+    len_port = len(str(sharing_site.port)) + 1
+    patched_root_url = sharing_site.root_url[:-len_port]
+    
+    return patched_root_url + page_path
