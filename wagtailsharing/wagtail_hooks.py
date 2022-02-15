@@ -49,7 +49,7 @@ def add_sharing_banner(page, response):
     if hasattr(response, "render") and callable(response.render):
         response.render()
 
-    html = force_text(response.content)
+    html = force_str(response.content)
     body = re.search(r"(?is)<body.*?>", html)
 
     if body:
@@ -59,7 +59,7 @@ def add_sharing_banner(page, response):
         banner_template = loader.get_template(banner_template_name)
 
         banner_html = banner_template.render()
-        banner_html = force_text(banner_html)
+        banner_html = force_str(banner_html)
 
         content_with_banner = html[:endpos] + banner_html + html[endpos:]
         response.content = content_with_banner
