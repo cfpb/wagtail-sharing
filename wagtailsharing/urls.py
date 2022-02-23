@@ -8,7 +8,7 @@ from wagtailsharing.views import ServeView
 
 try:
     from django.urls import re_path
-except ImportError:
+except ImportError:  # pragma: no cover
     from django.conf.urls import url as re_path
 
 
