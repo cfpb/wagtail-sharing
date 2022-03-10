@@ -36,6 +36,7 @@ jobs:
             - py36-dj22-waglatest
             - py39-dj22-waglatest
             - py39-dj32-waglatest
+            - py39-dj40-waglatest
         include:
           - toxenv: py36-dj22-wag27
             python-version: 3.6
@@ -44,6 +45,8 @@ jobs:
           - toxenv: py39-dj22-waglatest
             python-version: 3.9
           - toxenv: py39-dj32-waglatest
+            python-version: 3.9
+          - toxenv: py39-dj40-waglatest
             python-version: 3.9
 
     steps:
