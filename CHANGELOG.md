@@ -1,6 +1,11 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.6 - 2022-03-10
+
+- Update tests to Python 3.9
+- Adds Django 4.0 support
+
 ## 2.5.1 - 2021-03-05
 
 - Included a delete migration for `ShareableRoutablePage`, a model that does not exist but was accidentially included via migration in 2.5.0
