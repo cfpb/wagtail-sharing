@@ -67,9 +67,9 @@ def add_sharing_banner(page, response):
 
 @hooks.register("before_route_page")
 def set_routed_by_wagtail_sharing(request, path):
-    setattr(request, "routed_by_wagtail_sharing", True)
+    request.routed_by_wagtail_sharing = True
 
 
 @hooks.register("before_serve_shared_page")
 def set_served_by_wagtail_sharing(page, request, args, kwargs):
-    setattr(request, "served_by_wagtail_sharing", True)
+    request.served_by_wagtail_sharing = True
