@@ -1,5 +1,13 @@
-from wagtail.core.urls import serve_pattern
-from wagtail.core.urls import urlpatterns as wagtailcore_urlpatterns
+try:
+    from wagtail.urls import (
+        serve_pattern,
+        urlpatterns as wagtailcore_urlpatterns,
+    )
+except ImportError:
+    from wagtail.core.urls import (
+        serve_pattern,
+        urlpatterns as wagtailcore_urlpatterns,
+    )
 
 from wagtailsharing.views import ServeView
 

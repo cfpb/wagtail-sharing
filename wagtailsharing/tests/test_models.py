@@ -1,7 +1,11 @@
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
 
-from wagtail.core.models import Site
+
+try:
+    from wagtail.models import Site
+except ImportError:
+    from wagtail.core.models import Site
 
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.shareable_routable_testapp.models import (

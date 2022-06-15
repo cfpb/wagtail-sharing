@@ -1,7 +1,12 @@
 from django.db import models
 
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-from wagtail.core.models import Site
+
+
+try:
+    from wagtail.models import Site
+except ImportError:
+    from wagtail.core.models import Site
 
 
 class SharingSite(models.Model):

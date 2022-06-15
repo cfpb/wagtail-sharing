@@ -1,6 +1,6 @@
 import os
 
-import wagtail
+from wagtail import VERSION as WAGTAIL_VERSION
 
 
 ALLOWED_HOSTS = ["*"]
@@ -28,21 +28,26 @@ WAGTAIL_APPS = (
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
-    "wagtail.tests.routablepage",
-    "wagtail.tests.testapp",
+    "wagtail.test.routablepage" if WAGTAIL_VERSION >= (3, 0) else "wagtail.tests.routablepage",
+    "wagtail.test.testapp" if WAGTAIL_VERSION >= (3, 0) else "wagtail.tests.testapp",
     "wagtail.admin",
-    "wagtail.core",
+    "wagtail" if WAGTAIL_VERSION >= (3, 0) else "wagtail.core",
     "wagtail.documents",
     "wagtail.images",
     "wagtail.sites",
     "wagtail.users",
 )
 
-WAGTAILADMIN_RICH_TEXT_EDITORS = {
-    "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-    "custom": {"WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"},
-}
-
+if WAGTAIL_VERSION >= (3, 0):
+    WAGTAILADMIN_RICH_TEXT_EDITORS = {
+        "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
+        "custom": {"WIDGET": "wagtail.test.testapp.rich_text.CustomRichTextArea"},
+    }
+else:
+    WAGTAILADMIN_RICH_TEXT_EDITORS = {
+        "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
+        "custom": {"WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"},
+    }
 
 MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
@@ -52,9 +57,6 @@ MIDDLEWARE = (
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
-
-if wagtail.VERSION < (2, 9):
-    MIDDLEWARE += ("wagtail.core.middleware.SiteMiddleware",)
 
 INSTALLED_APPS = (
     (

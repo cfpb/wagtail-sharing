@@ -4,7 +4,11 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.urls import re_path
 
-from wagtail.core import urls as wagtail_core_urls
+
+try:
+    from wagtail import urls as wagtail_core_urls
+except ImportError:
+    from wagtail.core import urls as wagtail_core_urls
 
 import wagtailsharing.urls
 

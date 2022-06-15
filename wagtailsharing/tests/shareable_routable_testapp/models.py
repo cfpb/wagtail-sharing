@@ -2,7 +2,12 @@ from django.db import models
 from django.http import HttpResponse
 
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.core.models import Page
+
+
+try:
+    from wagtail.models import Page
+except ImportError:
+    from wagtail.core.models import Page
 
 from wagtailsharing.models import ShareableRoutablePageMixin
 

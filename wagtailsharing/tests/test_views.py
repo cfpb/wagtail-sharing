@@ -4,8 +4,15 @@ from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase
 
 import wagtail
-from wagtail.core.models import Site
-from wagtail.tests.utils import WagtailTestUtils
+from wagtail import VERSION as WAGTAIL_VERSION
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.models import Site
+    from wagtail.test.utils import WagtailTestUtils
+else:
+    from wagtail.core.models import Site
+    from wagtail.tests.utils import WagtailTestUtils
 
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import (

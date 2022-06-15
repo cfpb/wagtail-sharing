@@ -7,7 +7,12 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin import widgets as wagtailadmin_widgets
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from wagtail.core import hooks
+
+
+try:
+    from wagtail import hooks
+except ImportError:
+    from wagtail.core.hooks import hooks
 
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite

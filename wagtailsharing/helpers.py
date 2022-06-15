@@ -1,4 +1,7 @@
-from wagtail.core.models import Site
+try:
+    from wagtail.models import Site
+except ImportError:
+    from wagtail.core.models import Site
 
 from wagtailsharing.models import SharingSite
 
