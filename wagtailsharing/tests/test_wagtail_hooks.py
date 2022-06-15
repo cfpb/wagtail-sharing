@@ -4,6 +4,7 @@ from django.test import RequestFactory, TestCase, override_settings
 
 from wagtail import VERSION as WAGTAIL_VERSION
 
+
 if WAGTAIL_VERSION >= (3, 0):
     from wagtail.test.testapp.models import SimplePage
 else:

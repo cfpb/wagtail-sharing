@@ -7,7 +7,7 @@ from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.routable_page.models import RoutablePageMixin
 
 
-if WAGTAIL_VERSION >= (3, 0):    
+if WAGTAIL_VERSION >= (3, 0):
     from wagtail import hooks
     from wagtail.url_routing import RouteResult
     from wagtail.views import serve as wagtail_serve

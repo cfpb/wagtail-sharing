@@ -22,16 +22,25 @@ DATABASES = {
     },
 }
 
+if WAGTAIL_VERSION >= (3, 0):
+    routablepage = "wagtail.test.routablepage"
+    testapp = "wagtail.testapp"
+    wagtail = "wagtail"
+else:
+    routablepage = "wagtail.tests.routablepage"
+    testapp = "wagtail.tests.testapp"
+    wagtail = "wagtail.core"
+
 
 WAGTAIL_APPS = (
     "wagtail.contrib.forms",
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
-    "wagtail.test.routablepage" if WAGTAIL_VERSION >= (3, 0) else "wagtail.tests.routablepage",
-    "wagtail.test.testapp" if WAGTAIL_VERSION >= (3, 0) else "wagtail.tests.testapp",
+    routablepage,
+    testapp,
     "wagtail.admin",
-    "wagtail" if WAGTAIL_VERSION >= (3, 0) else "wagtail.core",
+    wagtail,
     "wagtail.documents",
     "wagtail.images",
     "wagtail.sites",
@@ -41,12 +50,16 @@ WAGTAIL_APPS = (
 if WAGTAIL_VERSION >= (3, 0):
     WAGTAILADMIN_RICH_TEXT_EDITORS = {
         "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-        "custom": {"WIDGET": "wagtail.test.testapp.rich_text.CustomRichTextArea"},
+        "custom": {
+            "WIDGET": "wagtail.test.testapp.rich_text.CustomRichTextArea"
+        },
     }
 else:
     WAGTAILADMIN_RICH_TEXT_EDITORS = {
         "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-        "custom": {"WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"},
+        "custom": {
+            "WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"
+        },
     }
 
 MIDDLEWARE = (

@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from wagtail import VERSION as WAGTAIL_VERSION
 
 
-if WAGTAIL_VERSION >= (3, 0):    
+if WAGTAIL_VERSION >= (3, 0):
     from wagtail.test.routablepage.models import RoutablePageTest
     from wagtail.test.testapp.models import SimplePage
 else:

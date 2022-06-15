@@ -6,6 +6,7 @@ from django.urls import re_path
 
 from wagtail import VERSION as WAGTAIL_VERSION
 
+
 if WAGTAIL_VERSION >= (3, 0):
     from wagtail import urls as wagtail_core_urls
 else:
@@ -42,7 +43,9 @@ class TestUrlPatterns(TestCase):
         if WAGTAIL_VERSION >= (3, 0):
             self.assertEqual(self.urlpatterns[1].callback.__name__, "view")
         else:
-            self.assertEqual(self.urlpatterns[1].callback.__name__, "ServeView")
+            self.assertEqual(
+                self.urlpatterns[1].callback.__name__, "ServeView"
+            )
 
     def test_leaves_later_urls_alone(self):
         self.assertEqual(self.urlpatterns[2].name, "bar")
