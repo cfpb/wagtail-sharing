@@ -1,10 +1,12 @@
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
 
+from wagtail import VERSION as WAGTAIL_VERSION
 
-try:
+
+if WAGTAIL_VERSION >= (3, 0):
     from wagtail.models import Site
-except ImportError:
+else:
     from wagtail.core.models import Site
 
 from wagtailsharing.models import SharingSite
