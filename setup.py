@@ -5,7 +5,7 @@ install_requires = [
     "django>=3.0,<5.0",
 ]
 
-testing_extras = ["coverage>=3.7.0", "mock>=3.0.0"]
+testing_extras = ["coverage>=3.7.0"]
 
 setup(
     name="wagtail-sharing",
