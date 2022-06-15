@@ -1,9 +1,11 @@
-try:
+from wagtail import VERSION as WAGTAIL_VERSION
+
+if WAGTAIL_VERSION >= (3, 0):
     from wagtail.urls import (
         serve_pattern,
         urlpatterns as wagtailcore_urlpatterns,
     )
-except ImportError:
+else:
     from wagtail.core.urls import (
         serve_pattern,
         urlpatterns as wagtailcore_urlpatterns,
