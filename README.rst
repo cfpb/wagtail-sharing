@@ -41,6 +41,10 @@ Add ``wagtailsharing`` as an installed app in your Django settings:
 
 ``wagtail.contrib.modeladmin`` is also required and must be included in your list of installed apps.
 
+The code examples below assume that you are using the latest Wagtail version (3.0+).
+
+* For earlier versions, you will need to consult the `Wagtail documentation <https://docs.wagtail.org/en/stable/releases/index.html>`_ for your version.
+
 Run migrations to create required database tables:
 
 .. code-block:: bash
@@ -198,9 +202,9 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.6+
-* Django 2.2 (LTS), 3.1, 4.0 (current)
-* Wagtail 2.7 (LTS), 2.10 (current)
+* Python 3.7+
+* Django 3.0+
+* Wagtail 2.15+
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
