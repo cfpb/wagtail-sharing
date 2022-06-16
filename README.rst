@@ -52,7 +52,7 @@ Replace use of Wagtail's catch-all URL pattern:
 .. code-block:: diff
 
   # in urls.py
-  -from wagtail.core import urls as wagtail_urls
+  -from wagtail import urls as wagtail_urls
   +from wagtailsharing import urls as wagtailsharing_urls
 
   ...
@@ -140,7 +140,7 @@ This hook could be useful for limiting sharing to only certain page types or for
 
 .. code-block:: python
 
-  from wagtail.core import hooks
+  from wagtail import hooks
 
   @hooks.register('before_serve_shared_page')
   def modify_shared_title(page, request, args, kwargs):
@@ -155,7 +155,7 @@ This hook could be useful for directly modifying the response content, for examp
 
 .. code-block:: python
 
-  from wagtail.core import hooks
+  from wagtail import hooks
 
   @hooks.register('after_serve_shared_page')
   def add_custom_header(page, response):
@@ -176,8 +176,8 @@ By default, Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail-Sharin
 
 .. code-block:: python
 
-  from wagtail.core.fields import RichTextField
-  from wagtail.core.models import Page
+  from wagtail.fields import RichTextField
+  from wagtail.models import Page
   from wagtail.contrib.routable_page.models import route
   from wagtailsharing.models import ShareableRoutablePageMixin
 
