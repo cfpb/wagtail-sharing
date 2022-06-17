@@ -24,7 +24,7 @@ DATABASES = {
 
 if WAGTAIL_VERSION >= (3, 0):
     routablepage = "wagtail.test.routablepage"
-    testapp = "wagtail.testapp"
+    testapp = "wagtail.test.testapp"
     wagtail = "wagtail"
 else:
     routablepage = "wagtail.tests.routablepage"
