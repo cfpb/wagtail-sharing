@@ -40,9 +40,7 @@ class TestUrlPatterns(TestCase):
 
     def test_replaces_wagtail_serve(self):
         self.assertEqual(self.urlpatterns[1].name, "wagtail_serve")
-        self.assertEqual(
-            self.urlpatterns[1].callback.__name__, "ServeView"
-        )
+        self.assertEqual(self.urlpatterns[1].callback.__name__, "ServeView")
 
     def test_leaves_later_urls_alone(self):
         self.assertEqual(self.urlpatterns[2].name, "bar")

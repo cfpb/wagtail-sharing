@@ -31,29 +31,14 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
-        toxenv:
-            - py37-dj30-wag215
-            - py37-dj30-waglatest
-            - py38-dj31-wag215
-            - py38-dj31-waglatest
-        include:
-          - toxenv: py39-dj32-wag216
-            python-version: 3.9
-          - toxenv: py39-dj32-waglatest
-            python-version: 3.9
-          - toxenv: py39-dj40-wag30
-            python-version: 3.9
-          - toxenv: py38-dj40-waglatest
-            python-version: 3.9
+        python: ["3.8", "3.9", "3.10"]
 
     steps:
-      - uses: actions/checkout@v1
-
-      - name: Set up Python
-        uses: actions/setup-python@v1
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
 
       - name: Install dependencies
         run: |
