@@ -16,15 +16,11 @@ from wagtailsharing.models import SharingSite
 def get_tokenized_sharing_url(sharing_site, page_path):
     share_path = getattr(settings, "WAGTAILSHARING_TOKEN_SHARE_PATH", "share")
     payload = {"path": page_path}
-    return "/".join(
-        [
-            sharing_site.root_url,
-            share_path,
-            jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256").decode(
-                "utf-8"
-            ),
-        ]
-    )
+    hash = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+    if not isinstance(hash, str):
+        # PyJWT < 2.0 returns a byte string
+        hash = hash.decode("utf-8")
+    return "/".join([sharing_site.root_url, share_path, hash])
 
 
 def get_sharing_url(page):
