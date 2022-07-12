@@ -1,9 +1,6 @@
 .. image:: https://github.com/cfpb/wagtail-sharing/workflows/test/badge.svg?branch=main
   :alt: Build Status
   :target: https://github.com/cfpb/wagtail-sharing/actions?query=branch%3Amain+workflow%3Atest+
-.. image:: https://coveralls.io/repos/github/cfpb/wagtail-sharing/badge.svg?branch=main
-  :alt: Coverage Status
-  :target: https://coveralls.io/github/cfpb/wagtail-sharing?branch=main
 
 wagtail-sharing
 ===============
