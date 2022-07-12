@@ -28,7 +28,7 @@ WAGTAIL_APPS = (
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
-    "wagtail.tests.routablepage",
+    "wagtail.test.routablepage",
     "wagtail.tests.testapp",
     "wagtail.admin",
     "wagtail.core",
