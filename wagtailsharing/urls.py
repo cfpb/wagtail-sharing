@@ -1,4 +1,3 @@
-
 try:
     from wagtail.urls import serve_pattern
     from wagtail.urls import urlpatterns as wagtailcore_urlpatterns
