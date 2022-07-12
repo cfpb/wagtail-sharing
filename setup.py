@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 install_requires = [
-    "wagtail>=2.7,<3",
+    "wagtail>=2.7,<4",
 ]
 
 testing_extras = ["coverage>=3.7.0"]
@@ -12,7 +12,7 @@ setup(
     author="CFPB",
     author_email="tech@cfpb.gov",
     license="CCO",
-    version="2.6",
+    version="2.7",
     include_package_data=True,
     packages=find_packages(),
     python_requires=">=3.6",
@@ -27,6 +27,7 @@ setup(
         "Framework :: Django :: 4.0",
         "Framework :: Wagtail",
         "Framework :: Wagtail :: 2",
+        "Framework :: Wagtail :: 3",
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "License :: Public Domain",
         "Programming Language :: Python",
