@@ -29,7 +29,7 @@ WAGTAIL_APPS = (
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
     "wagtail.test.routablepage",
-    "wagtail.tests.testapp",
+    "wagtail.test.testapp",
     "wagtail.admin",
     "wagtail.core",
     "wagtail.documents",
