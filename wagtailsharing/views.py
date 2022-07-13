@@ -3,10 +3,18 @@ import inspect
 from django.http import Http404, HttpResponse
 from django.views.generic import View
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-from wagtail.core import hooks
-from wagtail.core.url_routing import RouteResult
-from wagtail.core.views import serve as wagtail_serve
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail import hooks
+    from wagtail.url_routing import RouteResult
+    from wagtail.views import serve as wagtail_serve
+else:
+    from wagtail.core import hooks
+    from wagtail.core.url_routing import RouteResult
+    from wagtail.core.views import serve as wagtail_serve
 
 from wagtailsharing.models import SharingSite
 
@@ -38,7 +46,7 @@ class ServeView(View):
     def route(site, request, path):
         """Retrieve a page from a site given a request and path.
 
-        This method uses the standard `wagtail.core.Page.route` method to
+        This method uses the standard `wagtail.Page.route` method to
         retrieve a page using its path from the given site root.
 
         If a requested page exists and is published, the result of `Page.route`

@@ -1,7 +1,13 @@
 from django.db import models
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-from wagtail.core.models import Site
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.models import Site
+else:
+    from wagtail.core.models import Site
 
 
 class SharingSite(models.Model):

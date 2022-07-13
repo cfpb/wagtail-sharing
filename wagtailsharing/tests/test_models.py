@@ -1,7 +1,13 @@
 from django.db import IntegrityError
 from django.test import RequestFactory, TestCase
 
-from wagtail.core.models import Site
+from wagtail import VERSION as WAGTAIL_VERSION
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.models import Site
+else:
+    from wagtail.core.models import Site
 
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.shareable_routable_testapp.models import (

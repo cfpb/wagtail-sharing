@@ -1,5 +1,12 @@
-from wagtail.core.urls import serve_pattern
-from wagtail.core.urls import urlpatterns as wagtailcore_urlpatterns
+from wagtail import VERSION as WAGTAIL_VERSION
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.urls import serve_pattern
+    from wagtail.urls import urlpatterns as wagtailcore_urlpatterns
+else:
+    from wagtail.core.urls import serve_pattern
+    from wagtail.core.urls import urlpatterns as wagtailcore_urlpatterns
 
 from wagtailsharing.views import ServeView
 

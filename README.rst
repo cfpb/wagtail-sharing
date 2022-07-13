@@ -41,6 +41,10 @@ Add ``wagtailsharing`` as an installed app in your Django settings:
 
 ``wagtail.contrib.modeladmin`` is also required and must be included in your list of installed apps.
 
+The code examples below assume that you are using the latest Wagtail version (3.0+).
+
+* For earlier versions, you will need to consult the `Wagtail documentation <https://docs.wagtail.org/en/stable/releases/index.html>`_ for your version.
+
 Run migrations to create required database tables:
 
 .. code-block:: bash
@@ -52,7 +56,7 @@ Replace use of Wagtail's catch-all URL pattern:
 .. code-block:: diff
 
   # in urls.py
-  -from wagtail.core import urls as wagtail_urls
+  -from wagtail import urls as wagtail_urls
   +from wagtailsharing import urls as wagtailsharing_urls
 
   ...
@@ -140,7 +144,7 @@ This hook could be useful for limiting sharing to only certain page types or for
 
 .. code-block:: python
 
-  from wagtail.core import hooks
+  from wagtail import hooks
 
   @hooks.register('before_serve_shared_page')
   def modify_shared_title(page, request, args, kwargs):
@@ -155,7 +159,7 @@ This hook could be useful for directly modifying the response content, for examp
 
 .. code-block:: python
 
-  from wagtail.core import hooks
+  from wagtail import hooks
 
   @hooks.register('after_serve_shared_page')
   def add_custom_header(page, response):
@@ -176,8 +180,8 @@ By default, Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail-Sharin
 
 .. code-block:: python
 
-  from wagtail.core.fields import RichTextField
-  from wagtail.core.models import Page
+  from wagtail.fields import RichTextField
+  from wagtail.models import Page
   from wagtail.contrib.routable_page.models import route
   from wagtailsharing.models import ShareableRoutablePageMixin
 
@@ -198,9 +202,9 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.6+
-* Django 2.2 (LTS), 3.1, 4.0 (current)
-* Wagtail 2.7 (LTS), 2.10 (current)
+* Python 3.7+
+* Django 3.0+
+* Wagtail 2.15+
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.

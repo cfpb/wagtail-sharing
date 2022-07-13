@@ -1,7 +1,14 @@
 from django.utils.text import slugify
 
-from wagtail.tests.routablepage.models import RoutablePageTest
-from wagtail.tests.testapp.models import SimplePage
+from wagtail import VERSION as WAGTAIL_VERSION
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.test.routablepage.models import RoutablePageTest
+    from wagtail.test.testapp.models import SimplePage
+else:
+    from wagtail.tests.routablepage.models import RoutablePageTest
+    from wagtail.tests.testapp.models import SimplePage
 
 
 def create_draft_page(site, title):

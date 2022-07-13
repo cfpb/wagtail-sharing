@@ -1,8 +1,14 @@
 from django.db import models
 from django.http import HttpResponse
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.core.models import Page
+
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail.models import Page
+else:
+    from wagtail.core.models import Page
 
 from wagtailsharing.models import ShareableRoutablePageMixin
 
