@@ -1,9 +1,9 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
-## unreleased
+## 2.7 - 2022-07-13
 
-- [Wagtail 3.0 compatibility](https://github.com/cfpb/wagtail-sharing/pull/55)
+- Added support for Wagtail 3.0 (thanks [@nickmoreton](https://github.com/nickmoreton)!)
 
 ## 2.6 - 2022-03-10
 
