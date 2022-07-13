@@ -1,13 +1,14 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## unreleased
+
+- [Wagtail 3.0 compatibility](https://github.com/cfpb/wagtail-sharing/pull/55)
+
 ## 2.6 - 2022-03-10
 
 - Update tests to Python 3.9
 - Adds Django 4.0 support
-## unreleased
-
-- [Wagtail 3.0 compatibility](https://github.com/zerolab/wagtail-sharing/pull/1)
 
 ## 2.5.1 - 2021-03-05
 
