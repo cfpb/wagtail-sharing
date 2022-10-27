@@ -21,19 +21,17 @@ except ImportError:  # pragma: no cover
 
 if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", False):
     share_path = getattr(settings, "WAGTAILSHARING_TOKEN_SHARE_PATH", "share")
-    wagtailsharing_serve_path = re_path(
-        rf"^{share_path}/([\w\.\-\_]+)/$",
-        TokenServeView.as_view(),
-        name="wagtail_serve",
-    )
+    urlpatterns = wagtailcore_urlpatterns + [
+        re_path(
+            rf"^{share_path}/([\w\.\-\_]+)/$",
+            TokenServeView.as_view(),
+            name="wagtail_serve",
+        )
+    ]
 else:
-    wagtailsharing_serve_path = re_path(
-        serve_pattern, ServeView.as_view(), name="wagtail_serve"
-    )
-
-urlpatterns = [
-    wagtailsharing_serve_path
-    if urlpattern.name == "wagtail_serve"
-    else urlpattern
-    for urlpattern in wagtailcore_urlpatterns
-]
+    urlpatterns = [
+        re_path(serve_pattern, ServeView.as_view(), name="wagtail_serve")
+        if urlpattern.name == "wagtail_serve"
+        else urlpattern
+        for urlpattern in wagtailcore_urlpatterns
+    ]
