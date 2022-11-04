@@ -7,6 +7,7 @@
 
 
 There are two primary ways to help:
+
  - Using the issue tracker, and
  - Changing the code-base.
 
@@ -42,7 +43,7 @@ You can format code and imports by calling:
 
 ```
 black wagtailsharing
-isort --recursive wagtailsharing
+isort wagtailsharing
 ```
 
 And you can check for style, import order, and other linting by using:

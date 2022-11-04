@@ -1,4 +1,8 @@
+from django.conf import settings
+
 from wagtail import VERSION as WAGTAIL_VERSION
+
+import jwt
 
 
 if WAGTAIL_VERSION >= (3, 0):
@@ -7,6 +11,16 @@ else:
     from wagtail.core.models import Site
 
 from wagtailsharing.models import SharingSite
+
+
+def get_tokenized_sharing_url(sharing_site, page_path):
+    share_path = getattr(settings, "WAGTAILSHARING_TOKEN_SHARE_PATH", "share")
+    payload = {"path": page_path}
+    hash = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+    if not isinstance(hash, str):
+        # PyJWT < 2.0 returns a byte string
+        hash = hash.decode("utf-8")
+    return "/".join([sharing_site.root_url, share_path, hash])
 
 
 def get_sharing_url(page):
@@ -26,5 +40,8 @@ def get_sharing_url(page):
     except SharingSite.DoesNotExist:
         # Site is not shared.
         return None
+
+    if getattr(settings, "WAGTAILSHARING_TOKENIZE_URL", False):
+        return get_tokenized_sharing_url(sharing_site, page_path)
 
     return sharing_site.root_url + page_path
