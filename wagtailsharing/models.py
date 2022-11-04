@@ -56,7 +56,10 @@ class SharingSite(models.Model):
 class ShareableRoutablePageMixin(RoutablePageMixin):
     def route(self, request, path_components):
         if getattr(request, "routed_by_wagtail_sharing", False):
-            page = self.get_latest_revision_as_page()
+            if WAGTAIL_VERSION >= (4, 0):
+                page = self.get_latest_revision_as_object()
+            else:
+                page = self.get_latest_revision_as_page()
             # This call to RoutablePageMixin's route() is so that the  method
             # gets called with the latest-revision-as-page object as self,
             # rather than the page object that is current self in this context.

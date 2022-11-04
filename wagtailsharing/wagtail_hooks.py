@@ -28,10 +28,11 @@ class SharingSiteModelAdmin(ModelAdmin):
 
 
 modeladmin_register(SharingSiteModelAdmin)
+hook_params = {} if WAGTAIL_VERSION >= (4, 0) else {"is_parent": False}
 
 
 @hooks.register("register_page_listing_more_buttons")
-def add_sharing_link(page, page_perms, is_parent=False, next_url=None):
+def add_sharing_link(page, page_perms, next_url=None, **hook_params):
     sharing_url = get_sharing_url(page)
 
     if sharing_url:

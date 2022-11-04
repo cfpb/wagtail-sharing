@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## Unreleased
+
+- Added support for Wagtail 4.0 ([@katdom13](https://github.com/katdom13)!)
+
 ## 2.7 - 2022-07-13
 
 - Added support for Wagtail 3.0 (thanks [@nickmoreton](https://github.com/nickmoreton)!)
