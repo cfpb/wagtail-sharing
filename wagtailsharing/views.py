@@ -87,7 +87,7 @@ class ServeView(View):
                 return result
 
         # Get the latest revision for the requested page.
-        page = page.get_latest_revision_as_page()
+        page = page.get_latest_revision_as_object()
 
         # Call the before_serve_shared_page hook.
         for fn in hooks.get_hooks("before_serve_shared_page"):
