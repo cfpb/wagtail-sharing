@@ -1,14 +1,7 @@
 from django.test import TestCase
 
-from wagtail import VERSION as WAGTAIL_VERSION
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail.models import Site
-    from wagtail.test.testapp.models import SimplePage
-else:
-    from wagtail.core.models import Site
-    from wagtail.tests.testapp.models import SimplePage
+from wagtail.models import Site
+from wagtail.test.testapp.models import SimplePage
 
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite

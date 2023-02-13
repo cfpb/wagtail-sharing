@@ -1,17 +1,10 @@
 from importlib import reload
 from unittest.mock import patch
 
-from django import VERSION as DJANGO_VERSION
 from django.test import TestCase
 from django.urls import re_path
 
-from wagtail import VERSION as WAGTAIL_VERSION
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail import urls as wagtail_core_urls
-else:
-    from wagtail.core import urls as wagtail_core_urls
+from wagtail import urls as wagtail_core_urls
 
 import wagtailsharing.urls
 
@@ -41,12 +34,7 @@ class TestUrlPatterns(TestCase):
 
     def test_replaces_wagtail_serve(self):
         self.assertEqual(self.urlpatterns[1].name, "wagtail_serve")
-        if WAGTAIL_VERSION >= (3, 0) and DJANGO_VERSION >= (4, 0):
-            self.assertEqual(self.urlpatterns[1].callback.__name__, "view")
-        else:
-            self.assertEqual(
-                self.urlpatterns[1].callback.__name__, "ServeView"
-            )
+        self.assertEqual(self.urlpatterns[1].callback.__name__, "view")
 
     def test_leaves_later_urls_alone(self):
         self.assertEqual(self.urlpatterns[2].name, "bar")

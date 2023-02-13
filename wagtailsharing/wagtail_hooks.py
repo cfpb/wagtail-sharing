@@ -5,15 +5,9 @@ from django.template import loader
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail import hooks
 from wagtail.admin import widgets as wagtailadmin_widgets
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail import hooks
-else:
-    from wagtail.core import hooks
 
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite
