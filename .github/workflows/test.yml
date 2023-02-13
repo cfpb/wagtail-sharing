@@ -2,6 +2,10 @@ name: test
 
 on: [pull_request, push]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   lint:
@@ -31,23 +35,30 @@ jobs:
     strategy:
       matrix:
         toxenv:
-          # Legacy versions
-          - py39-dj32-wag215
-
-          # Current and latest versions
-          - py310-dj32-wag30
-          - py310-dj40-wag30
-          - py310-dj40-waglatest
+          # Current Django and Wagtail LTS
+          - py39-dj32-wag41
+          - py39-dj32-wag42
+          - py310-dj40-wag41
+          - py310-dj40-wag42
 
         include:
-          - toxenv: py39-dj32-wag215
+          - toxenv: py39-dj32-wag41
             python-version: "3.9"
-          - toxenv: py310-dj32-wag30
+          - toxenv: py39-dj32-wag42
+            python-version: "3.9"
+
+          - toxenv: py310-dj40-wag41
             python-version: "3.10"
-          - toxenv: py310-dj40-wag30
+          - toxenv: py310-dj40-wag42
             python-version: "3.10"
-          - toxenv: py310-dj40-waglatest
-            python-version: "3.10"
+
+          - toxenv: py311-dj41-wag41
+            python-version: "3.11"
+          - toxenv: py311-dj41-wag42
+            python-version: "3.11"
+
+          - toxenv: py311-dj41-waglatest
+            python-version: "3.11"
 
     steps:
       - uses: actions/checkout@v3
