@@ -202,9 +202,9 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.7+
-* Django 3.0+
-* Wagtail 2.15+
+* Python 3.9+
+* Django 3.2+
+* Wagtail 4.1+
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
