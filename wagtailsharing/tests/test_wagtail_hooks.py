@@ -1,16 +1,10 @@
+from unittest.mock import Mock, patch
+
 from django.conf import settings
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
 
-from wagtail import VERSION as WAGTAIL_VERSION
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail.test.testapp.models import SimplePage
-else:
-    from wagtail.tests.testapp.models import SimplePage
-
-from unittest.mock import Mock, patch
+from wagtail.test.testapp.models import SimplePage
 
 from wagtailsharing.wagtail_hooks import (
     add_sharing_banner,
