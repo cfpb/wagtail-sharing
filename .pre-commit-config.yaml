@@ -5,13 +5,13 @@ repos:
     - id: black
       args: ["wagtailsharing", "setup.py", "--line-length=79"]
       exclude: migrations
--   repo: https://gitlab.com/pycqa/flake8
+-   repo: https://github.com/pycqa/flake8
     rev: 4.0.1
     hooks:
     - id: flake8
       additional_dependencies: [flake8-bugbear==22.1.11]
 -   repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
       - id: isort
         name: isort (python)
