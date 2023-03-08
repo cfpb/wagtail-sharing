@@ -7,9 +7,9 @@
 
 
 There are two primary ways to help:
+
  - Using the issue tracker, and
  - Changing the code-base.
-
 
 ## Using the issue tracker
 
