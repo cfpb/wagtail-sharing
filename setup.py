@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    "wagtail>=4.1",
+    "wagtail>=3",
 ]
 
 testing_extras = ["coverage>=3.7.0"]
@@ -24,10 +24,10 @@ setup(
     classifiers=[
         "Framework :: Django",
         "Framework :: Django :: 3.2",
-        "Framework :: Django :: 4.0",
+        "Framework :: Django :: 4",
         "Framework :: Wagtail",
-        "Framework :: Wagtail :: 2",
         "Framework :: Wagtail :: 3",
+        "Framework :: Wagtail :: 4",
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "License :: Public Domain",
         "Programming Language :: Python",

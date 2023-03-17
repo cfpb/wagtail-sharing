@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.8"
 
       - name: Install dependencies
         run: |
@@ -34,31 +34,13 @@ jobs:
 
     strategy:
       matrix:
-        toxenv:
-          # Current Django and Wagtail LTS
-          - py39-dj32-wag41
-          - py39-dj32-wag42
-          - py310-dj40-wag41
-          - py310-dj40-wag42
-
+        python: ['3.8', '3.11']
+        django: ['3.2', '4.1']
+        wagtail: ['4.1', '4.2']
         include:
-          - toxenv: py39-dj32-wag41
-            python-version: "3.9"
-          - toxenv: py39-dj32-wag42
-            python-version: "3.9"
-
-          - toxenv: py310-dj40-wag41
-            python-version: "3.10"
-          - toxenv: py310-dj40-wag42
-            python-version: "3.10"
-
-          - toxenv: py311-dj41-wag41
-            python-version: "3.11"
-          - toxenv: py311-dj41-wag42
-            python-version: "3.11"
-
-          - toxenv: py311-dj41-waglatest
-            python-version: "3.11"
+          - python: '3.8'
+            django: '3.2'
+            wagtail: '3.0'
 
     steps:
       - uses: actions/checkout@v3
@@ -66,7 +48,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
 
       - name: Install dependencies
         run: |
@@ -76,7 +58,7 @@ jobs:
         run: |
             tox
         env:
-          TOXENV: ${{ matrix.toxenv }}
+          TOXENV: python${{ matrix.python }}-django${{ matrix.django }}-wagtail${{ matrix.wagtail }}
 
       - name: Store test coverage
         uses: actions/upload-artifact@v2
@@ -98,7 +80,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.8"
 
       - name: Install dependencies
         run: |
