@@ -1,6 +1,11 @@
 import os
 
 
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(PROJECT_DIR)
+
+DEBUG = True
+
 ALLOWED_HOSTS = ["*"]
 
 SECRET_KEY = "not needed"
@@ -63,7 +68,11 @@ INSTALLED_APPS = (
     + ("wagtailsharing", "wagtailsharing.tests.shareable_routable_testapp")
 )
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 TEMPLATES = [
     {
