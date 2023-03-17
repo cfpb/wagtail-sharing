@@ -3,18 +3,11 @@ import inspect
 from django.http import Http404, HttpResponse
 from django.views.generic import View
 
-from wagtail import VERSION as WAGTAIL_VERSION
+import wagtail
+from wagtail import hooks
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail import hooks
-    from wagtail.url_routing import RouteResult
-    from wagtail.views import serve as wagtail_serve
-else:
-    from wagtail.core import hooks
-    from wagtail.core.url_routing import RouteResult
-    from wagtail.core.views import serve as wagtail_serve
+from wagtail.url_routing import RouteResult
+from wagtail.views import serve as wagtail_serve
 
 from wagtailsharing.models import SharingSite
 
@@ -95,7 +88,10 @@ class ServeView(View):
                 return result
 
         # Get the latest revision for the requested page.
-        page = page.get_latest_revision_as_page()
+        if wagtail.VERSION >= (4,):
+            page = page.get_latest_revision_as_object()
+        else:
+            page = page.get_latest_revision_as_page()
 
         # Call the before_serve_shared_page hook.
         for fn in hooks.get_hooks("before_serve_shared_page"):

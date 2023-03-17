@@ -41,9 +41,7 @@ Add ``wagtailsharing`` as an installed app in your Django settings:
 
 ``wagtail.contrib.modeladmin`` is also required and must be included in your list of installed apps.
 
-The code examples below assume that you are using the latest Wagtail version (3.0+).
-
-* For earlier versions, you will need to consult the `Wagtail documentation <https://docs.wagtail.org/en/stable/releases/index.html>`_ for your version.
+The code examples below assume that you are using a recent Wagtail version (3.0+).
 
 Run migrations to create required database tables:
 
@@ -69,9 +67,8 @@ Sharing sites
 
 The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/sharing-sites.png
-    :width: 200px
-    :height: 100px
+.. image:: ./docs/images/sharing-sites.png
+    :width: 640px
     :alt: Sharing sites
 
 No sharing sites exist by default. A sharing site must be manually created for each Wagtail Site to make its latest revisions shareable. Each sharing site is defined by a unique hostname and port number. **Important: configuring your sharing sites improperly could expose draft/private content publicly. Be careful when setting them up!**
@@ -91,9 +88,8 @@ Verify that you can access your local server at http://sharing.localhost:8000. Y
 
 To do so, in the Wagtail admin, under Settings, Sharing Sites, create a new sharing site for the default site, with hostname ``sharing.localhost`` and port ``8000``.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/new-sharing-site.png
-    :width: 200px
-    :height: 100px
+.. image:: ./docs/images/new-sharing-site.png
+    :width: 640px
     :alt: New sharing site with site: "localhost [default]", hostname: "sharing.localhost", port: "8000"
 
 Your latest page revisions (including drafts) should now be available at http://sharing.localhost:8000.
@@ -103,7 +99,7 @@ Banners
 
 Pages viewed on a wagtail-sharing shared site have a simple banner added to them to remind reviewers that the current published content may differ from the content they are viewing.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/banner.png
+.. image:: ./docs/images/banner.png
     :alt: Banner
 
 This behavior can be disabled by setting ``settings.WAGTAILSHARING_BANNER = False``.  The banner template can be overridden by providing an alternate template file at ``wagtailsharing/banner.html`` similar to how `wagtailadmin template overrides <http://docs.wagtail.io/en/latest/advanced_topics/customisation/admin_templates.html#customising-admin-templates>`_ are supported.
@@ -115,8 +111,9 @@ A page's sharing URL can be retrieved by passing its ``Page`` instance to ``wagt
 
 Shared pages will also have a new dropdown menu option that links to this sharing URL from the Wagtail page explorer.
 
-.. image:: https://raw.githubusercontent.com/cfpb/wagtail-sharing/main/docs/images/dropdown.png
+.. image:: ./docs/images/dropdown.png
     :alt: Dropdown with sharing link
+    :width: 640px
 
 Hooks
 -----
@@ -202,12 +199,29 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.7+
-* Django 3.0+
-* Wagtail 2.15+
+* Python 3.9+
+* Django 3.2+
+* Wagtail 3.0+
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
+
+Testing
+-------
+
+Running project unit tests requires `tox <https://tox.wiki/en/latest/>`_:
+
+.. code-block:: bash
+
+  $ tox
+
+To run the test app interactively, run:
+
+.. code-block:: bash
+
+  $ tox -e interactive
+
+Now you can visit http://localhost:8000/admin/ in a browser and log in with ``admin`` / ``changeme``.
 
 Open source licensing info
 --------------------------

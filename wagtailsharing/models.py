@@ -1,13 +1,8 @@
 from django.db import models
 
-from wagtail import VERSION as WAGTAIL_VERSION
+import wagtail
 from wagtail.contrib.routable_page.models import RoutablePageMixin
-
-
-if WAGTAIL_VERSION >= (3, 0):
-    from wagtail.models import Site
-else:
-    from wagtail.core.models import Site
+from wagtail.models import Site
 
 
 class SharingSite(models.Model):
@@ -56,7 +51,11 @@ class SharingSite(models.Model):
 class ShareableRoutablePageMixin(RoutablePageMixin):
     def route(self, request, path_components):
         if getattr(request, "routed_by_wagtail_sharing", False):
-            page = self.get_latest_revision_as_page()
+            if wagtail.VERSION >= (4,):
+                page = self.get_latest_revision_as_object()
+            else:
+                page = self.get_latest_revision_as_page()
+
             # This call to RoutablePageMixin's route() is so that the  method
             # gets called with the latest-revision-as-page object as self,
             # rather than the page object that is current self in this context.

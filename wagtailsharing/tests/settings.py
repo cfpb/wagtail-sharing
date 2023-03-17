@@ -1,7 +1,10 @@
 import os
 
-from wagtail import VERSION as WAGTAIL_VERSION
 
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(PROJECT_DIR)
+
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -22,45 +25,25 @@ DATABASES = {
     },
 }
 
-if WAGTAIL_VERSION >= (3, 0):
-    routablepage = "wagtail.test.routablepage"
-    testapp = "wagtail.test.testapp"
-    wagtail = "wagtail"
-else:
-    routablepage = "wagtail.tests.routablepage"
-    testapp = "wagtail.tests.testapp"
-    wagtail = "wagtail.core"
-
-
 WAGTAIL_APPS = (
     "wagtail.contrib.forms",
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
-    routablepage,
-    testapp,
+    "wagtail.test.routablepage",
+    "wagtail.test.testapp",
     "wagtail.admin",
-    wagtail,
+    "wagtail",
     "wagtail.documents",
     "wagtail.images",
     "wagtail.sites",
     "wagtail.users",
 )
 
-if WAGTAIL_VERSION >= (3, 0):
-    WAGTAILADMIN_RICH_TEXT_EDITORS = {
-        "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-        "custom": {
-            "WIDGET": "wagtail.test.testapp.rich_text.CustomRichTextArea"
-        },
-    }
-else:
-    WAGTAILADMIN_RICH_TEXT_EDITORS = {
-        "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-        "custom": {
-            "WIDGET": "wagtail.tests.testapp.rich_text.CustomRichTextArea"
-        },
-    }
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
+    "custom": {"WIDGET": "wagtail.test.testapp.rich_text.CustomRichTextArea"},
+}
 
 MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
@@ -85,7 +68,11 @@ INSTALLED_APPS = (
     + ("wagtailsharing", "wagtailsharing.tests.shareable_routable_testapp")
 )
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 TEMPLATES = [
     {
@@ -106,3 +93,5 @@ TEMPLATES = [
 ]
 
 WAGTAIL_SITE_NAME = "Test Site"
+
+WAGTAILADMIN_BASE_URL = "http://localhost:8000"
