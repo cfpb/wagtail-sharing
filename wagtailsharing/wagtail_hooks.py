@@ -24,6 +24,7 @@ class SharingSiteModelAdmin(ModelAdmin):
 modeladmin_register(SharingSiteModelAdmin)
 
 
+@hooks.register("register_page_header_buttons")
 @hooks.register("register_page_listing_more_buttons")
 def add_sharing_link(page, page_perms, is_parent=False, next_url=None):
     sharing_url = get_sharing_url(page)
@@ -32,6 +33,7 @@ def add_sharing_link(page, page_perms, is_parent=False, next_url=None):
         yield wagtailadmin_widgets.Button(
             "View sharing link",
             sharing_url,
+            icon_name="draft",
             attrs={
                 "title": _("View shared revision of '{}'").format(
                     page.get_admin_display_title()
