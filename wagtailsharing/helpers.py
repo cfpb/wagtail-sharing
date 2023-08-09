@@ -4,7 +4,13 @@ from wagtailsharing.models import SharingSite
 
 
 def get_sharing_url(page):
-    """Get a sharing URL for the latest revision of a page, if available."""
+    """Get a sharing URL for a page, if available."""
+
+    # Retrieve the version of the page persisted to the database to
+    # make sure we're using its routable path.
+    if page.pk is not None:
+        page = page.specific_class.objects.get(pk=page.pk)
+
     url_parts = page.get_url_parts()
 
     if url_parts is None:
