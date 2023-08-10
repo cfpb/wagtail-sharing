@@ -7,6 +7,11 @@ from wagtail.models import Page
 from wagtailsharing.models import ShareableRoutablePageMixin
 
 
+class TestPage(Page):
+    def serve(self, request, *args, **kwargs):
+        return HttpResponse(self.title)
+
+
 class RoutableTestPage(RoutablePageMixin, Page):
     text = models.TextField()
 
