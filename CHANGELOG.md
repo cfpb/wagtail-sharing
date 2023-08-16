@@ -1,15 +1,20 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.10 - 2023-08-16
+
+- Deprecate reliance on Wagtail's testapp (https://github.com/cfpb/wagtail-sharing/pull/68)
+- Fix: get_sharing_url should use database slug (https://github.com/cfpb/wagtail-sharing/pull/67)
+
 ## 2.9 - 2023-05-12
 
 - Added the "View sharing link" to page header links ([#63](https://github.com/cfpb/wagtail-sharing/pull/63))
 
 ## 2.8
 
-* Fix flake8 configuration by @chosak in https://github.com/cfpb/wagtail-sharing/pull/58
-* Remove definition of default_app_config by @chosak in https://github.com/cfpb/wagtail-sharing/pull/60
-* Add support for Wagtail 4.2 by @willbarton, @chosak, and @nickmoreton in https://github.com/cfpb/wagtail-sharing/pull/62
+- Fix flake8 configuration by @chosak in https://github.com/cfpb/wagtail-sharing/pull/58
+- Remove definition of default_app_config by @chosak in https://github.com/cfpb/wagtail-sharing/pull/60
+- Add support for Wagtail 4.2 by @willbarton, @chosak, and @nickmoreton in https://github.com/cfpb/wagtail-sharing/pull/62
 
 ## 2.7 - 2022-07-13
 
