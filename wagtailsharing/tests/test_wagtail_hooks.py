@@ -4,8 +4,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
 
-from wagtail.test.testapp.models import SimplePage
-
+from wagtailsharing.tests.shareable_routable_testapp.models import TestPage
 from wagtailsharing.wagtail_hooks import (
     add_sharing_banner,
     add_sharing_link,
@@ -16,7 +15,7 @@ from wagtailsharing.wagtail_hooks import (
 
 class TestAddSharingLink(TestCase):
     def setUp(self):
-        self.page = SimplePage(title="title", slug="slug", content="content")
+        self.page = TestPage(title="title", slug="slug")
         self.page_perms = Mock()
 
     def test_no_link_no_button(self):
@@ -41,7 +40,7 @@ class TestAddSharingLink(TestCase):
 
 class TestAddSharingBanner(TestCase):
     def setUp(self):
-        self.page = SimplePage(title="title", slug="slug", content="content")
+        self.page = TestPage(title="title", slug="slug")
 
     def add_banner_to_response(self, content):
         response = HttpResponse(content=content)

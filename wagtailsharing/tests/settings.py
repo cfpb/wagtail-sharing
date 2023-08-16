@@ -31,7 +31,6 @@ WAGTAIL_APPS = (
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
     "wagtail.test.routablepage",
-    "wagtail.test.testapp",
     "wagtail.admin",
     "wagtail",
     "wagtail.documents",
@@ -39,11 +38,6 @@ WAGTAIL_APPS = (
     "wagtail.sites",
     "wagtail.users",
 )
-
-WAGTAILADMIN_RICH_TEXT_EDITORS = {
-    "default": {"WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea"},
-    "custom": {"WIDGET": "wagtail.test.testapp.rich_text.CustomRichTextArea"},
-}
 
 MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
