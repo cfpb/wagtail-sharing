@@ -108,6 +108,8 @@ Sharing links
 -------------
 
 A page's sharing URL can be retrieved by passing its ``Page`` instance to ``wagtailsharing.helpers.get_sharing_url``. This method returns ``None`` if no shared sites are configured or if the specified page is not routable to a shared site.
+A page's sharing URL is based on the slug of its most recently published revision
+or, if the page has never been published, its initial revision.
 
 Shared pages will also have a new dropdown menu option that links to this sharing URL from the Wagtail page explorer.
 

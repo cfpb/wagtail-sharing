@@ -43,3 +43,20 @@ class TestGetSharingUrl(TestCase):
         page = create_draft_page(self.default_site, title="published")
         page.save_revision().publish()
         self.assertEqual(get_sharing_url(page), "http://hostname/published/")
+
+    def test_url_always_based_on_database_version(self):
+        self.create_sharing_site(hostname="hostname")
+        page = create_draft_page(self.default_site, title="initial")
+        self.assertEqual(get_sharing_url(page), "http://hostname/initial/")
+
+        page.slug = "second"
+        page.save_revision()
+        self.assertEqual(get_sharing_url(page), "http://hostname/initial/")
+
+        page.slug = "third"
+        page.save_revision().publish()
+        self.assertEqual(get_sharing_url(page), "http://hostname/third/")
+
+        page.slug = "fourth"
+        page.save_revision()
+        self.assertEqual(get_sharing_url(page), "http://hostname/third/")
