@@ -1,14 +1,12 @@
 from django.utils.text import slugify
 
 from wagtail.test.routablepage.models import RoutablePageTest
-from wagtail.test.testapp.models import SimplePage
+
+from wagtailsharing.tests.shareable_routable_testapp.models import TestPage
 
 
 def create_draft_page(site, title):
-    page = SimplePage(
-        title=title, slug=slugify(title), content="content", live=False
-    )
-
+    page = TestPage(title=title, slug=slugify(title), live=False)
     site.root_page.add_child(instance=page)
     return page
 

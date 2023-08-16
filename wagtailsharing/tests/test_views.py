@@ -3,7 +3,6 @@ from unittest.mock import patch
 from django.http import Http404, HttpResponse
 from django.test import RequestFactory, TestCase
 
-import wagtail
 from wagtail.models import Site
 from wagtail.test.utils import WagtailTestUtils
 
@@ -37,10 +36,7 @@ class TestServeView(WagtailTestUtils, TestCase):
         self.default_site = Site.objects.get(is_default_site=True)
 
     def make_request(self, path, method="get", **kwargs):
-        request = getattr(self.factory, method)(path, **kwargs)
-        if wagtail.VERSION < (2, 9):
-            request.site = self.default_site
-        return request
+        return getattr(self.factory, method)(path, **kwargs)
 
     def create_sharing_site(self, hostname):
         SharingSite.objects.create(site=self.default_site, hostname=hostname)

@@ -1,11 +1,11 @@
 from django.test import TestCase
 
 from wagtail.models import Site
-from wagtail.test.testapp.models import SimplePage
 
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite
 from wagtailsharing.tests.helpers import create_draft_page
+from wagtailsharing.tests.shareable_routable_testapp.models import TestPage
 
 
 class TestGetSharingUrl(TestCase):
@@ -16,12 +16,12 @@ class TestGetSharingUrl(TestCase):
         SharingSite.objects.create(site=self.default_site, hostname=hostname)
 
     def test_unroutable_page_no_sharing_site_returns_none(self):
-        page = SimplePage(title="title", slug="slug", content="content")
+        page = TestPage(title="title", slug="slug")
         self.assertIsNone(get_sharing_url(page))
 
     def test_unroutable_page_sharing_site_returns_none(self):
         self.create_sharing_site(hostname="hostname")
-        page = SimplePage(title="title", slug="slug", content="content")
+        page = TestPage(title="title", slug="slug")
         self.assertIsNone(get_sharing_url(page))
 
     def test_draft_page_no_sharing_site_returns_none(self):
