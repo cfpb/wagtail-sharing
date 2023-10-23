@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## Unreleased
+
+- Add support for Wagtail 5.1
+
 ## 2.10 - 2023-08-16
 
 - Deprecate reliance on Wagtail's testapp (https://github.com/cfpb/wagtail-sharing/pull/68)
