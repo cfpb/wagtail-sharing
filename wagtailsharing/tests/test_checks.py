@@ -1,14 +1,12 @@
-from django.apps import apps
-from django.core.checks import Error
-from django.test import SimpleTestCase, override_settings
-
 from wagtail import VERSION as WAGTAIL_VERSION
 
 
 if WAGTAIL_VERSION <= (5, 0):
-    from wagtailsharing.checks import modeladmin_installed_check
+    from django.apps import apps
+    from django.core.checks import Error
+    from django.test import SimpleTestCase, override_settings
 
-if WAGTAIL_VERSION <= (5, 0):
+    from wagtailsharing.checks import modeladmin_installed_check
 
     class TestModelAdminInstalledCheck(SimpleTestCase):
         @override_settings(
