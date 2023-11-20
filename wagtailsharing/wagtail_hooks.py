@@ -7,21 +7,22 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail import hooks
 from wagtail.admin import widgets as wagtailadmin_widgets
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views.snippets import SnippetViewSet
 
 from wagtailsharing.helpers import get_sharing_url
 from wagtailsharing.models import SharingSite
 
 
-class SharingSiteModelAdmin(ModelAdmin):
+class SharingSiteViewSet(SnippetViewSet):
     model = SharingSite
-    menu_icon = "site"
+    icon = "site"
     menu_order = 603
     add_to_settings_menu = True
     list_display = ("site", "hostname", "port")
 
 
-modeladmin_register(SharingSiteModelAdmin)
+register_snippet(SharingSiteViewSet)
 
 
 @hooks.register("register_page_header_buttons")
@@ -35,7 +36,7 @@ def add_sharing_link(page, page_perms, is_parent=False, next_url=None):
             sharing_url,
             icon_name="draft",
             attrs={
-                "title": _("View shared revision of '{}'").format(
+                "aria-label": _("View shared revision of '{}'").format(
                     page.get_admin_display_title()
                 ),
             },
