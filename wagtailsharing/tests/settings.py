@@ -1,5 +1,7 @@
 import os
 
+from wagtail import VERSION as WAGTAIL_VERSION
+
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -27,7 +29,9 @@ DATABASES = {
 
 WAGTAIL_APPS = (
     "wagtail.contrib.forms",
-    "wagtail.contrib.modeladmin",
+    "wagtail.contrib.modeladmin"
+    if WAGTAIL_VERSION <= (5, 0)
+    else "wagtail.snippets",
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
     "wagtail.test.routablepage",

@@ -1,23 +1,27 @@
 from django.apps import apps
 from django.core.checks import Error, register
 
+from wagtail import VERSION as WAGTAIL_VERSION
 
-@register()
-def modeladmin_installed_check(app_configs, **kwargs):
-    errors = []
 
-    MODELADMIN_APP = "wagtail.contrib.modeladmin"
-    if not apps.is_installed(MODELADMIN_APP):
-        error_hint = "Is '{}' in settings.INSTALLED_APPS?".format(
-            MODELADMIN_APP
-        )
+if WAGTAIL_VERSION <= (5, 0):
 
-        errors.append(
-            Error(
-                "wagtail-sharing requires the Wagtail ModelAdmin app.",
-                hint=error_hint,
-                id="wagtailsharing.E001",
+    @register()
+    def modeladmin_installed_check(app_configs, **kwargs):
+        errors = []
+
+        MODELADMIN_APP = "wagtail.contrib.modeladmin"
+        if not apps.is_installed(MODELADMIN_APP):
+            error_hint = "Is '{}' in settings.INSTALLED_APPS?".format(
+                MODELADMIN_APP
             )
-        )
 
-    return errors
+            errors.append(
+                Error(
+                    "wagtail-sharing requires the Wagtail ModelAdmin app.",
+                    hint=error_hint,
+                    id="wagtailsharing.E001",
+                )
+            )
+
+        return errors
