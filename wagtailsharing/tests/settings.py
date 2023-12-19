@@ -27,7 +27,6 @@ DATABASES = {
 
 WAGTAIL_APPS = (
     "wagtail.contrib.forms",
-    "wagtail.contrib.modeladmin",
     "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
     "wagtail.test.routablepage",
@@ -36,6 +35,7 @@ WAGTAIL_APPS = (
     "wagtail.documents",
     "wagtail.images",
     "wagtail.sites",
+    "wagtail.snippets",
     "wagtail.users",
 )
 

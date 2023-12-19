@@ -34,7 +34,7 @@ class TestAddSharingLink(TestCase):
             button = next(links)
             self.assertEqual(button.url, url)
             self.assertIn(
-                self.page.get_admin_display_title(), button.attrs["title"]
+                self.page.get_admin_display_title(), button.attrs["aria-label"]
             )
 
 
