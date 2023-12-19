@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
-## Unreleased
+## 2.12 - 2023-12-19
 
 - Add support for Wagtail 5.1 and 5.2
 - Drop support for Wagtail < 5.1 and dependence on wagtail.contrib.modeladmin
