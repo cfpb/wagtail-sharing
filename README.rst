@@ -39,7 +39,7 @@ Add ``wagtailsharing`` as an installed app in your Django settings:
       ...
   )
 
-``wagtail.contrib.modeladmin`` is also required and must be included in your list of installed apps.
+``wagtail.snippets`` is also required and must be included in your list of installed apps.
 
 The code examples below assume that you are using a recent Wagtail version (3.0+).
 
@@ -203,7 +203,7 @@ This project has been tested for compatibility with:
 
 * Python 3.9+
 * Django 3.2+
-* Wagtail 3.0+
+* Wagtail 5.1+ (see past releases for older Wagtail support)
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
