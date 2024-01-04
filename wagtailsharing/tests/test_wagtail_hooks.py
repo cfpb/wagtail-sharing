@@ -16,13 +16,13 @@ from wagtailsharing.wagtail_hooks import (
 class TestAddSharingLink(TestCase):
     def setUp(self):
         self.page = TestPage(title="title", slug="slug")
-        self.page_perms = Mock()
+        self.user = Mock()
 
     def test_no_link_no_button(self):
         with patch(
             "wagtailsharing.wagtail_hooks.get_sharing_url", return_value=None
         ):
-            links = add_sharing_link(self.page, self.page_perms)
+            links = add_sharing_link(self.page, self.user)
             self.assertFalse(list(links))
 
     def test_link_makes_button(self):
@@ -30,7 +30,7 @@ class TestAddSharingLink(TestCase):
         with patch(
             "wagtailsharing.wagtail_hooks.get_sharing_url", return_value=url
         ):
-            links = add_sharing_link(self.page, self.page_perms)
+            links = add_sharing_link(self.page, self.user)
             button = next(links)
             self.assertEqual(button.url, url)
             self.assertIn(
