@@ -1,9 +1,13 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.12.1 2024-01-09
+
+- Fix deprecation warning in Wagtail 5.2 (https://github.com/cfpb/wagtail-sharing/pull/73)
+
 ## 2.12 - 2023-12-19
 
-- Add support for Wagtail 5.1 and 5.2
+- Add support for Wagtail 5.1 and 5.2 (https://github.com/cfpb/wagtail-sharing/pull/71)
 - Drop support for Wagtail < 5.1 and dependence on wagtail.contrib.modeladmin
 
 ## 2.11 - 2023-11-29
