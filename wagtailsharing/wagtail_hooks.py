@@ -27,7 +27,7 @@ register_snippet(SharingSiteViewSet)
 
 @hooks.register("register_page_header_buttons")
 @hooks.register("register_page_listing_more_buttons")
-def add_sharing_link(page, page_perms, is_parent=False, next_url=None):
+def add_sharing_link(page, user, next_url=None, **kwargs):
     sharing_url = get_sharing_url(page)
 
     if sharing_url:

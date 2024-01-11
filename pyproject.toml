@@ -1,6 +1,6 @@
 [project]
 name = "wagtail-sharing"
-version = "2.12"
+version = "2.12.1"
 description = "Easier sharing of Wagtail drafts"
 readme = "README.rst"
 requires-python = ">=3.8"
