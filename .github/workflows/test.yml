@@ -83,7 +83,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
       - name: Retrieve test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
           name: coverage
 
