@@ -7,28 +7,14 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail import hooks
 from wagtail.admin import widgets as wagtailadmin_widgets
-from wagtail.snippets.models import register_snippet
-from wagtail.snippets.views.snippets import SnippetViewSet
 
-from wagtailsharing.helpers import get_sharing_url
-from wagtailsharing.models import SharingSite
-
-
-class SharingSiteViewSet(SnippetViewSet):
-    model = SharingSite
-    icon = "site"
-    menu_order = 603
-    add_to_settings_menu = True
-    list_display = ("site", "hostname", "port")
-
-
-register_snippet(SharingSiteViewSet)
+from wagtailsharing.routers import get_router
 
 
 @hooks.register("register_page_header_buttons")
 @hooks.register("register_page_listing_more_buttons")
 def add_sharing_link(page, user, next_url=None, **kwargs):
-    sharing_url = get_sharing_url(page)
+    sharing_url = get_router().get_sharing_url(page)
 
     if sharing_url:
         yield wagtailadmin_widgets.Button(

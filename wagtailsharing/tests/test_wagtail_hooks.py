@@ -1,9 +1,13 @@
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from django.conf import settings
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
 
+from wagtail.models import Site
+
+from wagtailsharing.models import SharingSite
+from wagtailsharing.tests.helpers import create_draft_page
 from wagtailsharing.tests.shareable_routable_testapp.models import TestPage
 from wagtailsharing.wagtail_hooks import (
     add_sharing_banner,
@@ -15,27 +19,26 @@ from wagtailsharing.wagtail_hooks import (
 
 class TestAddSharingLink(TestCase):
     def setUp(self):
-        self.page = TestPage(title="title", slug="slug")
+        self.default_site = Site.objects.get(is_default_site=True)
         self.user = Mock()
 
     def test_no_link_no_button(self):
-        with patch(
-            "wagtailsharing.wagtail_hooks.get_sharing_url", return_value=None
-        ):
-            links = add_sharing_link(self.page, self.user)
-            self.assertFalse(list(links))
+        page = TestPage(title="title", slug="slug")
+        links = add_sharing_link(page, self.user)
+        self.assertFalse(list(links))
 
     def test_link_makes_button(self):
-        url = "http://test.domain/slug/"
-        with patch(
-            "wagtailsharing.wagtail_hooks.get_sharing_url", return_value=url
-        ):
-            links = add_sharing_link(self.page, self.user)
-            button = next(links)
-            self.assertEqual(button.url, url)
-            self.assertIn(
-                self.page.get_admin_display_title(), button.attrs["aria-label"]
-            )
+        SharingSite.objects.create(
+            site=self.default_site, hostname="sharing.example.com", port=8080
+        )
+        page = create_draft_page(self.default_site, title="test")
+
+        links = add_sharing_link(page, self.user)
+        button = next(links)
+        self.assertEqual(button.url, "http://sharing.example.com:8080/test/")
+        self.assertIn(
+            page.get_admin_display_title(), button.attrs["aria-label"]
+        )
 
 
 class TestAddSharingBanner(TestCase):

@@ -63,31 +63,9 @@ class TestSharingSite(TestCase):
         with self.assertRaises(SharingSite.DoesNotExist):
             SharingSite.find_for_request(request)
 
-    def test_find_for_request_hostname_keyerror(self):
-        request = self.factory.get("/", SERVER_PORT=5678)
-        del request.META["SERVER_NAME"]
-
-        with self.assertRaises(SharingSite.DoesNotExist):
-            SharingSite.find_for_request(request)
-
-    def test_find_for_request_no_server_port(self):
-        request = self.factory.get("/")
-        del request.META["SERVER_PORT"]
-
-        with self.assertRaises(SharingSite.DoesNotExist):
-            SharingSite.find_for_request(request)
-
-    def test_root_url_port_80_http_no_port(self):
+    def test_root_url(self):
         site = SharingSite(hostname="test.hostname", port=80)
         self.assertEqual(site.root_url, "http://test.hostname")
-
-    def test_root_url_port_443_https(self):
-        site = SharingSite(hostname="test.hostname", port=443)
-        self.assertEqual(site.root_url, "https://test.hostname")
-
-    def test_root_url_other_port_http(self):
-        site = SharingSite(hostname="test.hostname", port=1234)
-        self.assertEqual(site.root_url, "http://test.hostname:1234")
 
 
 class TestShareableRoutablePage(TestCase):

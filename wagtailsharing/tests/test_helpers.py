@@ -1,62 +1,81 @@
-from django.test import TestCase
+from django.test import RequestFactory, SimpleTestCase
 
-from wagtail.models import Site
+from wagtailsharing.helpers import (
+    get_hostname_and_port_from_request,
+    make_root_url,
+    parse_host,
+)
 
-from wagtailsharing.helpers import get_sharing_url
-from wagtailsharing.models import SharingSite
-from wagtailsharing.tests.helpers import create_draft_page
-from wagtailsharing.tests.shareable_routable_testapp.models import TestPage
 
-
-class TestGetSharingUrl(TestCase):
+class GetHostnameAndPortFromRequestTests(SimpleTestCase):
     def setUp(self):
-        self.default_site = Site.objects.get(is_default_site=True)
+        self.factory = RequestFactory()
 
-    def create_sharing_site(self, hostname):
-        SharingSite.objects.create(site=self.default_site, hostname=hostname)
+    def test_request(self):
+        request = self.factory.get("/", HTTP_HOST="example.com")
+        self.assertEqual(
+            get_hostname_and_port_from_request(request), ("example.com", 80)
+        )
 
-    def test_unroutable_page_no_sharing_site_returns_none(self):
-        page = TestPage(title="title", slug="slug")
-        self.assertIsNone(get_sharing_url(page))
+    def test_request_with_port(self):
+        request = self.factory.get(
+            "/", HTTP_HOST="example.com", SERVER_PORT=5678
+        )
+        self.assertEqual(
+            get_hostname_and_port_from_request(request), ("example.com", 5678)
+        )
 
-    def test_unroutable_page_sharing_site_returns_none(self):
-        self.create_sharing_site(hostname="hostname")
-        page = TestPage(title="title", slug="slug")
-        self.assertIsNone(get_sharing_url(page))
+    def test_request_without_hostname(self):
+        request = self.factory.get("/")
+        del request.META["SERVER_NAME"]
+        self.assertEqual(
+            get_hostname_and_port_from_request(request), (None, 80)
+        )
 
-    def test_draft_page_no_sharing_site_returns_none(self):
-        page = create_draft_page(self.default_site, title="draft")
-        self.assertIsNone(get_sharing_url(page))
+    def test_request_without_port(self):
+        request = self.factory.get("/", HTTP_HOST="example.com")
+        del request.META["SERVER_PORT"]
+        self.assertEqual(
+            get_hostname_and_port_from_request(request), ("example.com", None)
+        )
 
-    def test_draft_page_sharing_site_returns_url(self):
-        self.create_sharing_site(hostname="hostname")
-        page = create_draft_page(self.default_site, title="draft")
-        self.assertEqual(get_sharing_url(page), "http://hostname/draft/")
 
-    def test_published_page_no_sharing_site_returns_none(self):
-        page = create_draft_page(self.default_site, title="published")
-        page.save_revision().publish()
-        self.assertIsNone(get_sharing_url(page))
+class MakeRootURLTests(SimpleTestCase):
+    def test_make_root_url(self):
+        for hostname, port, root_url in [
+            ("example.com", 80, "http://example.com"),
+            ("example.com", 443, "https://example.com"),
+            ("example.com", 8000, "http://example.com:8000"),
+        ]:
+            with self.subTest(hostname=hostname, port=port, root_url=root_url):
+                self.assertEqual(make_root_url(hostname, port), root_url)
 
-    def test_published_page_sharing_site_returns_url(self):
-        self.create_sharing_site(hostname="hostname")
-        page = create_draft_page(self.default_site, title="published")
-        page.save_revision().publish()
-        self.assertEqual(get_sharing_url(page), "http://hostname/published/")
 
-    def test_url_always_based_on_database_version(self):
-        self.create_sharing_site(hostname="hostname")
-        page = create_draft_page(self.default_site, title="initial")
-        self.assertEqual(get_sharing_url(page), "http://hostname/initial/")
+class ParseHostTests(SimpleTestCase):
+    def test_valid(self):
+        for host, hostname, port in [
+            ("example.com", "example.com", 80),
+            ("http://example.com", "example.com", 80),
+            ("https://example.com", "example.com", 443),
+            ("example.com:443", "example.com", 443),
+            ("localhost:8000", "localhost", 8000),
+            ("subdomain.example.com", "subdomain.example.com", 80),
+            ("http://example.com:8080", "example.com", 8080),
+            ("https://example.com:8443", "example.com", 8443),
+            ("192.168.1.1", "192.168.1.1", 80),
+            ("192.168.1.1:3000", "192.168.1.1", 3000),
+        ]:
+            with self.subTest(host=host, hostname=hostname, port=port):
+                self.assertEqual(parse_host(host), (hostname, port))
 
-        page.slug = "second"
-        page.save_revision()
-        self.assertEqual(get_sharing_url(page), "http://hostname/initial/")
-
-        page.slug = "third"
-        page.save_revision().publish()
-        self.assertEqual(get_sharing_url(page), "http://hostname/third/")
-
-        page.slug = "fourth"
-        page.save_revision()
-        self.assertEqual(get_sharing_url(page), "http://hostname/third/")
+    def test_invalid(self):
+        for host in [
+            "http://",
+            "https://",
+            "http:///path",
+            "",
+            ":8080",
+        ]:
+            with self.subTest(host=host):
+                with self.assertRaises(ValueError):
+                    parse_host(host)

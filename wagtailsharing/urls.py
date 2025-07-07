@@ -7,8 +7,10 @@ from wagtailsharing.views import ServeView
 
 
 urlpatterns = [
-    re_path(serve_pattern, ServeView.as_view(), name="wagtail_serve")
-    if urlpattern.name == "wagtail_serve"
-    else urlpattern
+    (
+        re_path(serve_pattern, ServeView.as_view(), name="wagtail_serve")
+        if urlpattern.name == "wagtail_serve"
+        else urlpattern
+    )
     for urlpattern in wagtailcore_urlpatterns
 ]

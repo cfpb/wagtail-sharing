@@ -3,6 +3,11 @@ from django.db import models
 from wagtail.contrib.routable_page.models import RoutablePageMixin
 from wagtail.models import Site
 
+from wagtailsharing.helpers import (
+    get_hostname_and_port_from_request,
+    make_root_url,
+)
+
 
 class SharingSite(models.Model):
     site = models.OneToOneField(
@@ -25,26 +30,12 @@ class SharingSite(models.Model):
 
         Uses request hostname and port to find matching sharing site.
         """
-        try:
-            hostname = request.get_host().split(":")[0]
-        except KeyError:
-            hostname = None
-
-        try:
-            port = request.get_port()
-        except (AttributeError, KeyError):
-            port = request.META.get("SERVER_PORT")
-
+        hostname, port = get_hostname_and_port_from_request(request)
         return cls.objects.get(hostname=hostname, port=port)
 
     @property
     def root_url(self):
-        if self.port == 80:
-            return "http://{}".format(self.hostname)
-        elif self.port == 443:
-            return "https://{}".format(self.hostname)
-        else:
-            return "http://{}:{:d}".format(self.hostname, self.port)
+        return make_root_url(self.hostname, self.port)
 
 
 class ShareableRoutablePageMixin(RoutablePageMixin):
