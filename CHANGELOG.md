@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.13 2025-08-01
+
+- Add ability to configure sharing domain via Django settings (https://github.com/cfpb/wagtail-sharing/pull/78)
+
 ## 2.12.1 2024-01-09
 
 - Fix deprecation warning in Wagtail 5.2 (https://github.com/cfpb/wagtail-sharing/pull/73)
