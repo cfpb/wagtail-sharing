@@ -89,3 +89,8 @@ TEMPLATES = [
 WAGTAIL_SITE_NAME = "Test Site"
 
 WAGTAILADMIN_BASE_URL = "http://localhost:8000"
+
+WAGTAILSHARING_ROUTER = "wagtailsharing.routers.db.DatabaseHostRouter"
+
+# WAGTAILSHARING_ROUTER = "wagtailsharing.routers.settings.SettingsHostRouter"
+# WAGTAILSHARING_HOST = "http://sharing.localhost:8000"

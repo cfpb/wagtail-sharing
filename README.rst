@@ -5,7 +5,7 @@
 wagtail-sharing
 ===============
 
-Easier sharing of `Wagtail <https://wagtail.io>`_ drafts.
+Easier sharing of `Wagtail <https://wagtail.org>`_ drafts.
 
 Wagtail Sharing makes it easier to share Wagtail draft content for review by users who don't have access to the Wagtail admin site. It allows you to define an alternate hostname and/or port on which to expose the latest revision of all of your Wagtail pages.
 
@@ -18,6 +18,81 @@ These examples obviously work best when you have some method of restricting acce
 Wagtail Sharing lets you create separate sharing sites for each Wagtail Site you have defined. It also supports a configurable visual banner on shared pages to remind reviewers that content may differ from your published site.
 
 This new logic only applies to ``GET`` requests. Other HTTP methods like ``POST`` defer to standard Wagtail handling.
+
+Routing configuration
+---------------------
+
+Wagtail Sharing supports different routing strategies for determining how
+draft pages are shared.
+
+Database-based routing (default)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The default routing strategy uses sharing sites stored in the database,
+using a new ``wagtailsharing.SharingSite`` model.
+This approach allows for configuration of different sharing domains
+for different Wagtail sites.
+
+.. code-block:: python
+
+  WAGTAILSHARING_ROUTER = "wagtailsharing.routers.db.DatabaseHostRouter"
+
+With database-based routing, Wagtail adds a new admin section under
+Settings -> Sharing Sites that allows users to define how they would like to expose latest page revisions.
+
+.. image:: ./docs/images/sharing-sites.png
+    :width: 640px
+    :alt: Sharing sites
+
+No sharing sites exist by default. A sharing site must be manually created for each Wagtail Site to make its latest revisions shareable. Each sharing site is defined by a unique hostname and port number.
+
+In the above configuration,
+drafts will be viewable at http://sharing.mysite.com:8000/.
+
+Settings-based routing
+~~~~~~~~~~~~~~~~~~~~~~
+
+Sharing can also be configured via Django settings.
+This approach avoids the need to configure sharing via the database,
+but only works for the default Wagtail site.
+
+.. code-block:: python
+
+  WAGTAILSHARING_ROUTER = "wagtailsharing.routers.settings.SettingsHostRouter"
+  WAGTAILSHARING_HOST = "http://sharing.mysite.com:8000"
+
+With this configuration,
+draft pages will also be viewable at http://sharing.mysite.com:8000/.
+
+Custom routing
+~~~~~~~~~~~~~~
+
+A custom router can be used for alternative routing strategies.
+For example, you might want to route based on authentication tokens,
+query parameters, or other criteria beyond hostname matching.
+
+To create a custom router,
+inherit from ``wagtailsharing.routers.base.RouterBase``
+and implement the required methods:
+
+.. code-block:: python
+
+  from wagtailsharing.routers.base import RouterBase
+
+  class CustomRouter(RouterBase):
+      def route(self, request, path):
+          # Returns (Site, path) tuple or (None, path) if no match.
+          ...
+
+      def get_sharing_url(self, page):
+          # Returns the sharing URL for a given page.
+          ...
+
+Then configure it in your settings:
+
+.. code-block:: python
+
+  WAGTAILSHARING_ROUTER = "myapp.routers.CustomRouter"
 
 Setup
 -----
@@ -35,19 +110,9 @@ Add ``wagtailsharing`` as an installed app in your Django settings:
   # in settings.py
   INSTALLED_APPS = (
       ...
-      'wagtailsharing',
+      "wagtailsharing",
       ...
   )
-
-``wagtail.snippets`` is also required and must be included in your list of installed apps.
-
-The code examples below assume that you are using a recent Wagtail version (3.0+).
-
-Run migrations to create required database tables:
-
-.. code-block:: bash
-
-  $ python manage.py migrate wagtailsharing
 
 Replace use of Wagtail's catch-all URL pattern:
 
@@ -59,45 +124,46 @@ Replace use of Wagtail's catch-all URL pattern:
 
   ...
 
-  -urlpatterns.append(url(r'', include(wagtail_urls)))
-  +urlpatterns.append(url(r'', include(wagtailsharing_urls)))
+  -urlpatterns.append(url(r"", include(wagtail_urls)))
+  +urlpatterns.append(url(r"", include(wagtailsharing_urls)))
 
-Sharing sites
--------------
+Database-based routing
+~~~~~~~~~~~~~~~~~~~~~~
 
-The Wagtail admin now contains a new section under Settings called Sharing Sites that allows users to define how they would like to expose latest page revisions.
-
-.. image:: ./docs/images/sharing-sites.png
-    :width: 640px
-    :alt: Sharing sites
-
-No sharing sites exist by default. A sharing site must be manually created for each Wagtail Site to make its latest revisions shareable. Each sharing site is defined by a unique hostname and port number. **Important: configuring your sharing sites improperly could expose draft/private content publicly. Be careful when setting them up!**
-
-Creating a new sharing site
----------------------------
-
-After following the setup steps above, you should be able to create a new sharing site to use this functionality in a local Django development server. Let's assume that you are running your local development server on the default port 8000, and that pages there are being served at http://localhost:8000. We want to create a new sharing site at http://sharing.localhost:8000 at which latest page revisions will be exposed.
-
-To simulate accessing your site on a different hostname, you'll need to loosen `Django's default security settings <https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts>`_ that only allow access on `localhost`. Edit your settings file (e.g. ``myproject/settings/local.py``) to add the following:
+If you're using the default database-based routing, you'll also need to add
+``wagtail.snippets`` to your installed apps:
 
 .. code-block:: python
 
-  ALLOWED_HOSTS = ['*']
+  # in settings.py
+  INSTALLED_APPS = (
+      ...
+      "wagtail.snippets",
+      "wagtailsharing",
+      ...
+  )
 
-Verify that you can access your local server at http://sharing.localhost:8000. You should see the same content there as on http://localhost:8000, as you haven't enabled wagtail-sharing for the default site yet.
+You'll also need to run migrations to create the required database tables:
 
-To do so, in the Wagtail admin, under Settings, Sharing Sites, create a new sharing site for the default site, with hostname ``sharing.localhost`` and port ``8000``.
+.. code-block:: bash
 
-.. image:: ./docs/images/new-sharing-site.png
-    :width: 640px
-    :alt: New sharing site with site: "localhost [default]", hostname: "sharing.localhost", port: "8000"
+  $ python manage.py migrate wagtailsharing
 
-Your latest page revisions (including drafts) should now be available at http://sharing.localhost:8000.
+Settings-based routing
+~~~~~~~~~~~~~~~~~~~~~~
+
+If you're using settings-based routing,
+you only need to add the router configuration to your settings:
+
+.. code-block:: python
+
+  WAGTAILSHARING_ROUTER = "wagtailsharing.routers.settings.SettingsHostRouter"
+  WAGTAILSHARING_HOST = "http://sharing.mysite.com:8000"
 
 Banners
 -------
 
-Pages viewed on a wagtail-sharing shared site have a simple banner added to them to remind reviewers that the current published content may differ from the content they are viewing.
+Pages viewed on a Wagtail Sharing shared site have a simple banner added to them to remind reviewers that the current published content may differ from the content they are viewing.
 
 .. image:: ./docs/images/banner.png
     :alt: Banner
@@ -107,9 +173,17 @@ This behavior can be disabled by setting ``settings.WAGTAILSHARING_BANNER = Fals
 Sharing links
 -------------
 
-A page's sharing URL can be retrieved by passing its ``Page`` instance to ``wagtailsharing.helpers.get_sharing_url``. This method returns ``None`` if no shared sites are configured or if the specified page is not routable to a shared site.
-A page's sharing URL is based on the slug of its most recently published revision
-or, if the page has never been published, its initial revision.
+A page's sharing URL can be retrieved by calling the configured router's ``get_sharing_url`` method.
+
+.. code-block:: python
+
+  from wagtailsharing.routers import get_router
+
+  sharing_url = get_router().get_sharing_url(page)
+
+A page's sharing URL is based on the slug of its most recently published revision or, if the page has never been published, its initial revision.
+This method returns ``None`` if the specified page is not routable
+via the current routing configuration.
 
 Shared pages will also have a new dropdown menu option that links to this sharing URL from the Wagtail page explorer.
 
@@ -145,9 +219,9 @@ This hook could be useful for limiting sharing to only certain page types or for
 
   from wagtail import hooks
 
-  @hooks.register('before_serve_shared_page')
+  @hooks.register("before_serve_shared_page")
   def modify_shared_title(page, request, args, kwargs):
-      page.title += ' (Shared)'
+      page.title += " (Shared)"
 
 ``after_serve_shared_page``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -160,9 +234,9 @@ This hook could be useful for directly modifying the response content, for examp
 
   from wagtail import hooks
 
-  @hooks.register('after_serve_shared_page')
+  @hooks.register("after_serve_shared_page")
   def add_custom_header(page, response):
-      response['Wagtail-Is-Shared'] = '1'
+      response["Wagtail-Is-Shared"] = "1"
 
 Mixins
 ------
@@ -173,7 +247,7 @@ Mixins
  .. |RoutablePageMixin| replace:: ``RoutablePageMixin``
  .. _RoutablePageMixin: https://docs.wagtail.io/en/stable/reference/contrib/routablepage.html
 
-By default, Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail-Sharing, instead you need to use ``ShareableRoutablePageMixin`` in order to view share draft content fields on routable pages.
+Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail Sharing, instead you need to use ``ShareableRoutablePageMixin`` in order to view shared draft content fields on routable pages.
 
 ``ShareableRoutablePageMixin`` is used exactly the same way as |RoutablePageMixin|_:
 
@@ -188,11 +262,11 @@ By default, Wagtail's |RoutablePageMixin|_ is not compatible with Wagtail-Sharin
   class EventIndexPage(ShareableRoutablePageMixin, Page):
       intro = RichTextField()
 
-      @route(r'^$')
+      @route(r"^$")
       def current_events(self, request):
           # …
 
-      @route(r'^past/$')
+      @route(r"^past/$")
       def past_events(self, request):
           # …
 
@@ -201,7 +275,7 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.9+
+* Python 3.8+
 * Django 3.2+
 * Wagtail 5.1+ (see past releases for older Wagtail support)
 
