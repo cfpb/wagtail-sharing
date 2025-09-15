@@ -22,17 +22,21 @@ class SettingsHostRouter(RouterBase):
                 f"settings.{self.SETTING} is not defined"
             )
 
-        host_setting = getattr(settings, self.SETTING)
+        hosts = getattr(settings, self.SETTING)
 
-        self.hostname, self.port = parse_host(host_setting)
+        if isinstance(hosts, str):
+            hosts = hosts.split(",")
+
+        self.hostnames_and_ports = list(map(parse_host, hosts))
 
     def route(self, request, path):
         hostname, port = get_hostname_and_port_from_request(request)
 
-        if (hostname, port) != (self.hostname, self.port):
-            return None, path
+        for hostname_and_port in self.hostnames_and_ports:
+            if (hostname, port) == hostname_and_port:
+                return Site.objects.get(is_default_site=True), path
 
-        return Site.objects.get(is_default_site=True), path
+        return None, path
 
     def get_sharing_url(self, page):
         """Get a sharing URL for a page using the sharing hostname setting."""
@@ -43,6 +47,6 @@ class SettingsHostRouter(RouterBase):
 
         site_id, root_url, page_path = url_parts
 
-        sharing_root_url = make_root_url(self.hostname, self.port)
+        sharing_root_url = make_root_url(*(self.hostnames_and_ports[0]))
 
         return f"{sharing_root_url}{page_path}"
