@@ -14,11 +14,10 @@ class SettingsHostRouterTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def test_sharing_hostname(self):
-        router = SettingsHostRouter()
+    def test_sharing_hostnames(self):
         self.assertEqual(
-            (router.hostname, router.port),
-            ("sharing.example.com", 443),
+            SettingsHostRouter().hostnames_and_ports,
+            [("sharing.example.com", 443)],
         )
 
     def test_get_sharing_hostname_not_configured(self):
@@ -84,3 +83,53 @@ class SettingsHostRouterTests(TestCase):
         page.save_revision()
         result = SettingsHostRouter().get_sharing_url(page)
         self.assertEqual(result, "https://sharing.example.com/third/")
+
+
+@override_settings(
+    WAGTAILSHARING_HOST=[
+        "https://sharing.example.com",
+        "http://sharing2.example.com:8080",
+    ]
+)
+class MultipleHostsSettingsRouterTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_sharing_hostnames(self):
+        self.assertEqual(
+            SettingsHostRouter().hostnames_and_ports,
+            [("sharing.example.com", 443), ("sharing2.example.com", 8080)],
+        )
+
+    @override_settings(
+        WAGTAILSHARING_HOST="http://foo.com:8000,http://bar.com:8081"
+    )
+    def test_sharing_hostnames_string(self):
+        self.assertEqual(
+            SettingsHostRouter().hostnames_and_ports,
+            [("foo.com", 8000), ("bar.com", 8081)],
+        )
+
+    def test_route_matching_hosts(self):
+        for host, port in [
+            ("sharing.example.com", "443"),
+            ("sharing2.example.com", "8080"),
+        ]:
+            request = self.factory.get("/", HTTP_HOST=host, SERVER_PORT=port)
+            result = SettingsHostRouter().route(request, "/test/")
+
+            default_site = Site.objects.get(is_default_site=True)
+            self.assertEqual(result, (default_site, "/test/"))
+
+    def test_route_non_matching_hostname(self):
+        request = self.factory.get("/", HTTP_HOST="other.example.com")
+        result = SettingsHostRouter().route(request, "/test/")
+
+        self.assertEqual(result, (None, "/test/"))
+
+    def test_get_sharing_url_uses_first_host(self):
+        default_site = Site.objects.get(is_default_site=True)
+        page = create_draft_page(default_site, title="test-page")
+
+        result = SettingsHostRouter().get_sharing_url(page)
+        self.assertEqual(result, "https://sharing.example.com/test-page/")

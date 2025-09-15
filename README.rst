@@ -64,6 +64,17 @@ but only works for the default Wagtail site.
 With this configuration,
 draft pages will also be viewable at http://sharing.mysite.com:8000/.
 
+Specify multiple hosts as a list or comma-delimited string
+to share the default Wagtail site on multiple domains:
+
+.. code-block:: python
+
+  WAGTAILSHARING_ROUTER = "wagtailsharing.routers.settings.SettingsHostRouter"
+  WAGTAILSHARING_HOST = [
+      "http://sharing.mysite.com:8000",
+      "http://sharing2.mysite.com:8000",
+  ]
+
 Custom routing
 ~~~~~~~~~~~~~~
 
