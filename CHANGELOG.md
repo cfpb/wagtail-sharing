@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## 2.14 2025-09-16
+
+- Support multiple settings-based sharing hosts (https://github.com/cfpb/wagtail-sharing/pull/79)
+
 ## 2.13 2025-08-01
 
 - Add ability to configure sharing domain via Django settings (https://github.com/cfpb/wagtail-sharing/pull/78)
