@@ -22,8 +22,8 @@ def add_sharing_link(page, user, next_url=None, **kwargs):
             sharing_url,
             icon_name="draft",
             attrs={
-                "aria-label": _("View shared revision of '{}'").format(
-                    page.get_admin_display_title()
+                "aria-label": _(
+                    f"View shared revision of '{page.get_admin_display_title()}'"
                 ),
             },
             priority=90,

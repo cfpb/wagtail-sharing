@@ -1,6 +1,10 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
+## Unreleased
+
+- Add support for Python 3.13, drop support for Python < 3.10
+
 ## 2.14 2025-09-16
 
 - Support multiple settings-based sharing hosts (https://github.com/cfpb/wagtail-sharing/pull/79)
