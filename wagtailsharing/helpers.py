@@ -1,4 +1,3 @@
-from typing import Optional, Tuple
 from urllib.parse import urlparse
 
 from django.http import HttpRequest
@@ -6,7 +5,7 @@ from django.http import HttpRequest
 
 def get_hostname_and_port_from_request(
     request: HttpRequest,
-) -> Tuple[Optional[str], Optional[int]]:
+) -> tuple[str | None, int | None]:
     try:
         hostname = request.get_host().split(":")[0]
     except KeyError:
@@ -24,14 +23,14 @@ def get_hostname_and_port_from_request(
 
 def make_root_url(hostname: str, port: int) -> str:
     if port == 80:
-        return "http://{}".format(hostname)
+        return f"http://{hostname}"
     elif port == 443:
-        return "https://{}".format(hostname)
+        return f"https://{hostname}"
     else:
-        return "http://{}:{:d}".format(hostname, port)
+        return f"http://{hostname}:{port}"
 
 
-def parse_host(host: str) -> Tuple[str, int]:
+def parse_host(host: str) -> tuple[str, int]:
     """Parse a host string and return a hostname and port."""
     if host.startswith(("http://", "https://")):
         parsed = urlparse(host)

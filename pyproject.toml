@@ -3,24 +3,28 @@ name = "wagtail-sharing"
 version = "2.14"
 description = "Easier sharing of Wagtail drafts"
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = {text = "CC0"}
 authors = [
     {name = "CFPB", email = "tech@cfpb.gov" }
 ]
 dependencies = [
-    "wagtail>=5.1",
+    "wagtail>=6.2",
 ]
 classifiers = [
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.1",
     "Framework :: Wagtail",
-    "Framework :: Wagtail :: 5",
+    "Framework :: Wagtail :: 6",
     "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     "License :: Public Domain",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 
 [project.optional-dependencies]
@@ -44,7 +48,7 @@ inventory = [
 
 [tool.black]
 line-length = 79
-target-version = ["py38"]
+target-version = ["py313"]
 include = '\.pyi?$'
 exclude = '''
 (

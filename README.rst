@@ -286,12 +286,14 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.8+
-* Django 3.2+
-* Wagtail 5.1+ (see past releases for older Wagtail support)
+* Python 3.10+
+* Django 4.2+
+* Wagtail 6.2+
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
+
+See past releases for older Python/Django/Wagtail support.
 
 Testing
 -------
