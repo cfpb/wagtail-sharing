@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) format.
 
-## Unreleased
+## 2.15 2025-11-10
 
 - Add support for Python 3.13, drop support for Python < 3.10
 
