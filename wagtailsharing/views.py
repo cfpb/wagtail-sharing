@@ -48,9 +48,7 @@ class ServeView(View):
         cases, and, if they fall into the latter category, returns the
         requested page back to the caller despite its draft status.
         """
-        path_components = [
-            component for component in path.split("/") if component
-        ]
+        path_components = [component for component in path.split("/") if component]
 
         try:
             return site.root_page.route(request, path_components)

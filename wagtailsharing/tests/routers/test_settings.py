@@ -101,9 +101,7 @@ class MultipleHostsSettingsRouterTests(TestCase):
             [("sharing.example.com", 443), ("sharing2.example.com", 8080)],
         )
 
-    @override_settings(
-        WAGTAILSHARING_HOST="http://foo.com:8000,http://bar.com:8081"
-    )
+    @override_settings(WAGTAILSHARING_HOST="http://foo.com:8000,http://bar.com:8081")
     def test_sharing_hostnames_string(self):
         self.assertEqual(
             SettingsHostRouter().hostnames_and_ports,

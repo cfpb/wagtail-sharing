@@ -20,9 +20,7 @@ class TestUrlPatterns(TestCase):
             re_path(r"^bar/$", re_path, name="bar"),
         ]
 
-        self.patcher = patch.object(
-            wagtail_core_urls, "urlpatterns", root_patterns
-        )
+        self.patcher = patch.object(wagtail_core_urls, "urlpatterns", root_patterns)
         self.patcher.start()
         self.addCleanup(self.patcher.stop)
 
@@ -40,9 +38,7 @@ class TestUrlPatterns(TestCase):
         if DJANGO_VERSION > (4, 0):
             self.assertEqual(self.urlpatterns[1].callback.__name__, "view")
         else:
-            self.assertEqual(
-                self.urlpatterns[1].callback.__name__, "ServeView"
-            )
+            self.assertEqual(self.urlpatterns[1].callback.__name__, "ServeView")
 
     def test_leaves_later_urls_alone(self):
         self.assertEqual(self.urlpatterns[2].name, "bar")
