@@ -18,9 +18,7 @@ class GetHostnameAndPortFromRequestTests(SimpleTestCase):
         )
 
     def test_request_with_port(self):
-        request = self.factory.get(
-            "/", HTTP_HOST="example.com", SERVER_PORT=5678
-        )
+        request = self.factory.get("/", HTTP_HOST="example.com", SERVER_PORT=5678)
         self.assertEqual(
             get_hostname_and_port_from_request(request), ("example.com", 5678)
         )
@@ -28,9 +26,7 @@ class GetHostnameAndPortFromRequestTests(SimpleTestCase):
     def test_request_without_hostname(self):
         request = self.factory.get("/")
         del request.META["SERVER_NAME"]
-        self.assertEqual(
-            get_hostname_and_port_from_request(request), (None, 80)
-        )
+        self.assertEqual(get_hostname_and_port_from_request(request), (None, 80))
 
     def test_request_without_port(self):
         request = self.factory.get("/", HTTP_HOST="example.com")

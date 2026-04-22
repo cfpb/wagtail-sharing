@@ -12,10 +12,10 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
 
@@ -34,31 +34,15 @@ jobs:
 
     strategy:
       matrix:
-        include:
-          - python: '3.10'
-            django: '4.2'
-            wagtail: '6.2'
-          - python: '3.13'
-            django: '4.2'
-            wagtail: '6.2'
-          - python: '3.12'
-            django: '5.1'
-            wagtail: '6.3'
-          - python: '3.13'
-            django: '5.1'
-            wagtail: '6.3'
-          - python: '3.12'
-            django: '5.1'
-            wagtail: '6.4'
-          - python: '3.13'
-            django: '5.1'
-            wagtail: '6.4'
+        python: ["3.12", "3.13"]
+        django: ["5.2"]
+        wagtail: ["6.3", "6.4", "7.0"]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
 
@@ -73,7 +57,7 @@ jobs:
           TOXENV: python${{ matrix.python }}-django${{ matrix.django }}-wagtail${{ matrix.wagtail }}
 
       - name: Store test coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-py${{ matrix.python }}-dj${{ matrix.django }}-wag${{ matrix.wagtail }}
           path: .coverage.*
@@ -86,12 +70,12 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
 
@@ -101,7 +85,7 @@ jobs:
           pip install tox
 
       - name: Retrieve test coverage
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: coverage-*
           merge-multiple: true

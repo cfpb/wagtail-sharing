@@ -27,9 +27,7 @@ class DatabaseHostRouterTests(TestCase):
         self.assertEqual(result, (self.default_site, "/test/"))
 
     def test_route_without_sharing_site(self):
-        request = self.factory.get(
-            "/", HTTP_HOST="nonexistent.com", SERVER_PORT=8080
-        )
+        request = self.factory.get("/", HTTP_HOST="nonexistent.com", SERVER_PORT=8080)
         result = self.router.route(request, "/test/")
 
         self.assertEqual(result, (None, "/test/"))

@@ -36,9 +36,7 @@ class TestAddSharingLink(TestCase):
         links = add_sharing_link(page, self.user)
         button = next(links)
         self.assertEqual(button.url, "http://sharing.example.com:8080/test/")
-        self.assertIn(
-            page.get_admin_display_title(), button.attrs["aria-label"]
-        )
+        self.assertIn(page.get_admin_display_title(), button.attrs["aria-label"])
 
 
 class TestAddSharingBanner(TestCase):

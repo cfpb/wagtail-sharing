@@ -18,9 +18,7 @@ class SettingsHostRouter(RouterBase):
         super().__init__(*args, **kwargs)
 
         if not hasattr(settings, self.SETTING):
-            raise ImproperlyConfigured(
-                f"settings.{self.SETTING} is not defined"
-            )
+            raise ImproperlyConfigured(f"settings.{self.SETTING} is not defined")
 
         hosts = getattr(settings, self.SETTING)
 

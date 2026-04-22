@@ -1,9 +1,9 @@
 [project]
 name = "wagtail-sharing"
-version = "2.15"
+dynamic = ["version"]
 description = "Easier sharing of Wagtail drafts"
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = {text = "CC0"}
 authors = [
     {name = "CFPB", email = "tech@cfpb.gov" }
@@ -13,16 +13,14 @@ dependencies = [
 ]
 classifiers = [
     "Framework :: Django",
-    "Framework :: Django :: 4.2",
-    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
     "Framework :: Wagtail",
     "Framework :: Wagtail :: 6",
+    "Framework :: Wagtail :: 7",
     "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     "License :: Public Domain",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
