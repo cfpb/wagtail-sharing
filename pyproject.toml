@@ -36,7 +36,7 @@ testing = [
 "Source" = "https://github.com/cfpb/wagtail-sharing"
 
 [build-system]
-requires = ["setuptools>=43.0.0", "wheel"]
+requires = ["setuptools>=64", "setuptools_scm[toml]>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-data]
