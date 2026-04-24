@@ -39,6 +39,8 @@ testing = [
 requires = ["setuptools>=64", "setuptools_scm[toml]>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools_scm]
+
 [tool.setuptools.package-data]
 inventory = [
     "templates/wagtailsharing/*",
