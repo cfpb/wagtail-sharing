@@ -286,9 +286,9 @@ Compatibility
 
 This project has been tested for compatibility with:
 
-* Python 3.12, 3.13
-* Django 5.2 (LTS)
-* Wagtail 6.3 (LTS), 6.4, 7.0
+* Python 3.13 – 3.14
+* Django  5.2 (LTS) – 6.0
+* Wagtail 7.0 (LTS) – 7.4 (LTS)
 
 It should be compatible with all intermediate versions, as well.
 If you find that it is not, please `file an issue <https://github.com/cfpb/wagtail-sharing/issues/new>`_.
