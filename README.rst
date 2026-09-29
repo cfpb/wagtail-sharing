@@ -287,7 +287,7 @@ Compatibility
 This project has been tested for compatibility with:
 
 * Python 3.13 – 3.14
-* Django  5.2 (LTS) – 6.0
+* Django 5.2 (LTS) – 6.0
 * Wagtail 7.0 (LTS) – 7.4 (LTS)
 
 It should be compatible with all intermediate versions, as well.
